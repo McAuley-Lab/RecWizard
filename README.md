@@ -156,6 +156,6 @@ recwizard
 
 ## RoadMap
 - [x] Implement KBRD Recommender
-- [] Implement KBRD Generator
-- [] Improve the BaseTokenizer API (simplify)
-- [] Provide detailed examples of tokenization
+- [ ] Implement KBRD Generator
+- [ ] Improve the BaseTokenizer API (simplify)
+- [ ] Provide detailed examples of tokenization
