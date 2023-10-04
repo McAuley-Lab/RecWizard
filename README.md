@@ -1,6 +1,8 @@
 # <img src="server/recwizard.png" alt="recwizard logo" width="25"/> RecWizard
 ### A Plug-n-Play Toolkit for Conversational Recommendation with Modular, Portable Models and Interactive User Interfaces
 
+#### (submitted to AAAI 2024 Demo Track)
+
 ## Overview
 
 The Recwizard pacakage is built for fast development of Conversational Recomendational Systems(CRS).
@@ -151,3 +153,9 @@ recwizard
     └── utils.py
 
 ```
+
+## RoadMap
+- [x] Implement KBRD Recommender
+- [] Implement KBRD Generator
+- [] Improve the BaseTokenizer API (simplify)
+- [] Provide detailed examples of tokenization
