@@ -1,0 +1,108 @@
+[build-system]
+requires = ["hatchling >= 1.13.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+ignore-vcs = true
+[tool.hatch.build.targets.wheel]
+packages = ["src/recwizard"]
+
+[project]
+name = "recwizard"
+description = "RecWizard: A Plug-n-Play Toolkit for Conversational Recommendation with Modular, Portable Models and Interactive User Interfaces"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+authors = [
+    { name = "Tanmay Laud", email = "tanmaylaud@gmail.com"},
+    { name = "Zeyuan Zhang", email ="zez018@ucsd.edu"},
+    { name = "Zihang He", email = "z6he@ucsd.edu"},
+    { name = "Zhankui He", email = "zhh004@ucsd.edu"}
+]
+classifiers = [
+    "Intended Audience :: Information Technology",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python",
+    "Topic :: Internet",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+   
+dependencies = [
+    "transformers~=4.33.2",
+    "tokenizers~=0.13.3",
+    "datasets~=2.12.0",
+    "torch_geometric~=2.3.1",
+    "scikit_learn~=1.2.2",
+    "pandas~=2.0.0",
+    "pyarrow~=12.0.0",
+    "nltk~=3.8.1",
+    "openai~=0.28.1",
+    "h5py",
+    "loguru"
+]
+
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "link to hompage"
+Documentation = "link to documentation"
+Repository = "link to repo"
+
+[project.optional-dependencies]
+all = [
+    "uvicorn[standard] >=0.12.0",
+    "streamlit",
+    "fastapi",
+    "matplotlib",
+    "plotly==5.17.0",
+]
+
+dev = [
+    "sphinx==5.3.0",
+    "m2r==0.3.1",
+    "sphinx-rtd-theme==1.0.0",
+]
+
+[tool.hatch.version]
+path = "src/recwizard/__init__.py"
+
+[tool.mypy]
+strict = true
+
+[tool.pytest.ini_options]
+addopts = [
+  "--strict-config",
+  "--strict-markers",
+  "--ignore=docs_src",
+]
+xfail_strict = true
+junit_family = "xunit2"
+filterwarnings = [
+    "error",
+]
+
+
+[tool.ruff]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+
+[tool.ruff.isort]
+known-third-party = ["recwizard"]

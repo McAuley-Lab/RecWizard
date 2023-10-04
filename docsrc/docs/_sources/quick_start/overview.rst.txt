@@ -1,0 +1,26 @@
+Overview
+----------------
+
+**🤖️ RecBOT** is a comprehensive toolkit designed for the `development`, `deployment`, and `interaction` of Conversational Recommender System research. 
+**🤖️ RecBOT** leverages the best practices from the `🔥 PyTorch <https://pytorch.org>`_ and `🤗 Huggingface <https://huggingface.co/>`_ ecosystem to streamline the learning process, reducing the need for additional effort.
+
+
+1. Usage
+^^^^^^^^^^^^^
+
+Learn the basics and become familiar with launching and interacting with a **🤖️ RecBOT** model.
+
+2. Resource
+^^^^^^^^^^^^^
+
+High-level overview of the existing **🤖️ RecBOT** datasets and **🤖️ RecBOT** pre-trained models.
+
+3. Developer Guide
+^^^^^^^^^^^^^^^^^^^^
+
+Learn how to create new datasets, develop new models and share your creations with **🤖️ RecBOT**.
+
+4. API Reference
+^^^^^^^^^^^^^^^^^^
+
+Technical descriptions of how **🤖️ RecBOT** classes and methods work.

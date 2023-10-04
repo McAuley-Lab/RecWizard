@@ -1,0 +1,19 @@
+recwizard.utils
+--------------
+
+recwizard.configuration_utils
+```````````````````````````
+
+recwizard.module_utils
+````````````````````
+
+.. autoclass:: recwizard.module_utils.BaseModule
+    :special-members: __init__
+    :members: prepare_weight, get_tokenizer, state_dict, load_state_dict, map_parameters, remove_ignores, load_checkpoint
+
+
+recwizard.model_utils
+```````````````````
+
+recwizard.tokenizer_utils
+```````````````````````

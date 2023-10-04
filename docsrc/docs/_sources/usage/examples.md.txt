@@ -1,0 +1,63 @@
+## Examples
+
+### 1: Use Pre-trained Pipeline as a Whole
+
+After installing [🤖️ RecBOT](./index), we quickly load pre-trained a Converstional Recommender Bot as follows:
+
+```python
+import recwizard import Model
+from transformers import pipeline
+
+model = Model.from_pretrained('ReDIAL')
+pipe = pipeline(model=model, device='cuda:0')
+
+pipe("Recommend me some popular and classic movies")
+```
+
+We input the conversation history and get the results from the pre-trained [ReDIAL](https://proceedings.neurips.cc/paper_files/paper/2018/file/800de15c79c8d840f4e78d3af937d4d4-Paper.pdf) pipeline.
+
+```bash
+'The Shawshank Redemption (1994) \n
+ The Godfather (1972) \n 
+ The Dark Knight (2008) \n 
+ The Godfather: Part II (1974) \n 
+ The Lord of the Rings: The Return of the King (2003)'
+```
+
+
+### 2: Use Finer-Grained Pre-trained Components
+
+We also provide finer-grained control on different modules of a Converstional Recommender Bot as follows. 
+We also explain the details of different modules [here](./zoo/overview).
+
+```python
+from recwizard import Model
+from recwizard import AutoModule
+
+model = Model(
+    processor = AutoModule.from_pretrained(HRNNForClassification"),
+    manager = AutoModule.from_pretrained("RedialManager"),
+    recommender = AutoModule.from_pretrained("AutoRec"),
+    generator = AutoModule.from_pretrained("SwitchingDecoder"),
+    aggregator = None,
+)
+```
+
+Then, this initialized `model` can be used in a similar way as Case 1:
+
+```python
+pipe = pipeline(model=model, device='cuda:0')
+pipe("Recommend me some popular and classic movies")
+```
+
+We input the conversation history and get the results from the pre-trained [ReDIAL](https://proceedings.neurips.cc/paper_files/paper/2018/file/800de15c79c8d840f4e78d3af937d4d4-Paper.pdf) pipeline.
+
+```bash
+'The Shawshank Redemption (1994) \n
+ The Godfather (1972) \n 
+ The Dark Knight (2008) \n 
+ The Godfather: Part II (1974) \n 
+ The Lord of the Rings: The Return of the King (2003)'
+```
+
+### 3: Launch Interactive Interface 
