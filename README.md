@@ -5,12 +5,22 @@
 
 ## Overview
 
-The Recwizard pacakage is built for fast development of Conversational Recomendational Systems(CRS).
+The Recwizard pacakage is built for easy deployment/development of Conversational Recomendational Systems(CRS).
 The core idea of Recwizard is to use a "Text-in, Text-out" interface for all kinds of different modules
 used in a CRS pipeline. The text-based interface gives our package a **plug-and-play** nature that allows users to
 easily experiment with new combinations of modules.
 
-## Overall Idea
+## Base Concept
+
+We abstract a CRS model to two levels as shown in the figure below:
+
+- **Module Level**: we typically provide a `recwizard.BaseModule` for making recommendations and
+  another `rectbot.BaseModule` for generating natural-language responses.
+  We can further introduce processor `rectbot.BaseModule` to extract important information (e.g., entity linking) from
+  users' raw features;
+- **Model Level**: we treat a `recwizard.BasePipeline` is a high-level manager to decide when and how to call the
+  lowe-level modules, and how to combine the results from such modules.
+
 <img src="pipeline.png" alt="pipeline" width="500"/> 
 
 ## Quick start
@@ -46,7 +56,7 @@ context = "<sep>".join([
 
 > Currently. The formatting contains 3 aspects:
 > 1. We prepend the sender of the message to the beggining of the sentence. Either "User: " or "System: "
-> 2. We join the utterances with the <sep> token. which can be handled differently by different tokenizers
+> 2. We join the utterances with the \<sep\> token. which can be handled differently by different tokenizers
 > 3. (Optional) We mark the entities in the text manually so that the named entities can be extracted by the downstream
      modules.
 
@@ -62,17 +72,6 @@ Another one is "Big Daddy (1999)" where Sandler's character adopts a kid to impr
 Both movies have Sandler's signature humor and are quite entertaining.
 ```
 
-
-## Base Concept
-
-We abstract a CRS model to two levels as shown in the main figure:
-
-- **Module Level**: we typically provide a `recwizard.BaseModule` for making recommendations and
-  another `rectbot.BaseModule` for generating natural-language responses.
-  We can further introduce processor `rectbot.BaseModule` to extract important information (e.g., entity linking) from
-  users' raw features;
-- **Model Level**: we treat a `recwizard.BasePipeline` is a high-level manager to decide when and how to call the
-  lowe-level modules, and how to combine the results from such modules.
 
 
 ## Code Structure
