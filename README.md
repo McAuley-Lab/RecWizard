@@ -1,25 +1,25 @@
 # <img src="server/recwizard.png" alt="recwizard logo" width="25"/> RecWizard
-### A Plug-n-Play Toolkit for Conversational Recommendation with Modular, Portable Models and Interactive User Interfaces
+### A Plug-n-Play Toolkit for Conversational Recommenders with Modular, Portable Models and Interactive User Interface
 
 #### (submitted to AAAI 2024 Demo Track)
 
 ## Overview
 
-The Recwizard pacakage is built for easy deployment/development of Conversational Recomendational Systems(CRS).
-The core idea of Recwizard is to use a "Text-in, Text-out" interface for all kinds of different modules
+The RecWizard libary is built for easy deployment/development of Conversational Recommender Systems(CRS).
+The core idea of RecWizard is to use a "Text-in, Text-out" interface for all kinds of different modules
 used in a CRS pipeline. The text-based interface gives our package a **plug-and-play** nature that allows users to
 easily experiment with new combinations of modules.
 
 ## Base Concept
 
-We abstract a CRS model to two levels as shown in the figure below:
+We abstract a CRS model into two levels as shown in the figure below:
 
-- **Module Level**: we typically provide a `recwizard.BaseModule` for making recommendations and
+- **Module Level**: We typically provide a `recwizard.BaseModule` for making recommendations and
   another `rectbot.BaseModule` for generating natural-language responses.
   We can further introduce processor `rectbot.BaseModule` to extract important information (e.g., entity linking) from
   users' raw features;
-- **Model Level**: we treat a `recwizard.BasePipeline` is a high-level manager to decide when and how to call the
-  lowe-level modules, and how to combine the results from such modules.
+- **Model Level**: We treat a `recwizard.BasePipeline` as a high-level manager to decide when and how to call the
+  lower-level modules, and how to combine the results from such modules.
 
 <img src="pipeline.png" alt="pipeline" width="500"/> 
 
