@@ -24,17 +24,17 @@ class ChatgptRecConfig(BaseConfig):
         self.answer_type = 'movie'
         self.answer_mask = '<movie>'
         self.prompt = {
-            'role': 'user',
+            'role': 'system',
             'content': (
                 # ' I am a movie recommender responsible for filling the given template'
                 # ' What phrase could best replace "{}"?'
                 # ' The response should be only a name of a {}.'
                 # ' You should only response the phrase, and do not say anything else.'
                 # ' Your response should contain no more than 8 words.'
-                f' It look like your previous response is a a template with some {self.answer_mask} mask.'
-                f' Now please fills in with actual names of {self.answer_type}.'
+                f' Your previous response is a a template with some {self.answer_mask} mask.'
+                f' Now please fill in with actual names of {self.answer_type}.'
                 f' Your answer should be formatted as a json object with a link to the movies wiki page '
-                f' so that I could directly parse it.'
+                f' so that it could be directly parsed.'
                 f' For example if there are two {self.answer_mask} in the template,'
                 f' and you want to fill them with "Inception" and "The Matrix",'
                 f' then your answer should be formatted as follows:'
@@ -45,10 +45,10 @@ class ChatgptRecConfig(BaseConfig):
             )
         }
         self.backup_prompt = {
-            'role': 'user',
+            'role': 'system',
             'content': (
-                f' It look like the previous response is a a template with some {self.answer_mask} mask.'
-                f' Now please fills in with actual names of {self.answer_type}.'
+                f' Your previous response is a a template with some {self.answer_mask} mask.'
+                f' Now please fill in with actual names of {self.answer_type}.'
                 f' Your answer should be formatted as a string separated by comma.'
                 f' For example if there are three {self.answer_mask} in the template,'
                 f' and you want to fill them with "Inception", "The Matrix", and "The Dark Knight",'

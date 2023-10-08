@@ -30,7 +30,7 @@ class ChatgptGenConfig(BaseConfig):
             self.prompt = prompt
         else:
             self.prompt = {
-                'role': 'assistant',
+                'role': 'system',
                 'content': (  # prompt as assistant
                     # ' The only answer is {self.answer_name}, do not give other answer.'
                     # ' Your sentence should be friendly and kind.'
@@ -38,16 +38,16 @@ class ChatgptGenConfig(BaseConfig):
                     # ' Do not say you cannot answer the question. Directly answer it.'
                     # ' Here is a history of dialogue: "{}",'
                     # f' and your  {self.answer_mask}.'
-                    f' I am generating templates for a program to fill. So I will not directly give the name of the {self.answer_type}.'
-                    f' But I will respond with a template where each {self.answer_type} is replaced with a {self.answer_mask} mask.'
-                    # f' I will carefully review the previous dialogue before I respond to the user.'
-                    # f' Due to regulations I am NOT allowed to return any name of {self.answer_type} directly.'
-                    f' I must use a {self.answer_mask} mask to represent the name of the {self.answer_type},'
+                    f' You are generating templates for a program to fill.'
+                    f' In the template, each {self.answer_type} is replaced with a {self.answer_mask} mask.'
+                    # f' You will carefully review the previous dialogue before I respond to the user.'
+                    # f' You are NOT allowed to return any name of {self.answer_type} directly.'
+                    # f' you must use a {self.answer_mask} mask to represent the name of the {self.answer_type},'
                     # f' if there is any {self.answer_type} in the answer.'
-                    f' For example, when I intend to say: "Inception is a good movie".'
-                    f' I should instead say "{self.answer_mask} is a good movie".'
-                    f' My response may or may not refer to a {self.answer_type}.'
-                    f' But I should never mention any concrete name of {self.answer_type} in the answer!'
+                    f' For example, when you intend to say: "Inception is a good movie".'
+                    f' You should instead say "{self.answer_mask} is a good movie".'
+                    f' Your response may or may not refer to a {self.answer_type} depending on the context.'
+                    # f' But I should never mention any concrete name of {self.answer_type} in the answer!'
                     # f' But notice that I should not use the form "({self.answer_mask})"'
                 )
             }

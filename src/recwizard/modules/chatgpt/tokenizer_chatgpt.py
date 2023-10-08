@@ -38,7 +38,7 @@ class ChatgptTokenizer():
             if text.startswith(user):
                 messages.append({'role': 'user', 'content': text[len(user):].strip(' ')})
             elif text.startswith(system):
-                messages.append({'role': 'system', 'content': text[len(system):].strip(' ')})
+                messages.append({'role': 'assistant', 'content': text[len(system):].strip(' ')})
             else:
                 messages.append({'role': 'user', 'content': text})
 
