@@ -23,7 +23,6 @@ class ChatgptGenConfig(BaseConfig):
         super().__init__(**kwargs)
         self.model_name = 'gpt-4'
         self.max_gen_len = max_gen_len
-        # self.answer_name = 'AAAAAAAAAA'
         self.answer_type = 'movie'
         self.answer_mask = '<movie>'
         if prompt is not None:
