@@ -20,4 +20,5 @@ dist/
 src/build
 src/dist
 .idea
+.vscode
 docs

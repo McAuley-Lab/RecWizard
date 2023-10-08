@@ -43,7 +43,8 @@ class BaseTokenizer(PreTrainedTokenizer):
             id2entity = {v: k for k, v in entity2id.items()}
         self.entity2id = entity2id
         self.id2entity = id2entity
-        self.pad_entity_id = pad_entity_id if pad_entity_id is not None else max(self.entity2id.values()) + 1
+        if self.entity2id is not None:
+            self.pad_entity_id = pad_entity_id if pad_entity_id is not None else max(self.entity2id.values()) + 1
         if tokenizers is None:
             self.tokenizers = None
         else:
@@ -193,7 +194,8 @@ class BaseTokenizer(PreTrainedTokenizer):
         encodings = self.encodes([tokenizer.batch_encode_plus for tokenizer in self.tokenizers], texts, *args, **kwargs)
         encodings = self.mergeEncoding(encodings)
         # add entities to the encodings
-        encodings.data['entities'] = batch_entities
+        if self.entity2id:
+            encodings.data['entities'] = batch_entities
         return encodings
 
     def encode_plus(
@@ -217,7 +219,8 @@ class BaseTokenizer(PreTrainedTokenizer):
         encodings = self.mergeEncoding(encodings)
         if kwargs.get('return_tensors') == 'pt':
             entities = torch.tensor(entities, dtype=torch.long)
-        encodings.data['entities'] = entities
+        if self.entity2id:
+            encodings.data['entities'] = entities
         return encodings
 
     def process_entities(self, text: str) -> Tuple[str, List[Entity]]:
