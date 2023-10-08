@@ -43,6 +43,7 @@ class BaseTokenizer(PreTrainedTokenizer):
             id2entity = {v: k for k, v in entity2id.items()}
         self.entity2id = entity2id
         self.id2entity = id2entity
+        self.pad_entity_id = None
         if self.entity2id is not None:
             self.pad_entity_id = pad_entity_id if pad_entity_id is not None else max(self.entity2id.values()) + 1
         if tokenizers is None:
@@ -79,7 +80,10 @@ class BaseTokenizer(PreTrainedTokenizer):
 
     @property
     def vocab_size(self) -> int:
-        return len(self.entity2id)
+        try:
+            return len(self.entity2id) 
+        except:
+            return len(self.tokenizers[0])
 
     def _convert_token_to_id(self, token: str) -> int:
         return self.entity2id[token] if token in self.entity2id else self.unk_token_id
@@ -175,19 +179,22 @@ class BaseTokenizer(PreTrainedTokenizer):
         """
         # preprocess
         batch_text = map(self.preprocess, batch_text_or_text_pairs)
-        # process entity
-        processed_results = [self.process_entities(text) for text in batch_text]
-        processed_text, batch_entities = map(list, zip(*processed_results))
-        if kwargs.get('padding') == True:
-            batch_entities = pad_and_stack([torch.tensor(entities, dtype=torch.long) for entities in batch_entities],
-                                           pad_value=self.pad_entity_id)
-            if kwargs.get('return_tensors') is None:
-                batch_entities = batch_entities.tolist()
-        if self.tokenizers is None:
-            return BatchEncoding({
-                'raw_text': processed_text,
-                'entities': batch_entities
-            })
+        if self.entity2id:
+            # process entity
+            processed_results = [self.process_entities(text) for text in batch_text]
+            processed_text, batch_entities = map(list, zip(*processed_results))
+            if kwargs.get('padding') == True:
+                batch_entities = pad_and_stack([torch.tensor(entities, dtype=torch.long) for entities in batch_entities],
+                                            pad_value=self.pad_entity_id)
+                if kwargs.get('return_tensors') is None:
+                    batch_entities = batch_entities.tolist()
+            if self.tokenizers is None:
+                return BatchEncoding({
+                    'raw_text': processed_text,
+                    'entities': batch_entities
+                })
+        else:
+            processed_text = batch_text
         # replace special tokens for each tokenzizer
         texts = [list(text) for text in zip(*[self.replace_special_tokens(s) for s in processed_text])]
         # call the encodes function on the list of tokenizer and the list of text
@@ -281,14 +288,3 @@ class BaseTokenizer(PreTrainedTokenizer):
         init_kwargs = json.load(open(path, 'r'))
         kwargs.update(init_kwargs)
         return cls(*args, **kwargs)
-
-
-if __name__ == '__main__':
-    bert_tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
-    tokenizer = BaseTokenizer(entity2id={'movie': 0}, tokenizers=bert_tokenizer)
-    s = ["The <item>movie</item> is interesting<sep>Yes! I think so"]
-    print(tokenizer(s[0], return_token_type_ids=False))
-    save_dir = "dummy_tokenizer"
-    tokenizer.save_pretrained(save_dir)
-    tokenizer = BaseTokenizer.from_pretrained(save_dir, tokenizers=bert_tokenizer)
-    print(tokenizer(s, return_token_type_ids=False))

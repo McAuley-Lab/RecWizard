@@ -27,9 +27,8 @@ class SelfAttentionLayer(nn.Module):
         nn.init.xavier_uniform_(self.b.data, gain=1.414)
 
     def forward(self, h):
-        N = h.shape[0]
         e = torch.matmul(torch.tanh(torch.matmul(h, self.a)), self.b).squeeze(dim=1)
-        attention = F.softmax(e)
+        attention = F.softmax(e, dim=-1)
         return torch.matmul(attention, h)
 
 def _edge_list(kg, n_entity):
@@ -65,55 +64,51 @@ class KBRD(nn.Module):
         self,
         n_entity,
         n_relation,
+        sub_n_relation,
         dim,
-        edge_list_tensor,
+        edge_idx,
+        edge_type,
         num_bases
     ):
         super(KBRD, self).__init__()
 
         self.n_entity = n_entity
         self.n_relation = n_relation
+        self.sub_n_relation = sub_n_relation
         self.dim = dim
 
         self.entity_emb = nn.Embedding(self.n_entity, self.dim)
         self.relation_emb = nn.Embedding(self.n_relation, self.dim)
         nn.init.kaiming_uniform_(self.entity_emb.weight.data)
 
-        self.criterion = nn.CrossEntropyLoss()
-        self.kge_criterion = nn.Softplus()
-
         self.self_attn = SelfAttentionLayer(self.dim, self.dim)
         self.output = nn.Linear(self.dim, self.n_entity)
 
-        self.rgcn = RGCNConv(self.n_entity, self.dim, self.n_relation, num_bases=num_bases)
+        self.rgcn = RGCNConv(self.n_entity, self.dim, self.sub_n_relation, num_bases=num_bases)
         
-        self.edge_idx = edge_list_tensor[:, :2].t()
-        self.edge_type = edge_list_tensor[:, 2]
+        self.edge_idx = nn.Parameter(edge_idx, requires_grad=False)
+        self.edge_type = nn.Parameter(edge_type, requires_grad=False)
 
     def forward(
         self,
-        seed_sets: list,
-        labels: torch.LongTensor,
+        input_ids: torch.LongTensor,
+        attention_mask: torch.BoolTensor
     ):
         # [batch size, dim]
-        u_emb, nodes_features = self.user_representation(seed_sets)
-        scores = F.linear(u_emb, nodes_features, self.output.bias)
+        u_emb, nodes_features = self.user_representation(input_ids, attention_mask)
+        return F.linear(u_emb, nodes_features, self.output.bias)
 
-        base_loss = self.criterion(scores, labels)
 
-        loss = base_loss
-
-        return dict(scores=scores.detach(), base_loss=base_loss, loss=loss)
-
-    def user_representation(self, seed_sets):
+    def user_representation(self, input_ids, attention_mask):
         nodes_features = self.rgcn(None, self.edge_idx, self.edge_type)
 
         user_representation_list = []
-        for i, seed_set in enumerate(seed_sets):
-            if seed_set == []:
+        for input_ids_, attention_mask_ in zip(input_ids, attention_mask):
+            valid_num = attention_mask_.sum() if len(attention_mask_) else 0
+            if valid_num == 0:
                 user_representation_list.append(torch.zeros(self.dim).cuda())
                 continue
-            user_representation = nodes_features[seed_set]
+            user_representation = nodes_features[input_ids_[:valid_num]]
             user_representation = self.self_attn(user_representation)
             user_representation_list.append(user_representation)
         return torch.stack(user_representation_list), nodes_features
