@@ -5,8 +5,8 @@ from .module_utils import BaseModule
 from .model_utils import BasePipeline
 from .tokenizer_utils import BaseTokenizer
 
-from .modules.chatgpt import ChatgptGen, ChatgptGenConfig, ChatgptTokenizer
-from .modules.chatgpt import ChatgptRec, ChatgptRecConfig
+from .modules.llm import ChatgptGen, ChatgptGenConfig, ChatgptTokenizer
+from .modules.llm import ChatgptRec, LLMRecConfig
 
 from .modules.monitor import monitoring, monitor
 

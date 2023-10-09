@@ -4,39 +4,37 @@ Test result of this code:
 ('User: Hi. I like everything but fantasy films and alien type stuff. have you seen anything good lately? ', "System: Sure, if you're not into fantasy and alien films, you might enjoy The Lord of the Rings.")
 """
 
-import sys
-
-sys.path.append('./src')
-
 from recwizard.modules.chatgpt import ChatgptGen, ChatgptGenConfig
 from recwizard.modules.unicrs import UnicrsRec
 from recwizard.modules.redial import RedialRec
 from recwizard import ExpansionConfig, ExpansionPipeline
-import json
+
+prompt = {
+    'role': 'system',
+    'content': (  
+        ' You are a customer support recommending movies to the user.'
+        ' Our operating platform returns suggested movies in real time from the dialogue history.'
+        ' You may choose from the suggestions and elaborate on why the user may like them.'
+        ' Or you can choose to reply without a recommendation.'
+        ' Now The system is suggesting the following movies: {}.'
+        # ' Carefully review the dialogue history before I write a response to the user.'
+        ' If a movie comes in the format with a year, e.g. ""Inception (2010)"",'
+        ' you should see the year (2010) as a part of the movie name.'
+        ' You should not use the format ""Inception" (2010)" by leaving the year out of the quotation mark.'
+        ' You should keep in mind that the system suggestion is only for reference.'
+        # ' If the user is saying things like thank you or goodbye,'
+        ' You should prioritize giving a quick short response over throwing more movies at the user,'
+        ' especially when the user is likely to be leaving.'
+        ' You should not not respond to this message.'
+    )
+}
 
 if __name__ == '__main__':
-    prompt = {
-        'role': 'assistant',
-        'content': (  # prompt as assistant
-            ' I am a customer support recommending movies to the user.'
-            ' Our operating platform returns suggested movies in real time from the dialogue history.'
-            ' I may choose from the suggestions and elaborate on why the user may like them.'
-            ' Or I could choose to reply without a recommendation.'
-            ' Now The system is suggesting the following movies: {}.'
-            ' I will carefully review the dialogue history before I write a response to the user.'
-            ' If a movie comes in the format with a year, e.g. ""Inception (2010)"",'
-            ' I should see the year (2010) as a part of the movie name.'
-            ' I should not use the format ""Inception" (2010)" by leaving the year out of the quotation mark.'
-            ' I should keep in mind that the system suggestion is only for reference.'
-            # ' If the user is saying things like thank you or goodbye,'
-            ' I should prioritize giving a quick short response over throwing more movies at the user,'
-            ' especially when the user is likely to be leaving.'
-        )
-    }
+
 
     # upload to hub if prompt is changed
-    module = ChatgptGen(ChatgptGenConfig(prompt=prompt))
-    module.push_to_hub('recwizard/chatgpt-gen-expansion')
+    # module = ChatgptGen(ChatgptGenConfig(prompt=prompt))
+    # module.push_to_hub('recwizard/chatgpt-gen-expansion')
 
     model = ExpansionPipeline(
         config=ExpansionConfig(),

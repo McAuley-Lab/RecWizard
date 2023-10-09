@@ -1,7 +1,3 @@
-import sys
-
-sys.path.append('./src')
-
 from recwizard.modules.redial import RedialGen, RedialGenTokenizer, RedialRec, RedialRecTokenizer
 from recwizard.utility import loadJsonFileFromDataset, init_deterministic, EntityLink, DeviceManager
 from recwizard.pipelines.expansion import ExpansionConfig, ExpansionPipeline

@@ -1,29 +1,32 @@
 """
 Test result of this code:
 
-('User: Hi. I like everything but fantasy films and alien type stuff. have you seen anything good lately? ', "System: Sure, if you're not into fantasy and alien films, you might enjoy The Lord of the Rings.")
+User: Hi can you recommend a few <entity>fantasy</entity> movies to me?
+
+System: Of course, I\'d be happy to recommend some fantasy movies to you! Based on your interest in fantasy movies, I suggest "The Last Jedi" (2017) and "Wonder Woman" (2017).
+Both of these movies are highly acclaimed and have received great reviews for their fantastical elements, action-packed scenes, and strong female leads. 
+"The Last Jedi" is the latest installment in the Star Wars franchise and follows the journey of Rey, a young scavenger, as she becomes a Jedi and battles against the evil First Order. 
+"Wonder Woman" is a superhero movie that tells the origin story of Diana Prince, a demigod from the Amazonian island of Themyscira, as she fights in World War I.
+Both movies have been praised for their well-developed characters, stunning visuals, and exciting plot twists. I think you\'ll enjoy them! Let me know if you have any other questions.
 """
-
-import sys
-
-sys.path.append('./src')
 
 from recwizard.modules.chatgpt import LLMConfig, LlamaGen
 from recwizard.modules.unicrs import UnicrsRec
 from recwizard.modules.redial import RedialRec
 from recwizard import ExpansionConfig, ExpansionPipeline
-import json
+
 
 if __name__ == '__main__':
 
     # upload to hub if prompt is changed
-    module = LlamaGen(LLMConfig())
+    # from chatgpt_gen_expansion import prompt
+    # module = LlamaGen(LLMConfig(prompt=prompt))
     # module.push_to_hub('recwizard/llama-expansion')
 
     model = ExpansionPipeline(
         config=ExpansionConfig(),
-        # gen_module=ChatgptGen.from_pretrained('recwizard/chatgpt-gen-expansion'),
-        gen_module=module.to('cuda:0'),
+        gen_module=LlamaGen.from_pretrained('recwizard/llama-expansion').to('cuda:0'),
+        # gen_module=module.to('cuda:0'),
         # rec_module=UnicrsRec.from_pretrained('recwizard/unicrs-rec-redial'),
         rec_module=RedialRec.from_pretrained('recwizard/redial-rec').to('cuda:0'),
         use_rec_logits=False

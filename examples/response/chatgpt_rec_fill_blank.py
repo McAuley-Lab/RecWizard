@@ -4,11 +4,8 @@ Test result of this code:
 ('User: Hi. I like everything but fantasy films and alien type stuff. have you seen anything good lately?\n', "System: I haven't seen The Shawshank Redemption yet. I'm not sure what I can find.\n")
 """
 
-import sys
-sys.path.append('./src')
-
 from recwizard.modules.unicrs import UnicrsGen
-from recwizard.modules.chatgpt import ChatgptRec, ChatgptRecConfig
+from recwizard.modules.chatgpt import ChatgptRec, LLMRecConfig
 from recwizard.pipelines.fill_blank import FillBlankConfig, FillBlankPipeline
 
 if __name__ == '__main__':

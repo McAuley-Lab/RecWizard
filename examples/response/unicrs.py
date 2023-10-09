@@ -1,14 +1,3 @@
-import logging
-import sys
-
-import torch
-
-from recwizard.utility import EntityLink
-
-sys.path.append('./src')
-
-logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
-
 from recwizard.modules.unicrs import UnicrsGen, UnicrsRec, UnicrsRecTokenizer, UnicrsGenTokenizer
 from recwizard.pipelines.fill_blank.configuration_fill_blank import FillBlankConfig
 from recwizard.pipelines.fill_blank.modeling_fill_blank import FillBlankPipeline
@@ -21,7 +10,6 @@ if __name__ == '__main__':
         rec_module=UnicrsRec.from_pretrained('recwizard/unicrs-rec-redial'),
         # rec_tokenizer=UnicrsRecTokenizer.from_pretrained('recwizard/UnicrsRec-redial')
     ).to('cuda:0')
-    print('GPU memory allocated:', torch.cuda.memory_allocated() / 1024 / 1024, 'MB')
     query = ('System: Hello!'
              '<sep>User: Hi. I like horror movies, such as <entity>The Shining (1980)</entity> and <entity>Annabelle (2014)</entity>.'
              ' Would you please recommend me some other movies?'

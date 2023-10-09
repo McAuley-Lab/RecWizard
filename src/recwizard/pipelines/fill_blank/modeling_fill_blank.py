@@ -46,7 +46,7 @@ class FillBlankPipeline(BasePipeline):
             rec_input = {}
             rec_output = {}
         if return_dict:
-            if rec_output.get('links'):  # special case for chatgpt
+            if rec_output.get('links'):  # special case for llm
                 movieLinks = rec_output['links']
             elif 'movieIds' in rec_output:
                 movieIds = rec_output.get('movieIds')

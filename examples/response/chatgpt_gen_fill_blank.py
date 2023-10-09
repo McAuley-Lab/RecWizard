@@ -4,9 +4,6 @@ Test result of this code:
 ('User: Hi. I like everything but fantasy films and alien type stuff. have you seen anything good lately? ', "System: Sure, if you're not into fantasy and alien films, you might enjoy The Lord of the Rings.")
 """
 
-import sys
-sys.path.append('./src')
-
 from recwizard.modules.chatgpt import ChatgptGen, ChatgptGenConfig
 from recwizard.modules.unicrs import UnicrsRec
 from recwizard.modules.redial import RedialRec
@@ -15,10 +12,10 @@ from recwizard.pipelines.fill_blank import FillBlankConfig, FillBlankPipeline
 if __name__ == '__main__':
     # Upload to hub if prompt is changed
     # gen_module = ChatgptGen(ChatgptGenConfig())
-    # gen_module.push_to_hub('recwizard/chatgpt-gen-fillblank')
+    # gen_module.push_to_hub('recwizard/llm-gen-fillblank')
     model = FillBlankPipeline(
         config=FillBlankConfig(),
-        gen_module=ChatgptGen.from_pretrained('recwizard/chatgpt-gen-fillblank'),
+        gen_module=ChatgptGen.from_pretrained('recwizard/llm-gen-fillblank'),
         # rec_module=UnicrsRec.from_pretrained('recwizard/unicrs-rec-redial'),
         rec_module=RedialRec.from_pretrained('recwizard/redial-rec'),
     ).to('cuda:0')
