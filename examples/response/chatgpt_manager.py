@@ -5,8 +5,6 @@ Test result of this code:
 """
 
 import sys
-sys.path.append('./src')
-
 from recwizard.modules.unicrs import UnicrsGen, UnicrsRec
 from recwizard.pipelines.chatgpt import ChatgptAgentConfig, ChatgptAgent
 

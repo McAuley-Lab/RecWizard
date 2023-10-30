@@ -8,9 +8,6 @@ Here is three continued conversation. The code has memory and supports ChatGpt-l
 ('User: Thank you! Could you recommend one extra movie like it? ', "System: Of course! If you enjoyed the action and excitement in the previous movie, you're likely to enjoy Mad Max: Fury Road. It shares a similar thrilling pace and narrative style. ^_^")
 """
 
-import sys
-sys.path.append('./src')
-
 from recwizard.modules.chatgpt import ChatgptGen
 from recwizard.modules.chatgpt import ChatgptRec
 from recwizard.pipelines.chatgpt import ChatgptAgentConfig, ChatgptAgent

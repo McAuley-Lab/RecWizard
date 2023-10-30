@@ -1,8 +1,4 @@
-import sys
-sys.path.append('./src')
 from recwizard.utility import DeviceManager
-
-
 from recwizard.modules.unicrs import UnicrsGen, UnicrsGenTokenizer
 from recwizard.modules.redial import RedialRec, RedialRecTokenizer
 from recwizard.pipelines.fill_blank.configuration_fill_blank import FillBlankConfig

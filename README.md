@@ -84,7 +84,7 @@ recwizard
 ├── module_utils.py
 ├── modules
 │   ├── __init__.py
-│   ├── chatgpt
+│   ├── llm
 │   │   ├── __init__.py
 │   │   ├── configuration_chatgpt_gen.py
 │   │   ├── configuration_chatgpt_rec.py

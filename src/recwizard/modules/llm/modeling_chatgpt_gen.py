@@ -1,33 +1,32 @@
-import json
 import os
 from typing import Union, List
-
 import openai
 
 from recwizard import BaseModule
 from recwizard.modules.monitor import monitor
+from .configuration_llm import LLMConfig
 from .tokenizer_chatgpt import ChatgptTokenizer
-from .configuration_chatgpt_rec import ChatgptRecConfig
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-class ChatgptRec(BaseModule):
+class ChatgptGen(BaseModule):
     """
-    The recommender implemented based on OpanAI's GPT models.
+    The generator implemented based on OpanAI's GPT models.
 
     """
 
-    config_class = ChatgptRecConfig
+    config_class = LLMConfig
     tokenizer_class = ChatgptTokenizer
 
-    def __init__(self, config: ChatgptRecConfig, prompt=None, model_name=None, debug=False, **kwargs):
+    def __init__(self, config: LLMConfig, prompt=None, model_name=None, debug=False,
+                 **kwargs):
         """
         Initializes the instance based on the config file.
 
         Args:
-            config (ChatgptRecConfig): The config file.
+            config (ChatgptGenConfig): The config file.
             prompt (str, optional): A prompt to override the prompt from config file.
             model_name (str, optional): The specified GPT model's name. 
         """
@@ -49,7 +48,7 @@ class ChatgptRec(BaseModule):
             model_name (str, optional): The specified GPT model's name.
 
         Returns:
-            (ChatgptRec): the instance.
+             the instance.
         """
         if config is None:
             config = cls.config_class.from_pretrained(pretrained_model_name_or_path)
@@ -69,37 +68,42 @@ class ChatgptRec(BaseModule):
         Get a tokenizer.
 
         Returns:
-            (ChatgptRecTokenizer): the tokenizer.
+            (ChatgptTokenizer): the tokenizer.
         """
         # return lambda x: {'context': x}
         return ChatgptTokenizer()
 
     @monitor
-    def response(self, raw_input: str, tokenizer=None, topk=3, max_tokens=None, temperature=0.5, model_name=None,
+    def response(self, raw_input, tokenizer, recs: List[str] = None, max_tokens=None, temperature=0.5,
+                 model_name=None,
                  return_dict=False,
                  **kwargs):
         """
         Generate a template to response the processed user's input.
 
         Args:
-            raw_input (dict): A dict that contains the question and its related information.
-            tokenizer (BaseTokenizer, optional): A tokenizer to process the question.
-            topk (int): The number of answers.
+            raw_input (str): The user's raw input.
+            tokenizer (BaseTokenizer, optional): A tokenizer to process the raw input.
+            recs (list, optional): The recommended movies.
             max_tokens (int): The maximum number of tokens used for ChatGPT API.
             temperature (float): The temperature value used for ChatGPT API.
             model_name (str, optional): The specified GPT model's name.
             return_dict (bool): Whether to return a dict or a list.
 
-
         Returns:
-            list: The answers.
+            str: The template to response the processed user's input.
         """
-        if topk == 0:
-            return {'output': [], 'links': []} if return_dict else []
+
         messages = tokenizer(raw_input)['messages']
-        messages.append(self.prompt)
+        # Add prompt at end
+        prompt = self.prompt.copy()
+        if recs is not None:
+            formatted_movies = ", ".join([f'{i + 1}. "{movie}"' for i, movie in enumerate(recs)])
+            prompt['content'] = prompt['content'].format(formatted_movies)
+        messages.append(prompt)
         if self.debug:
             logger.info('\ninput:', messages)
+
         res = openai.ChatCompletion.create(
             model=model_name or self.model_name,
             max_tokens=max_tokens,
@@ -109,31 +113,10 @@ class ChatgptRec(BaseModule):
 
         if self.debug:
             logger.info('\napi result:', res)
-
-        try:
-            answers = json.loads(res)
-            if len(answers) < topk:
-                raise ValueError()
-            output = [answer['name'] for answer in answers][:topk]
-            links = [answer['uri'] for answer in answers][:topk]
-        except:
-            messages[-1] = self.config.backup_prompt
-            res = openai.ChatCompletion.create(
-                model=self.model_name,
-                max_tokens=max_tokens,
-                messages=messages,
-                temperature=temperature
-            )['choices'][0]['message']['content']
-            output = res.split(',')[:topk]
-            if len(output) < topk:
-                output = output + [''] * (topk - len(output))
-            links = [''] * topk
-
+        res_out = 'System: {}'.format(res)
         if return_dict:
             return {
-                "input": messages,
-                "output": output,
-                "links": {name: link for name, link in zip(output, links)}
+                'input': messages,
+                'output': res_out,
             }
-        else:
-            return output
+        return res_out

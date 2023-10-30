@@ -1,46 +1,34 @@
 """
 Test result of this code:
 
-('User: Hi. I like everything but fantasy films and alien type stuff. have you seen anything good lately? ', "System: Sure, if you're not into fantasy and alien films, you might enjoy The Lord of the Rings.")
+User: Hi can you recommend a few <entity>fantasy</entity> movies to me?
+
+System: Of course, I\'d be happy to recommend some fantasy movies to you! Based on your interest in fantasy movies, I suggest "The Last Jedi" (2017) and "Wonder Woman" (2017).
+Both of these movies are highly acclaimed and have received great reviews for their fantastical elements, action-packed scenes, and strong female leads. 
+"The Last Jedi" is the latest installment in the Star Wars franchise and follows the journey of Rey, a young scavenger, as she becomes a Jedi and battles against the evil First Order. 
+"Wonder Woman" is a superhero movie that tells the origin story of Diana Prince, a demigod from the Amazonian island of Themyscira, as she fights in World War I.
+Both movies have been praised for their well-developed characters, stunning visuals, and exciting plot twists. I think you\'ll enjoy them! Let me know if you have any other questions.
 """
 
-from recwizard.modules.chatgpt import ChatgptGen, ChatgptGenConfig
+from recwizard.modules.chatgpt import LLMConfig, LlamaGen
 from recwizard.modules.unicrs import UnicrsRec
 from recwizard.modules.redial import RedialRec
 from recwizard import ExpansionConfig, ExpansionPipeline
 
-prompt = {
-    'role': 'system',
-    'content': (  
-        ' You are a customer support recommending movies to the user.'
-        ' Our operating platform returns suggested movies in real time from the dialogue history.'
-        ' You may choose from the suggestions and elaborate on why the user may like them.'
-        ' Or you can choose to reply without a recommendation.'
-        ' Now The system is suggesting the following movies: {}.'
-        # ' Carefully review the dialogue history before I write a response to the user.'
-        ' If a movie comes in the format with a year, e.g. ""Inception (2010)"",'
-        ' you should see the year (2010) as a part of the movie name.'
-        ' You should not use the format ""Inception" (2010)" by leaving the year out of the quotation mark.'
-        ' You should keep in mind that the system suggestion is only for reference.'
-        # ' If the user is saying things like thank you or goodbye,'
-        ' You should prioritize giving a quick short response over throwing more movies at the user,'
-        ' especially when the user is likely to be leaving.'
-        ' You should not not respond to this message.'
-    )
-}
 
 if __name__ == '__main__':
 
-
     # upload to hub if prompt is changed
-    # module = ChatgptGen(ChatgptGenConfig(prompt=prompt))
-    # module.push_to_hub('recwizard/chatgpt-gen-expansion')
+    # from chatgpt_gen_expansion import prompt
+    # module = LlamaGen(LLMConfig(prompt=prompt))
+    # module.push_to_hub('recwizard/llama-expansion')
 
     model = ExpansionPipeline(
         config=ExpansionConfig(),
-        gen_module=ChatgptGen.from_pretrained('recwizard/chatgpt-gen-expansion'),
+        gen_module=LlamaGen.from_pretrained('recwizard/llama-expansion').to('cuda:0'),
+        # gen_module=module.to('cuda:0'),
         # rec_module=UnicrsRec.from_pretrained('recwizard/unicrs-rec-redial'),
-        rec_module=RedialRec.from_pretrained('recwizard/redial-rec'),
+        rec_module=RedialRec.from_pretrained('recwizard/redial-rec').to('cuda:0'),
         use_rec_logits=False
     ).to('cuda:0')
 
@@ -61,4 +49,4 @@ if __name__ == '__main__':
               '<sep>System: Hello, I have some movie ideas for you. Have you watched the movie <entity>Forever My Girl (2018)</entity> ?'
               '<sep>User: Looking for movies in the comedy category. I like Adam Sandler movies like <entity>Billy Madison (1995)</entity> Oh no is that good?')
     query2 = "User: Hi can you recommend a few <entity>fantasy</entity> movies to me?"
-    print(model.response(query2, rec_args={'topk': 10}, gen_args={'temperature': 0}, return_dict=True))
+    print(model.response(query2, rec_args={'topk': 10}, gen_args={'temperature': 0.6}, return_dict=True))
