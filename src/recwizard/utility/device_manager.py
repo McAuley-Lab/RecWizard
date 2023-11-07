@@ -38,9 +38,9 @@ class DeviceManager:
         if hasattr(val, "to"):
             return val.to(device)
         elif isinstance(val, List) or isinstance(val, Set) or isinstance(val, Tuple):
-            return [cls.copy_to_device(x) for x in val]
+            return [cls.copy_to_device(x, device) for x in val]
         elif isinstance(val, Dict):
-            return {k: cls.copy_to_device(v) for k, v in val.items()}
+            return {k: cls.copy_to_device(v, device) for k, v in val.items()}
         else:
             return val
         # else:
