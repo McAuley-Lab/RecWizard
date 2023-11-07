@@ -82,7 +82,7 @@ class RedialGen(BaseModule):
     @monitor
     def response(self, raw_input, tokenizer, recs=None, return_dict=False, beam_size=10, forbid_movies=None,
                  temperature=1, max_seq_length=40, **kwargs):
-        gen_input = DeviceManager.copy_to_device(tokenizer([raw_input]).data)
+        gen_input = DeviceManager.copy_to_device(tokenizer([raw_input]).data, device=self.device)
         context = self.forward(**gen_input, recs=recs, encode_only=True)[0]
         if recs is None:
             recs = torch.zeros(1, self.n_movies)

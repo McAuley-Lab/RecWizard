@@ -84,7 +84,7 @@ class RedialRec(BaseModule):
     @WrapSingleInput
     @monitor
     def response(self, raw_input, tokenizer, return_dict=False, topk=3, **kwargs):
-        tokenized_input = DeviceManager.copy_to_device(tokenizer(raw_input).data)
+        tokenized_input = DeviceManager.copy_to_device(tokenizer(raw_input).data, device=self.device)
         logits = self.forward(**tokenized_input)
         movieIds = logits.topk(k=topk, dim=-1).indices[:, -1,
                    :].tolist()  # selects the recommendation for the last sentence
