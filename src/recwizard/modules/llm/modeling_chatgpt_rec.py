@@ -1,8 +1,7 @@
 import json
 import os
 from typing import Union, List
-
-import openai
+from openai import OpenAI
 
 from recwizard import BaseModule
 from recwizard.modules.monitor import monitor
@@ -36,6 +35,7 @@ class ChatgptRec(BaseModule):
         self.model_name = config.model_name if model_name is None else model_name
         self.prompt = config.prompt if prompt is None else prompt
         self.debug = debug
+        self.client = OpenAI()
 
     @classmethod
     def from_pretrained(cls, pretrained_model_name_or_path, config=None, prompt=None, model_name=None):
@@ -100,12 +100,12 @@ class ChatgptRec(BaseModule):
         messages.append(self.prompt)
         if self.debug:
             logger.info('\ninput:', messages)
-        res = openai.ChatCompletion.create(
+        res = self.client.chat.completions.create(
             model=model_name or self.model_name,
             max_tokens=max_tokens,
             messages=messages,
             temperature=temperature
-        )['choices'][0]['message']['content']
+        ).choices[0].message.content
 
         if self.debug:
             logger.info('\napi result:', res)
@@ -118,12 +118,12 @@ class ChatgptRec(BaseModule):
             links = [answer['uri'] for answer in answers][:topk]
         except:
             messages[-1] = self.config.backup_prompt
-            res = openai.ChatCompletion.create(
+            res = self.client.chat.completions.create(
                 model=self.model_name,
                 max_tokens=max_tokens,
                 messages=messages,
                 temperature=temperature
-            )['choices'][0]['message']['content']
+            ).choices[0].message.content
             output = res.split(',')[:topk]
             if len(output) < topk:
                 output = output + [''] * (topk - len(output))

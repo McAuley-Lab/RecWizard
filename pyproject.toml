@@ -42,7 +42,7 @@ dependencies = [
     "pandas~=2.0.0",
     "pyarrow~=12.0.0",
     "nltk~=3.8.1",
-    "openai~=0.28.1",
+    "openai~=1.1.1",
     "h5py",
     "loguru"
 ]
