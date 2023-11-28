@@ -1,6 +1,6 @@
 # <img src="server/recwizard.png" alt="recwizard logo" width="25"/> RecWizard
 ### A Plug-n-Play Toolkit for Conversational Recommenders with Modular, Portable Models and Interactive User Interface
-
+ <a href='https://huggingface.co/recwizard'><img src="https://img.shields.io/badge/%F0%9F%A4%97-HuggingFace%20Community-blue"/></a>
 #### (submitted to AAAI 2024 Demo Track)
 
 ## Overview
