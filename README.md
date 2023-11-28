@@ -71,6 +71,19 @@ System: If you're a fan of Adam Sandler, you might enjoy "50 First Dates (2004)"
 Another one is "Big Daddy (1999)" where Sandler's character adopts a kid to impress his girlfriend, but things don't go as planned. 
 Both movies have Sandler's signature humor and are quite entertaining.
 ```
+## Implemented Modules
+
+| Base Model | Recommender Module                                           | Generator Module                                             |
+| ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| ReDIAL     | [redial-rec](https://huggingface.co/recwizard/redial-rec)    | [redial-gen](https://huggingface.co/recwizard/redial-gen)    |
+| KBRD       | [kbrd-rec-redial](https://huggingface.co/recwizard/kbrd-rec-redial) | [kbrd-rec-redial](https://huggingface.co/recwizard/kbrd-gen-redial) |
+| UniCRS     | [unicrs-rec-redial](https://huggingface.co/recwizard/unicrs-rec-redial)/[unicrs-rec-inspired](https://huggingface.co/recwizard/unicrs-rec-inspired) | [unicrs-gen-redial](https://huggingface.co/recwizard/unicrs-gen-redial)/[unicrs-gen-inspired](https://huggingface.co/recwizard/unicrs-gen-inspired) |
+| KGSF       | kgsf-rec                                                     | kgsf-gen                                                     |
+| ChatGPT    | [chatgpt-rec-fillblank](https://huggingface.co/recwizard/chatgpt-rec-fillblank) | [chatgpt-gen-fillblank](https://huggingface.co/recwizard/chatgpt-gen-fillblank)/[chatgpt-gen-expansion](https://huggingface.co/recwizard/chatgpt-gen-expansion) |
+| Llama2     |                                                              | [llama-expansion](https://huggingface.co/recwizard/llama-expansion) |
+
+
+
 
 
 
