@@ -3,13 +3,19 @@ from recwizard.configuration_utils import BaseConfig
 
 class KGSFGenConfig(BaseConfig):
     def __init__(self, 
-                 batch_size: int, 
-                 max_r_length: int, 
-                 embedding_size: int, 
-                 n_concept: int, 
-                 dim: int, 
-                 n_entity: int, 
-                 num_bases: int, 
+                 dictionary = None,
+                 subkg = None,
+                 mask4movie = None,
+                 mask4key = None,
+                 embedding_data = None,
+                 edge_set = None,
+                 batch_size: int = 32, 
+                 max_r_length: int = 30, 
+                 embedding_size: int = 300, 
+                 n_concept: int = 29308, 
+                 dim: int = 128, 
+                 n_entity: int = 64368, 
+                 num_bases: int = 8, 
                  n_positions: int = None,
                  truncate: int = 0, 
                  text_truncate: int = 0, 
@@ -26,7 +32,7 @@ class KGSFGenConfig(BaseConfig):
                  attention_dropout: float = 0.0,
                  relu_dropout: float = 0.1,
                  learn_positional_embeddings: bool = False,
-                 embeddings_scale: bool = True,
+                 embeddings_scale: bool = True,               
                  **kwargs):
         super().__init__(**kwargs)
         self.batch_size = batch_size
@@ -63,3 +69,10 @@ class KGSFGenConfig(BaseConfig):
         self.relu_dropout = relu_dropout
         self.learn_positional_embeddings = learn_positional_embeddings
         self.embeddings_scale = embeddings_scale
+        
+        self.dictionary = dictionary
+        self.subkg = subkg
+        self.mask4key = mask4key
+        self.mask4movie = mask4movie
+        self.embedding_data = embedding_data
+        self.edge_set = edge_set

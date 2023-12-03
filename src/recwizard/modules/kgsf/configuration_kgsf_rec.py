@@ -3,13 +3,17 @@ from recwizard.configuration_utils import BaseConfig
 
 class KGSFRecConfig(BaseConfig):
     def __init__(self, 
-                 batch_size: int, 
-                 max_r_length: int, 
-                 embedding_size: int, 
-                 n_concept: int, 
-                 dim: int, 
-                 n_entity: int, 
-                 num_bases: int, 
+                 dictionary = None,
+                 subkg = None,
+                 edge_set = None,
+                 embedding_data = None,
+                 batch_size: int = 32, 
+                 max_r_length: int = 30, 
+                 embedding_size: int = 300, 
+                 n_concept: int = 29308, 
+                 dim: int = 128, 
+                 n_entity: int = 64368, 
+                 num_bases: int = 8, 
                  n_positions: int = None,
                  truncate: int = 0, 
                  text_truncate: int = 0, 
@@ -45,3 +49,8 @@ class KGSFRecConfig(BaseConfig):
         self.end_idx = end_idx
         self.longest_label = longest_label
         self.pretrain = pretrain
+        
+        self.dictionary = dictionary
+        self.subkg = subkg
+        self.edge_set = edge_set
+        self.embedding_data = embedding_data

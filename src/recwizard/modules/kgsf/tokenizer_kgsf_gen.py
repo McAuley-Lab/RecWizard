@@ -28,34 +28,37 @@ class KGSFGenTokenizer(BaseTokenizer):
             entity2id: Dict[str, int] = None,
             **kwargs,
     ):
+        
         if entity2entityId is None:
-            self.entity2entityId=pkl.load(open('../kgsfdata/entity2entityId.pkl','rb'))
+            self.entity2entityId=pkl.load(open('recwizard/modules/kgsf/data/entity2entityId.pkl','rb'))
         else:
             self.entity2entityId = entity2entityId
+      
         self.entity_max=len(self.entity2entityId)
         
         if word2index is None:
-            self.word2index = json.load(open('../kgsfdata/word2index_redial.json', encoding='utf-8'))
+            self.word2index = json.load(open('recwizard/modules/kgsf/data/word2index_redial.json', encoding='utf-8'))
         else:
             self.word2index = word2index
-            
+
         if key2index is None:
-            self.key2index=json.load(open('../kgsfdata/key2index_3rd.json',encoding='utf-8'))
+            self.key2index=json.load(open('recwizard/modules/kgsf/data/key2index_3rd.json',encoding='utf-8'))
         else:
             self.key2index = key2index
-            
+                      
         if entity_ids is None:
-            self.entity_ids = pkl.load(open("../kgsfdata/movie_ids.pkl", "rb"))
+            self.entity_ids = pkl.load(open("recwizard/modules/kgsf/data/movie_ids.pkl", "rb"))
         else:
             self.entity_ids = entity_ids
 
         if id2entity is None:
-            self.id2entity = pkl.load(open('../kgsfdata/id2entity.pkl','rb'))
+            self.id2entity = pkl.load(open('recwizard/modules/kgsf/data/id2entity.pkl','rb'))
         else:
             self.id2entity = id2entity
-        
+        self.id2entity = {int(k):str(v) for k,v in self.id2entity.items()}
+     
         if id2name is None:
-            self.id2name = json.load(open('../kgsfdata/id2name.jsonl', encoding='utf-8'))
+            self.id2name = json.load(open('recwizard/modules/kgsf/data/id2name.jsonl', encoding='utf-8'))
         else:
             self.id2name = id2name
         
@@ -63,7 +66,7 @@ class KGSFGenTokenizer(BaseTokenizer):
             self.entity2id = {v:k for k,v in self.id2entity.items()}
         else:
             self.entity2id = entity2id
-            
+        
         self.entityId2entity = {v:k for k,v in self.entity2entityId.items()}
         # in config:
         self.max_count = max_count

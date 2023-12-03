@@ -7,17 +7,15 @@ from torch_geometric.nn.conv.rgcn_conv import RGCNConv
 from torch_geometric.nn.conv.gcn_conv import GCNConv
 import json
 import pickle as pkl
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 from recwizard import BaseModule
-
 from recwizard.utility.utils import WrapSingleInput
-
 from .tokenizer_kgsf_rec import KGSFRecTokenizer
 from .configuration_kgsf_rec import KGSFRecConfig
-
-from .utils import _create_embeddings,_create_entity_embeddings, _edge_list, _concept_edge_list4GCN
+from .utils import _create_embeddings,_create_entity_embeddings, _edge_list
 from .graph_utils import SelfAttentionLayer,SelfAttentionLayer_batch
 from recwizard.modules.monitor import monitor
+
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 class KGSFRec(BaseModule):
     config_class = KGSFRecConfig
     tokenizer_class = KGSFRecTokenizer
@@ -25,9 +23,7 @@ class KGSFRec(BaseModule):
 
     def __init__(self, config, **kwargs):
         super().__init__(config,**kwargs)
-        self.opt = vars(config)  # converting config to dictionary if needed
-        dictionary = json.load(open('../kgsfdata/word2index_redial.json', encoding='utf-8'))
-
+        dictionary = config.dictionary
         self.batch_size = config.batch_size
         self.max_r_length = config.max_r_length
         self.NULL_IDX = config.padding_idx
@@ -36,16 +32,14 @@ class KGSFRec(BaseModule):
 
         self.pad_idx = config.padding_idx
         self.embeddings = _create_embeddings(
-            dictionary, config.embedding_size, self.pad_idx
+            dictionary, config.embedding_size, self.pad_idx, config.embedding_data
         )
 
         self.concept_embeddings = _create_entity_embeddings(
             config.n_concept + 1, config.dim, 0)
         self.concept_padding = 0
 
-        self.kg = pkl.load(
-            open("../kgsfdata/subkg.pkl", "rb")
-        )
+        self.kg = {int(k): v for k, v in config.subkg.items()}
 
         self.n_positions = config.n_positions
 
@@ -73,13 +67,12 @@ class KGSFRec(BaseModule):
 
         edge_list, self.n_relation = _edge_list(self.kg, config.n_entity, hop=2)
         edge_list = list(set(edge_list))
-        print(len(edge_list), self.n_relation)
         self.dbpedia_edge_sets = torch.LongTensor(edge_list).to(device)
         self.db_edge_idx = self.dbpedia_edge_sets[:, :2].t()
         self.db_edge_type = self.dbpedia_edge_sets[:, 2]
 
         self.dbpedia_RGCN = RGCNConv(config.n_entity, self.dim, self.n_relation, num_bases=config.num_bases)
-        self.concept_edge_sets = _concept_edge_list4GCN()
+        self.concept_edge_sets = torch.LongTensor(config.edge_set).to(device)
         self.concept_GCN = GCNConv(self.dim, self.dim)
 
         self.pretrain = config.pretrain
@@ -98,12 +91,9 @@ class KGSFRec(BaseModule):
         else:
             return rec_loss+0.025*info_db_loss
 
-    # def forward(self, context, response, mask_response, dbpedia_mask, concept_mask, seed_sets, labels, concept_vec, db_vec, entity_vector, rec, entity=None, test=True, cand_params=None, prev_enc=None, maxlen=None, bsz=None):
-    # response, concept_mask, seed_sets, labels, db_vec, rec
     def forward(self, response, concept_mask, seed_sets, labels, db_vec, rec, test=True, cand_params=None, prev_enc=None, maxlen=None, bsz=None):
         print(type(concept_mask),type(seed_sets),type(db_vec),type(rec))
         if bsz == None:
-            #bsz = self.batch_size # this does not work if not enough for a batch
             bsz = len(seed_sets)
 
         # graph network
@@ -156,7 +146,6 @@ class KGSFRec(BaseModule):
         movieIds_lst = []
         movieNames_lst = []
         for raw_single in raw_input:
-            print('one')
             inputs = tokenizer.encode(raw_single)
             logits = self.forward(**inputs)['rec_scores']
             movieIds, movieNames = tokenizer.decode(logits)
