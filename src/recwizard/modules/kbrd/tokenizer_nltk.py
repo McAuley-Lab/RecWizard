@@ -7,6 +7,7 @@ from tokenizers.normalizers import Lowercase
 from tokenizers.pre_tokenizers import PreTokenizer
 from transformers import PreTrainedTokenizerFast
 
+
 class NLTKTokenizer:
     def __init__(self, language="english"):
         # nltk.download('punkt')
@@ -14,15 +15,25 @@ class NLTKTokenizer:
         try:
             self.tokenizer = nltk.data.load(st_path)
         except LookupError:
-            nltk.download('punkt')
+            nltk.download("punkt")
             self.tokenizer = nltk.data.load(st_path)
         self.word_tokenizer = nltk.tokenize.treebank.TreebankWordTokenizer()
 
-    def word_tokenize(self, i: int, normalized_string: NormalizedString) -> List[NormalizedString]:
-        return [normalized_string[s:t] for s, t in self.word_tokenizer.span_tokenize(str(normalized_string))]
+    def word_tokenize(
+        self, i: int, normalized_string: NormalizedString
+    ) -> List[NormalizedString]:
+        return [
+            normalized_string[s:t]
+            for s, t in self.word_tokenizer.span_tokenize(str(normalized_string))
+        ]
 
-    def nltk_split(self, i: int, normalized_string: NormalizedString) -> List[NormalizedString]:
-        sentences = [normalized_string[s:t] for s, t in self.tokenizer.span_tokenize(str(normalized_string))]
+    def nltk_split(
+        self, i: int, normalized_string: NormalizedString
+    ) -> List[NormalizedString]:
+        sentences = [
+            normalized_string[s:t]
+            for s, t in self.tokenizer.span_tokenize(str(normalized_string))
+        ]
         tokenized = []
         for sentence in sentences:
             tokenized += self.word_tokenize(i, sentence)
@@ -53,7 +64,7 @@ def KBRDWordTokenizer(vocab, name="kbrd"):
     if tokenizers.get(name):
         return tokenizers[name]
     word2id = {word: i for i, word in enumerate(vocab)}
-    tokenizer = Tokenizer(WordLevel(unk_token='__unk__', vocab=word2id))
+    tokenizer = Tokenizer(WordLevel(unk_token="__unk__", vocab=word2id))
     tokenizer.normalizer = Lowercase()
 
     wrapped_tokenizer = PreTrainedTokenizerFast(
@@ -63,7 +74,8 @@ def KBRDWordTokenizer(vocab, name="kbrd"):
         bos_token="__start__",
         eos_token="__end__",
     )
-    wrapped_tokenizer.backend_tokenizer.pre_tokenizer = PreTokenizer.custom(NLTKTokenizer())
+    wrapped_tokenizer.backend_tokenizer.pre_tokenizer = PreTokenizer.custom(
+        NLTKTokenizer()
+    )
     tokenizers[name] = wrapped_tokenizer
     return wrapped_tokenizer
-

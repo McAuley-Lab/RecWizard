@@ -1,13 +1,16 @@
 from recwizard.configuration_utils import BaseConfig
 
+
 class KBRDRecConfig(BaseConfig):
-    def __init__(self,
-                 n_entity: int = None,
-                 n_relation: int = None,
-                 sub_n_relation: int = None,
-                 dim: int = None,
-                 num_bases: int = None,
-                 **kwargs):
+    def __init__(
+        self,
+        n_entity: int = None,
+        n_relation: int = None,
+        sub_n_relation: int = None,
+        dim: int = None,
+        num_bases: int = None,
+        **kwargs,
+    ):
         super().__init__(**kwargs)
 
         self.n_entity = n_entity
