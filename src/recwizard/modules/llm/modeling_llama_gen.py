@@ -49,10 +49,10 @@ class LlamaGen(BaseModule):
         Get an instance of this class.
 
         Args:
-            config:
-            pretrained_model_name_or_path:
-            prompt (str, optional): The prompt to override the prompt from config file.
-            model_name (str, optional): The specified GPT model's name.
+            pretrained_model_name_or_path (str): The name or path of the pretrained model to load.
+            config (PretrainedConfig, optional): An optional configuration object for the model.
+            prompt (str, optional): An optional custom prompt for the model's conversation.
+            model_name (str, optional): An optional name for the specified model.
 
         Returns:
              the instance.

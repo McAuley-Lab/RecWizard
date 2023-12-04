@@ -37,6 +37,7 @@ class LlamaTokenizer(BaseTokenizer):
             context (str): The raw input.
 
         Returns:
+            str: The processed text with special formatting for user and system messages.
 
         """
 

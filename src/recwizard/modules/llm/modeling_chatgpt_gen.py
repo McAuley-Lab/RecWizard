@@ -1,6 +1,6 @@
 import os
 from typing import Union, List
-from openai import OpenAI
+# from openai import OpenAI
 
 from recwizard import BaseModule
 from recwizard.modules.monitor import monitor
@@ -43,10 +43,10 @@ class ChatgptGen(BaseModule):
         Get an instance of this class.
 
         Args:
-            config:
-            pretrained_model_name_or_path:
-            prompt (str, optional): The prompt to override the prompt from config file.
-            model_name (str, optional): The specified GPT model's name.
+            pretrained_model_name_or_path (str): The name or path of the pretrained model to load.
+            config (Optional[PretrainedConfig]): An optional configuration for the model.
+            prompt (str, optional): An optional prompt to override the prompt from the configuration file.
+            model_name (str, optional): An optional name for the specified GPT model.
 
         Returns:
              the instance.

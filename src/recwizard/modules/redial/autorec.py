@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class AutoRec(BaseModule):  # We use features from BaseModule to load previous checkpoints
     """
-    User-based Autoencoder for Collaborative Filtering
+    User-based Autoencoder for Collaborative Filtering.
     """
 
     def __init__(self, n_movies, layer_sizes, g, f):

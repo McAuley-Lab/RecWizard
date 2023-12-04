@@ -91,8 +91,37 @@ class KGSFRecTokenizer(BaseTokenizer):
         }
     def padding_w2v(self,sentence,max_length,pad=0,end=2,unk=3):
         """
-        sentence: ['Okay', ',', 'have', 'you', 'seen', '@136983', '?'] / [...]
-        max_length: 30 / 256
+
+        Pad and process a list of words into a structured representation for word vectors.
+        - Converts words to numerical indices based on the provided vocabulary.
+        - Calculates concept masks based on the word case.
+        - Identifies DBpedia masks for entity recognition.
+
+        Args:
+            sentence (list): A list of words in the input sentence.
+            max_length (int): The maximum length of the resulting sequence.
+            pad (int): The padding value to use. Defaults to 0.
+            end (int): The end-of-sequence value. Defaults to 2.
+            unk (int): The unknown word value. Defaults to 3.
+
+        Returns:
+            Tuple[list, int, list, list]: A tuple containing four elements:
+                - A list of padded and processed word indices.
+                - The length of the resulting sequence.
+                - A list representing concept masks.
+                - A list representing DBpedia masks.
+
+        Example:
+            >>> sentence = ['Okay', ',', 'have', 'you', 'seen', '@136983', '?']
+            >>> max_length = 30
+            >>> padded_vector, length, concept_masks, dbpedia_masks = tokenizer.padding_w2v(sentence, max_length)
+            >>> print(padded_vector)
+
+            >>> print(length)
+
+            >>> print(concept_masks)
+
+            >>> print(dbpedia_masks)
         """
         vector=[]
         concept_mask=[]
@@ -167,11 +196,20 @@ class KGSFRecTokenizer(BaseTokenizer):
     
     def encode(self,user_input, user_context=None, entity=None, system_response=None, movie=0):
         """
-        user_input: eg. Hi, can you recommend a movie for me?
-        user_context: eg. [['Hello'], ['hi', 'how', 'are', 'u']] TODO: 考虑分隔符吗 _split_？
-        entity: movies in user_context, default []
-        system_response: eg. ['Great', '.', 'How', 'are', 'you', 'this', 'morning', '?']
-        movie: movies in system_response, defualt is an ID, so None. ?？？ TODO: 多个movie的话 case会重复 tokenizer怎么解决？
+        Args:
+            user_input (str): User's current input
+            user_context (list of lists): Prior user interactions, each represented as a list of words.
+            entity (list): Movies identified in the user context. Defaults to an empty list.
+            system_response (list): The system's previous response as a list of words.
+            movie (int): Identifier for movies in system_response. Defaults to 0.
+
+        Returns:
+            dict: A dictionary with the following keys and values:
+                - 'context': A tensor representing the context.
+                - 'response': A tensor representing the response (or None if 'system_response' is None).
+                - 'concept_mask': A tensor representing concept masks.
+                - 'seed_sets': A list containing 'entity'.
+                - 'entity_vector': A tensor representing the entity vector.
         """
         if user_context is None:
             user_context, entity = self.detect_movie(user_input)
@@ -210,6 +248,23 @@ class KGSFRecTokenizer(BaseTokenizer):
 
         
     def decode(self, outputs, top_k=3, labels=None):
+        """
+        Decode model outputs to retrieve top-k movie recommendations.
+
+        Args:
+            outputs (torch.Tensor): Model outputs containing scores for movie entities.
+            top_k (int, optional): The number of top recommendations to retrieve (default: 3).
+            labels (list, optional): A list of labels associated with the entities (default: None).
+
+        Returns:
+            tuple: A tuple containing two lists - movieIds and movieNames.
+
+        Example:
+            >>> outputs = model.generate_recommendations(user_input)
+            >>> movieIds, movieNames = model.decode(outputs, top_k=5)
+            >>> print("Recommended Movie IDs:", movieIds)
+            >>> print("Recommended Movie Names:", movieNames)
+        """
         outputs = outputs[:, torch.LongTensor(self.entity_ids)] #previous outputs.shape=(1,64368), now 6924, same as len(entity_ids)
         _, pred_idx = torch.topk(outputs, k=100, dim=1)
         movieIds = []

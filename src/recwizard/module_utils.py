@@ -311,6 +311,13 @@ class BaseModule(PreTrainedModel):
 
         Returns:
             dict: the mapped state dict.
+
+        Example:
+            >>> state_dict = {'block1.weight': tensor1, 'block1.bias': tensor2, 'block2.weight': tensor3}
+            >>> name_mappings = {'block1.': 'module1.', 'block2.': 'module2.'}
+            >>> mapped_state_dict = module.map_parameters(name_mappings, state_dict, remove_origin=False)
+            {'module1.weight': tensor1, 'module1.bias': tensor2, 'module2.weight': tensor3, 'block1.weight': tensor1, 'block1.bias': tensor2, 'block2.weight': tensor3}
+
         """
         for key, value in list(state_dict.items()):
             for prefix, mapped_prefix in name_mappings.items():

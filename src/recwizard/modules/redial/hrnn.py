@@ -8,17 +8,22 @@ from recwizard.utility import sort_for_packed_sequence
 
 class HRNN(nn.Module):
     """
-    Hierarchical Recurrent Neural Network
+    Hierarchical Recurrent Neural Network.
 
-    params.keys() ['use_gensen', 'use_movie_occurrences', 'sentence_encoder_hidden_size',
-    'conversation_encoder_hidden_size', 'sentence_encoder_num_layers', 'conversation_encoder_num_layers', 'use_dropout',
-    ['embedding_dimension']]
+    Args:
+        sentence_encoder_model (str): Pretrained transformer model for sentence encoding.
+        sentence_encoder_hidden_size (int): Hidden size of the sentence encoder GRU.
+        sentence_encoder_num_layers (int): Number of layers in the sentence encoder GRU.
+        conversation_encoder_hidden_size (int): Hidden size of the conversation encoder GRU.
+        conversation_encoder_num_layers (int): Number of layers in the conversation encoder GRU.
+        use_movie_occurrences (str): Specify whether to use movie occurrences at the word or sentence level.
+        conv_bidirectional (bool, optional): Whether the conversation encoder is bidirectional (default: False).
+        return_all (bool, optional): Whether to return representations for all time steps (default: True).
+        return_sentence_representations (bool, optional): Whether to return sentence-level representations (default: False).
+        use_dropout (bool, optional): Whether to apply dropout (default: False).
 
-    Input: Input["dialogue"] (batch, max_conv_length, max_utterance_length) Long Tensor
-           Input["senders"] (batch, max_conv_length) Float Tensor
-           Input["lengths"] (batch, max_conv_length) list
-           (optional) Input["movie_occurrences"] (batch, max_conv_length, max_utterance_length) for word occurence
-                                                 (batch, max_conv_length) for sentence occurrence. Float Tensor
+    Returns:
+        dict: A dictionary containing conversation representations and optional sentence-level representations.
     """
 
     # LOAD_SAVE_IGNORES = ('base_encoder',)

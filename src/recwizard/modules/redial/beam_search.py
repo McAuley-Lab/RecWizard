@@ -17,10 +17,20 @@ def get_best_beam(beams, normalization_alpha=0):
 
 def n_gram_repeats(sequence, n):
     """
-    Returns true if sequence contains twice the same n-gram
-    :param sequence:
-    :param n:
-    :return:
+    Check if a sequence contains repeated n-grams.
+
+    This function checks if a given sequence contains at least one repeated n-gram.
+
+    Args:
+        sequence (iterable): The input sequence to analyze.
+        n (int): The size of the n-grams to check for repeats.
+
+    Returns:
+        bool: True if the sequence contains at least one repeated n-gram, False otherwise.
+
+    Example:
+        >>> n_gram_repeats([1, 2, 3, 4, 1, 2, 3, 4], 2)
+        True
     """
     counts = Counter(ngrams(sequence, n))
     if len(counts) == 0:
@@ -53,10 +63,26 @@ class Beam(object):
 
     def normalized_score(self, alpha):
         """
-        Get score with a length penalty following
-        Wu et al 'Google's neural machine translation system: Bridging the gap between human and machine translation'
-        :param alpha:
-        :return:
+        Calculate a normalized score with a length penalty following Wu et al.'s method.
+
+        This method computes a normalized score using a length penalty, as described in the paper:
+        "Google's neural machine translation system: Bridging the gap between human and machine translation" by Wu et al.
+
+        Args:
+            alpha (float): The alpha parameter controlling the strength of the length penalty.
+
+        Returns:
+            float: The normalized score.
+
+        Note:
+            - If alpha is 0, the score is not penalized for length.
+            - If alpha is greater than 0, a length penalty is applied to the score.
+            - The length penalty is based on the length of the sequence in relation to a reference length.
+
+        Reference:
+            - Wu, Y., Schuster, M., Chen, Z., Le, Q. V., Norouzi, M., Macherey, W., ... & Dean, J. (2016).
+              Google's neural machine translation system: Bridging the gap between human and machine translation.
+              arXiv preprint arXiv:1609.08144.
         """
         if alpha == 0:
             return np.log(self.likelihood)
@@ -68,16 +94,40 @@ class Beam(object):
 class BeamSearch(object):
     @staticmethod
     def initial_beams(start_sentence):
+        """
+        Initialize beams for beam search with a start sentence.
+
+        Args:
+            start_sentence (list): The initial sequence of tokens for each beam.
+
+        Returns:
+            list: A list of Beam instances with the provided start sentences and initial likelihood.
+
+        Example:
+            >>> initial_beams(["<bos>"])
+            [Beam(sequence=["<bos>"], likelihood=1)]
+        """
         return [Beam(sequence=start_sentence, likelihood=1)]
 
     @staticmethod
     def update_beams(beams, beam_size, probabilities, n_gram_block=None):
+
         """
-        One step of beam search
-        :param n_gram_block:
-        :param probabilities: list of beam_size probability tensors (one for each beam)
-        :return: list of the new beams.
+        Perform one step of beam search to update the beams.
+
+        Args:
+            beams (list): A list of Beam instances representing the current beams.
+            beam_size (int): The desired beam size to maintain.
+            probabilities (list of tensors): List of beam_size probability tensors (one for each beam).
+            n_gram_block (int, optional): The n-gram block size for preventing n-gram repeats.
+
+        Returns:
+            list: A list of the new beams after the update step.
+
+        Note:
+            The function selects the top-k beams based on their likelihood and updates them.
         """
+
         vocab_size = probabilities[0].data.shape[0]
         # compute the likelihoods for the next token
         # vector for finished beams. First dimension will be the likelihood of the finished beam, other dimensions are

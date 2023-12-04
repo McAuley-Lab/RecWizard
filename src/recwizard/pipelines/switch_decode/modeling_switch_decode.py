@@ -10,9 +10,21 @@ from ...utility import SEP_TOKEN
 
 
 class SwitchDecodePipeline(BasePipeline):
+    """
+    A pipeline for response generation using a switching mechanism to integrate movie recommendations.
+    """
     config_class = SwitchDecodeConfig
 
     def __init__(self, config, temperature=1, sample_movies=False, **kwargs):
+        """
+        Initialize the SwitchDecodePipeline.
+
+        Args:
+            config (SwitchDecodeConfig): An instance of SwitchDecodeConfig containing pipeline configuration.
+            temperature (float, optional): Temperature parameter for controlling randomness in generation. Defaults to 1.
+            sample_movies (bool, optional): Whether to sample movies during generation. Defaults to False.
+            **kwargs: Additional keyword arguments to be passed to the BasePipeline constructor.
+        """
         super().__init__(config, **kwargs)
         self.switch = nn.Linear(in_features=self.config.hidden_size + self.config.context_size, out_features=1)
         self.vocab_size = len(self.gen_tokenizer)
@@ -24,6 +36,19 @@ class SwitchDecodePipeline(BasePipeline):
 
 
     def switch_decode(self, switch_context, language_output, movie_recommendations, temperature, forbid_movies=None):
+        """
+        Perform switch decoding to integrate movie recommendations into the generated response.
+
+        Args:
+            switch_context (torch.Tensor): Switch context tensor.
+            language_output (torch.Tensor): Language model output tensor.
+            movie_recommendations (torch.Tensor): Movie recommendation tensor.
+            temperature (float): Temperature parameter for controlling randomness.
+            forbid_movies (set, optional): Set of forbidden movie indices. Defaults to None.
+
+        Returns:
+            torch.Tensor: Switched output tensor.
+        """
         batch_size, max_utterance_length = language_output.shape[:2]
         n_movies = movie_recommendations.data.shape[1]
 
@@ -65,6 +90,17 @@ class SwitchDecodePipeline(BasePipeline):
         return output
 
     def forward(self, rec_inputs, gen_inputs, forbid_movies):
+        """
+        Forward pass through the SwitchDecodePipeline.
+
+        Args:
+            rec_inputs (dict): Recommendation inputs.
+            gen_inputs (dict): Generation inputs.
+            forbid_movies (set): Set of forbidden movie indices.
+
+        Returns:
+            torch.Tensor: Forward pass result.
+        """
         batch_size, max_conv_length, max_utterance_length = gen_inputs['dialogue'].shape[:3]
         recs = self.recs if self.recs is not None else self.rec_module.forward(**rec_inputs) # (batch, seq_len, n_movies)
         pad_tensor = torch.zeros(batch_size, 1, recs.shape[-1], device=recs.device)
@@ -86,8 +122,9 @@ class SwitchDecodePipeline(BasePipeline):
         """
         If the ID corresponds to a movie, returns the sequence of tokens that correspond to this movie name
         Args:
-            tokens:
-        Returns: modified sequence
+            tokens (list): List of token IDs.
+        Returns:
+            list: Modified list of tokens.
         """
         res = []
         for token_id in tokens:
@@ -99,6 +136,19 @@ class SwitchDecodePipeline(BasePipeline):
         return res
 
     def response(self, query: str, beam_size=10, forbid_movies=None, temperature=1, **kwargs):
+        """
+        Generate a response using the SwitchDecodePipeline.
+
+        Args:
+            query (str): The input query for generating a response.
+            beam_size (int, optional): Beam size for response generation. Defaults to 10.
+            forbid_movies (set, optional): Set of forbidden movie indices. Defaults to None.
+            temperature (float, optional): Temperature parameter for controlling randomness. Defaults to 1.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            str: The generated response.
+        """
         if forbid_movies is None:
             forbid_movies = set()
         self.t = temperature

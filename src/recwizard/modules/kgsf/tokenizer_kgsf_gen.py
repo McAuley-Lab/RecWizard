@@ -91,8 +91,38 @@ class KGSFGenTokenizer(BaseTokenizer):
         
     def padding_w2v(self,sentence,max_length,pad=0,end=2,unk=3):
         """
-        sentence: ['Okay', ',', 'have', 'you', 'seen', '@136983', '?'] / [...]
-        max_length: 30 / 256
+        Pad and process a list of words into a structured representation for word vectors.
+        - Converts words to numerical indices based on the provided vocabulary.
+        - Calculates concept masks based on the word case.
+        - Identifies DBpedia masks for entity recognition.
+
+        Args:
+            sentence (list): A list of words in the input sentence.
+            max_length (int): The maximum length of the resulting sequence.
+            pad (int): The padding value to use. Defaults to 0.
+            end (int): The end-of-sequence value. Defaults to 2.
+            unk (int): The unknown word value. Defaults to 3.
+
+        Returns:
+            Tuple[list, int, list, list]: A tuple containing four elements:
+                - A list of padded and processed word indices.
+                - The length of the resulting sequence.
+                - A list representing concept masks.
+                - A list representing DBpedia masks.
+
+        Example:
+            >>> sentence = ['Okay', ',', 'have', 'you', 'seen', '@136983', '?']
+            >>> max_length = 30
+            >>> padded_vector, length, concept_masks, dbpedia_masks = tokenizer.padding_w2v(sentence, max_length)
+            >>> print(padded_vector)
+
+            >>> print(length)
+
+            >>> print(concept_masks)
+
+            >>> print(dbpedia_masks)
+
+
         """
         vector=[]
         concept_mask=[]
@@ -122,7 +152,34 @@ class KGSFGenTokenizer(BaseTokenizer):
         
     def padding_context(self,contexts,pad=0):
         """
-        contexts: eg. [['Hello'], ['hi', 'how', 'are', 'u'], ['Great', '.', 'How', 'are', 'you', 'this', 'morning', '?'], ['would', 'u', 'have', 'any', 'recommendations', 'for', 'me', 'im', 'good', 'thanks', 'fo', 'asking'], ['What', 'type', 'of', 'movie', 'are', 'you', 'looking', 'for', '?'], ['comedies', 'i', 'like', 'kristin', 'wigg'], ['Okay', ',', 'have', 'you', 'seen', '@136983', '?'], ['something', 'like', 'yes', 'have', 'watched', '@140066', '?']]
+        Pad and process a list of conversation contexts into a structured representation.
+
+        This method takes a list of conversation contexts, where each context is represented as a list of words,
+        and processes them to create a structured representation suitable for model input. It pads the contexts,
+        combines them into a single sequence, and calculates concept masks and DBpedia masks.
+
+        Args:
+            contexts (list of lists): Prior user interactions, each represented as a list of words.
+            pad (int, optional): The padding value to use. Defaults to 0.
+
+        Returns:
+            Tuple[list, list, list]: A tuple containing three lists:
+                - A list of padded and combined context sequences.
+                - A list representing concept masks.
+                - A list representing DBpedia masks.
+
+        Example:
+            >>> conversation_contexts = [
+                ...     ['Hello'],
+                ...     ['hi', 'how', 'are', 'u'],
+                ...     ['Great', '.', 'How', 'are', 'you', 'this', 'morning', '?'],
+                ...     ['would', 'u', 'have', 'any', 'recommendations', 'for', 'me', 'im', 'good', 'thanks', 'fo', 'asking'],
+                ...     ['What', 'type', 'of', 'movie', 'are', 'you', 'looking', 'for', '?'],
+                ...     ['comedies', 'i', 'like', 'kristin', 'wigg'],
+                ...     ['Okay', ',', 'have', 'you', 'seen', '@136983', '?'],
+                ...     ['something', 'like', 'yes', 'have', 'watched', '@140066', '?']
+                ... ]
+
         """
         contexts_com=[]
         for sen in contexts[-self.max_count:-1]: # get the most recent max_count of contexts
@@ -130,10 +187,28 @@ class KGSFGenTokenizer(BaseTokenizer):
             contexts_com.append('_split_')
         contexts_com.extend(contexts[-1])
         vec,v_l,concept_mask,dbpedia_mask=self.padding_w2v(contexts_com,self.max_c_length)
-        return vec, concept_mask,dbpedia_mask
+        return vec, concept_mask, dbpedia_mask
 
     def _names_to_id(self, input_name):
+        """
+        Attempt to map a movie name to its corresponding ID.
 
+        This method takes an input movie name, processes it by stripping leading and trailing spaces,
+        converting it to lowercase, and removing any year information (e.g., '(2005)'). It then compares
+        the processed input name to a dictionary of movie names (in lowercase) and their corresponding IDs.
+        If a match is found, the method returns the corresponding movie ID; otherwise, it returns None.
+
+        Args:
+            input_name (str): The movie name to be mapped to an ID.
+
+        Returns:
+            int or None: The corresponding movie ID if found, or None if no match is found.
+
+        Example:
+            >>> input_movie_name = "Avatar (2009)"
+            >>> _names_to_id(input_movie_name)
+            136983
+        """
         processed_input_name = input_name.strip().lower()
         processed_input_name = re.sub(r'\(\d{4}\)', '', processed_input_name)
         
@@ -144,6 +219,26 @@ class KGSFGenTokenizer(BaseTokenizer):
         return None
     
     def detect_movie(self, sentence):
+        """
+        Detect and extract movies from a given sentence.
+
+        This function identifies movies within a sentence by searching for text enclosed in <entity> tags
+        or by using word boundaries and common punctuation. It then replaces the movie names with corresponding
+        movie IDs, and if available, maps these IDs to entity IDs. The detected tokens are returned as a list,
+        and any mapped entity IDs are also returned as a separate list.
+
+        Args:
+            sentence (str): The input sentence in which movies are to be detected.
+
+        Returns:
+            Tuple[List[str], List[int]]: A tuple containing two lists:
+                - A list of detected tokens in the sentence, where movie names are replaced with '@movie_id'.
+                - A list of entity IDs corresponding to the detected movies.
+
+        Example:
+            >>> "I watched <entity>Avatar</entity> yesterday."
+            (['I', 'watched', '@1', 'yesterday', '.'], [42])
+        """
         # This regular expression pattern will match text surrounded by <movie> tags
         pattern = r"<entity>.*?</entity>|\w+|[.,!?;]"
         tokens = re.findall(pattern, sentence)
@@ -166,11 +261,20 @@ class KGSFGenTokenizer(BaseTokenizer):
     
     def encode(self,user_input=None, user_context=None, entity=None, system_response=None, movie=0):
         """
-        user_input: eg. Hi, can you recommend a movie for me?
-        user_context: eg. [['Hello'], ['hi', 'how', 'are', 'u']] TODO: 考虑分隔符吗 _split_？
-        entity: movies in user_context, default []
-        system_response: eg. ['Great', '.', 'How', 'are', 'you', 'this', 'morning', '?']
-        movie: movies in system_response, defualt is an ID, so None. ?？？ TODO: 多个movie的话 case会重复 tokenizer怎么解决？
+        Args:
+            user_input (str): User's current input
+            user_context (list of lists): Prior user interactions, each represented as a list of words.
+            entity (list): Movies identified in the user context. Defaults to an empty list.
+            system_response (list): The system's previous response as a list of words.
+            movie (int): Identifier for movies in system_response. Defaults to 0.
+
+        Returns:
+            dict: A dictionary with the following keys and values:
+                - 'context': A tensor representing the context.
+                - 'response': A tensor representing the response (or None if 'system_response' is None).
+                - 'concept_mask': A tensor representing concept masks.
+                - 'seed_sets': A list containing 'entity'.
+                - 'entity_vector': A tensor representing the entity vector.
         """
         if user_context is None:
             user_context, entity = self.detect_movie(user_input)
@@ -210,6 +314,21 @@ class KGSFGenTokenizer(BaseTokenizer):
         }
             
     def decode(self, outputs, labels=None):
+        """
+        Decode a batch of model outputs into human-readable sentences.
+
+        Args:
+            outputs (torch.Tensor): A tensor containing the model's output.
+            labels (Optional[torch.Tensor]): An optional tensor containing the target labels, if available.
+
+        Returns:
+            List[str]: A list of decoded sentences where each sentence is a human-readable string.
+
+        Example:
+            >>> model_outputs = torch.tensor([[1, 4, 2, 3], [5, 6, 7, 2]])
+            >>> tokenizer.decode(model_outputs)
+            ['I watched _UNK_ .', 'Have you seen <entity>Avatar</entity> ?']
+        """
         sentences=[]
         for sen in outputs.tolist():
             sentence=[]

@@ -7,9 +7,20 @@ from ...utility import SEP_TOKEN, EntityLink
 
 
 class FillBlankPipeline(BasePipeline):
+    """
+    A pipeline for filling in blanks in a response with movie recommendations.
+    """
     config_class = FillBlankConfig
 
     def __init__(self, config, use_resp=True, **kwargs):
+        """
+        Initialize the FillBlankPipeline.
+
+        Args:
+            config (FillBlankConfig): An instance of FillBlankConfig containing pipeline configuration.
+            use_resp (bool, optional): Whether to use the response template for recommendations. Defaults to True.
+            **kwargs: Additional keyword arguments to be passed to the BasePipeline constructor.
+        """
         super().__init__(config, **kwargs)
         self.movie_pattern = re.compile(config.rec_pattern)
         self.use_resp = use_resp
@@ -17,6 +28,20 @@ class FillBlankPipeline(BasePipeline):
 
     @monitor
     def response(self, query, return_dict=False, gen_args=None, rec_args=None):
+        """
+        Generate a response by filling in blanks with movie recommendations.
+
+        Args:
+            query (str): The input query for generating a response.
+            return_dict (bool, optional): Whether to return the result as a dictionary. Defaults to False.
+            gen_args (dict, optional): Additional arguments for the generation module. Defaults to None.
+            rec_args (dict, optional): Additional arguments for the recommendation module. Defaults to None.
+
+        Returns:
+            dict or str: If return_dict is True, returns a dictionary with various outputs including
+                         'gen_input', 'gen_output', 'rec_input', 'rec_output', 'output', and 'links'.
+                         Otherwise, returns the generated response as a string.
+        """
         gen_args = gen_args or {}
         rec_args = rec_args or {}
         # generate response template

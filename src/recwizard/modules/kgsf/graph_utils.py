@@ -17,6 +17,7 @@ def kaiming_reset_parameters(linear_module):
 class GraphConvolution(nn.Module):
     """
     Simple GCN layer, similar to https://arxiv.org/abs/1609.02907
+
     """
 
     def __init__(self, in_features, out_features, bias=True):
@@ -53,6 +54,14 @@ class GraphConvolution(nn.Module):
 
 class GCN(nn.Module):
     def __init__(self, ninp, nhid, dropout=0.5):
+        """
+        Initialize a Graph Convolutional Network (GCN) module.
+
+        Args:
+            ninp (int): The number of input features per node.
+            nhid (int): The number of hidden units or output features per node.
+            dropout (float, optional): The dropout probability (default: 0.5).
+        """
         super(GCN, self).__init__()
 
         # self.gc1 = GraphConvolution(ninp, nhid)
@@ -60,7 +69,18 @@ class GCN(nn.Module):
         self.dropout = dropout
 
     def forward(self, x, adj):
-        """x: shape (|V|, |D|); adj: shape(|V|, |V|)"""
+        """
+        Forward pass of the GCN module.
+
+        Args:
+            x (torch.Tensor): The input features for each node in the graph.
+            adj (torch.Tensor): The adjacency matrix representing the graph structure.
+
+        Returns:
+            torch.Tensor: The output features for each node after the GCN operation.
+
+        """
+
         # x = F.relu(self.gc1(x, adj))
         # x = F.dropout(x, self.dropout, training=self.training)
         x = self.gc2(x, adj)
@@ -194,24 +214,24 @@ class BiAttention(nn.Module):
 
         self.dot_scale = nn.Parameter(torch.Tensor(input_size).uniform_(1.0 / (input_size ** 0.5)))
 
-        def forward(self, input, memory, mask=None):
-            bsz, input_len, memory_len = input.size(0), input.size(1), memory.size(1)
+    def forward(self, input, memory, mask=None):
+        bsz, input_len, memory_len = input.size(0), input.size(1), memory.size(1)
 
-            input = self.dropout(input)
-            memory = self.dropout(memory)
+        input = self.dropout(input)
+        memory = self.dropout(memory)
 
-            input_dot = self.input_linear(input)
-            memory_dot = self.memory_linear(memory).view(bsz, 1, memory_len)
-            cross_dot = torch.bmm(input * self.dot_scale, memory.permute(0, 2, 1).contiguous())
-            att = input_dot + memory_dot + cross_dot
-            if mask is not None:
-                att = att - 1e30 * (1 - mask[:,None])
+        input_dot = self.input_linear(input)
+        memory_dot = self.memory_linear(memory).view(bsz, 1, memory_len)
+        cross_dot = torch.bmm(input * self.dot_scale, memory.permute(0, 2, 1).contiguous())
+        att = input_dot + memory_dot + cross_dot
+        if mask is not None:
+            att = att - 1e30 * (1 - mask[:,None])
 
-                weight_one = F.softmax(att, dim=-1)
-                output_one = torch.bmm(weight_one, memory)
-                weight_two = F.softmax(att.max(dim=-1)[0], dim=-1).view(bsz, 1, input_len)
-                output_two = torch.bmm(weight_two, input)
-            return torch.cat([input, output_one, input*output_one, output_two*output_one], dim=-1)
+            weight_one = F.softmax(att, dim=-1)
+            output_one = torch.bmm(weight_one, memory)
+            weight_two = F.softmax(att.max(dim=-1)[0], dim=-1).view(bsz, 1, input_len)
+            output_two = torch.bmm(weight_two, input)
+        return torch.cat([input, output_one, input*output_one, output_two*output_one], dim=-1)
 
 class GAT(nn.Module):
     def __init__(self, nfeat, nhid, nclass, dropout, alpha, nheads):

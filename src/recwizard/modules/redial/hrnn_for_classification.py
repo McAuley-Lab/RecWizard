@@ -10,11 +10,21 @@ class HRNNForClassification(BaseModule):
 
     def __init__(self, hrnn_params, output_classes, return_liked_probability=True, multiple_items_per_example=True):
         """
+        Hierarchical Recurrent Neural Network for Classification.
 
         Args:
-            return_liked_probability:
-            multiple_items_per_example: should be set to True when each conversation corresponds an example (e.g. when generate output)
-            Should be set to False in training because each item corresponds an example
+            hrnn_params (dict): Dictionary of HRNN parameters.
+            output_classes (dict): Dictionary mapping output names to the number of classes for each output.
+            return_liked_probability (bool, optional): Whether to return the liked probability (default: True).
+            multiple_items_per_example (bool, optional): Should be set to True when each conversation corresponds to an example (e.g., when generating output).
+                Should be set to False during training because each item corresponds to an example.
+
+        Attributes:
+            encoder (HRNN): The HRNN encoder module.
+            linears (nn.ModuleDict): Dictionary of output linear layers for each output.
+            return_liked_probability (bool): Whether to return the liked probability.
+            multiple_items_per_example (bool): Whether each conversation corresponds to an example.
+
         """
         super().__init__(BaseConfig())
         self.encoder = HRNN(return_all=return_liked_probability, **hrnn_params)
@@ -37,15 +47,19 @@ class HRNNForClassification(BaseModule):
     def forward(self, input_ids, attention_mask, senders, movie_occurrences,
                 conversation_lengths):
         """
+        Forward pass of the HRNNForClassification model.
 
         Args:
-            input_ids:
-            attention_mask:
-            senders:
-            movie_occurrences:
-            conversation_lengths:
+            input_ids (Tensor): Input token IDs of shape (batch_size, max_conv_length, max_utt_length).
+            attention_mask (Tensor): Attention mask of shape (batch_size, max_conv_length, max_utt_length).
+            senders (Tensor): Senders information of shape (batch_size, max_conv_length).
+            movie_occurrences (Tensor): Movie occurrences information of shape
+                (batch_size, max_conv_length, max_utt_length).
+            conversation_lengths (Tensor): List of conversation lengths for each batch element.
 
         Returns:
+            dict: A dictionary containing model outputs, which may include class probabilities
+            or liked probabilities for each input item or conversation.
 
         """
         if self.multiple_items_per_example:

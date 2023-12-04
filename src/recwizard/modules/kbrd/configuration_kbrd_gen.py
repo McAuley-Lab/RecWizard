@@ -1,6 +1,27 @@
 from recwizard.configuration_utils import BaseConfig
 
 class KBRDGenConfig(BaseConfig):
+    """
+    The configuration for the generator in the KBRD model.
+
+    Args:
+        gen_dim (int): Dimensionality of the generator component.
+        rec_dim (int): Dimensionality of the recommender component.
+        vocab_size (int): Size of the vocabulary used in the model.
+        pad_idx (int): Index representing padding in the vocabulary.
+        start_idx (int): Index representing the start token in the vocabulary.
+        end_idx (int): Index representing the end token in the vocabulary.
+        n_positions (int): Number of positions in positional embeddings.
+        n_heads (int): Number of attention heads in the model.
+        n_layers (int): Number of transformer layers in the model.
+        ffn_size (int): Size of the feedforward network in each layer.
+        dropout (float): Dropout rate applied to various layers.
+        attention_dropout (float): Dropout rate applied to attention layers.
+        relu_dropout (float): Dropout rate applied to ReLU activation layers.
+        learn_positional_embeddings (bool): Whether to learn positional embeddings.
+        embeddings_scale (bool): Whether to scale embeddings at initialization.
+        rec_module_config (dict): Configuration settings for the recommender module.
+    """
     def __init__(self,
                  gen_dim: int = None,
                  rec_dim: int = None,
