@@ -203,7 +203,7 @@ class BaseModule(PreTrainedModel):
         return destination
 
     def load_state_dict(self,
-                        state_dict: 'OrderedDict[str, Tensor]',
+                        state_dict: 'OrderedDict[str, torch.TensorType]',
                         strict: bool = True,
                         allow_unexpected=False,
                         LOAD_PREFIX: Optional[str] = '',
