@@ -7,7 +7,7 @@ from typing import Tuple, Callable, Optional, Iterable, List, Type, Union
 import numpy as np
 import torch
 from torch.nn.modules.module import _IncompatibleKeys
-from transformers import PreTrainedModel, PreTrainedTokenizer
+from transformers import PreTrainedModel, PreTrainedTokenizer, AutoTokenizer
 
 from .modules.monitor import monitor
 from .configuration_utils import BaseConfig
@@ -28,7 +28,7 @@ class BaseModule(PreTrainedModel):
         We suggest using it when your module has a fixed part, in order to reduce the size of checkpoint.
         
     """
-    tokenizer_class: Type[PreTrainedTokenizer] = None
+    tokenizer_class: Type[PreTrainedTokenizer] = AutoTokenizer
     """
     The tokenizer class that should be used for this module.
     """
@@ -312,15 +312,20 @@ class BaseModule(PreTrainedModel):
         Returns:
             dict: the mapped state dict.
         """
+        new_dict = {}
         for key, value in list(state_dict.items()):
+            has_mapping = False
             for prefix, mapped_prefix in name_mappings.items():
                 if key.startswith(prefix) and prefix != mapped_prefix:
                     new_key = mapped_prefix + key[len(prefix):]
-                    state_dict[new_key] = copy.deepcopy(value)
-                    if remove_origin:
-                        state_dict.pop(key)
+                    new_dict[new_key] = copy.deepcopy(value)
+                    if not remove_origin:
+                        new_dict[key] = value
+                    has_mapping = True
                     break
-        return state_dict
+            if not has_mapping:
+                new_dict[key] = value
+        return new_dict
 
     @staticmethod
     def remove_ignores(load_ignores: Iterable, state_dict):
