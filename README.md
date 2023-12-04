@@ -1,4 +1,4 @@
-# <img src="server/recwizard.png" alt="recwizard logo" width="25"/> RecWizard
+# <img src="https://github.com/McAuley-Lab/RecWizard/blob/main/server/recwizard.png?raw=true" alt="recwizard logo" width="25"/> RecWizard
 ### A Plug-n-Play Toolkit for Conversational Recommenders with Modular, Portable Models and Interactive User Interface
  <a href='https://huggingface.co/recwizard'><img src="https://img.shields.io/badge/%F0%9F%A4%97-HuggingFace%20Community-blue"/></a>
 #### (accepted at AAAI 2024 Demo Track)
@@ -21,7 +21,7 @@ We abstract a CRS model into two levels as shown in the figure below:
 - **Model Level**: We treat a `recwizard.BasePipeline` as a high-level manager to decide when and how to call the
   lower-level modules, and how to combine the results from such modules.
 
-<img src="pipeline.png" alt="pipeline" width="500"/> 
+<img src="https://github.com/McAuley-Lab/RecWizard/blob/main/pipeline.png?raw=true" alt="pipeline" width="500"/> 
 
 ## Quick start
 

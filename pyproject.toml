@@ -50,9 +50,9 @@ dependencies = [
 dynamic = ["version"]
 
 [project.urls]
-Homepage = "link to hompage"
-Documentation = "link to documentation"
-Repository = "link to repo"
+Homepage = "https://github.com/McAuley-Lab/RecWizard"
+Documentation = "https://github.com/McAuley-Lab/RecWizard"
+Repository = "https://github.com/McAuley-Lab/RecWizard"
 
 [project.optional-dependencies]
 all = [
