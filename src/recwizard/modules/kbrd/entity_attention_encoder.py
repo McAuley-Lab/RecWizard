@@ -1,3 +1,6 @@
+""" This file is adapted from the KBRD original implementation: https://github.com/THUDM/KBRD
+"""
+
 import math
 from collections import defaultdict
 

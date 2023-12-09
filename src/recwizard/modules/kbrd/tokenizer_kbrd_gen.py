@@ -1,6 +1,6 @@
 import os
 import json
-from typing import List
+from typing import List, Dict
 
 from recwizard.tokenizer_utils import BaseTokenizer
 from recwizard.utility.utils import WrapSingleInput
@@ -10,43 +10,40 @@ from .tokenizer_kbrd_rec import KBRDRecTokenizer
 
 
 class KBRDGenTokenizer(BaseTokenizer):
-    init_word_list_file = "nltk_word_list.json"
-
     def __init__(
         self,
-        word_tokenizer: BaseTokenizer = None,
-        entity_tokenizer: BaseTokenizer = None,
+        vocab: List[str],
+        id2entity: Dict[int, str] = None,
         **kwargs,
     ):
-        self.word_tokenizer = word_tokenizer
-        self.entity_tokenizer = entity_tokenizer
-        tokenizers = [self.word_tokenizer, self.entity_tokenizer]
-
-        if word_tokenizer is None or entity_tokenizer is None:
-            raise ValueError("word_tokenizer and entity_tokenizer should not be None.")
-
-        super().__init__(tokenizers=tokenizers, **kwargs)
-
-    @classmethod
-    def from_pretrained(cls, pretrained_model_name_or_path, *args, **kwargs):
-        try:
-            from huggingface_hub import hf_hub_download
-
-            path = hf_hub_download(
-                pretrained_model_name_or_path, cls.init_word_list_file
-            )
-        except:
-            path = os.path.join(pretrained_model_name_or_path, cls.init_word_list_file)
-        word_tokenizer = KBRDWordTokenizer(json.load(open(path, "r")))
-        entity_tokenizer = KBRDRecTokenizer.from_pretrained(
-            pretrained_model_name_or_path
-        )
-        return cls(
-            word_tokenizer=word_tokenizer,
-            entity_tokenizer=entity_tokenizer,
-            *args,
+        """Initialize the KBRDGen tokenizer.
+        
+        Args:
+            vocab (List[str]): list of words in the NLTK tokenizer;
+            id2entity (Dict[int, str]): dictionary mapping entity ids to entity names;
+        """
+        id2entity = {int(k): v for k, v in id2entity.items()}
+        super().__init__(
+            tokenizers=[
+                KBRDWordTokenizer(vocab=vocab),
+                KBRDRecTokenizer(id2entity=id2entity),
+            ],
             **kwargs,
         )
+        self.vocab = vocab
+        self.id2entity = {int(k): v for k, v in id2entity.items()}
+
+    def get_init_kwargs(self):
+        """
+        The kwargs for initialization. Override this function to declare the necessary initialization kwargs (
+        they will be saved when the tokenizer is saved or pushed to huggingface model hub.)
+
+        See also: :meth:`~save_vocabulary`
+        """
+        return {
+            "vocab": self.vocab,
+            "id2entity": self.id2entity,
+        }
 
     @WrapSingleInput
     def decode(
@@ -55,8 +52,10 @@ class KBRDGenTokenizer(BaseTokenizer):
         *args,
         **kwargs,
     ) -> List[str]:
+        """Decode a list of token ids into a list of strings from the NLTK tokenizer."""
         return self.tokenizers[0].decode(ids)
 
     def __call__(self, *args, **kwargs):
+        """Tokenize a string into a list of token ids"""
         kwargs.update(return_tensors="pt", padding=True, truncation=True)
         return super().__call__(*args, **kwargs)

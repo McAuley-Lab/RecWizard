@@ -14,6 +14,8 @@ from recwizard.modules.monitor import monitor
 
 
 class KBRDRec(BaseModule):
+    """KBRDRec is a module that implements the KBRD recommender."""
+
     config_class = KBRDRecConfig
     tokenizer_class = KBRDRecTokenizer
     LOAD_SAVE_IGNORES = {"encoder.text_encoder", "decoder"}
@@ -26,6 +28,15 @@ class KBRDRec(BaseModule):
         item_index=None,
         **kwargs,
     ):
+        """Initialize the KBRDRec module.
+
+        Args:
+            config (KBRDRecConfig): The configuration of the KBRDRec module.
+            edge_index (torch.LongTensor): The edge index of the KBRD model.
+            edge_type (torch.LongTensor): The edge type of the KBRD model.
+            item_index (torch.LongTensor): The item index of the KBRD model.
+        """
+
         super().__init__(config, **kwargs)
 
         # prepare weights
@@ -56,6 +67,16 @@ class KBRDRec(BaseModule):
         attention_mask: torch.BoolTensor,
         labels: torch.LongTensor = None,
     ):
+        """Forward pass of the KBRDRec module.
+        
+        Args:
+            input_ids (torch.LongTensor): The input ids of the input conversation contexts.
+            attention_mask (torch.BoolTensor): The attention mask of the input.
+            labels (torch.LongTensor): The labels of the converastions, optional.
+        
+        Returns:
+            ModelOutput: The output of the model, containing the logits and the loss.
+        """
         scores = self.model(input_ids, attention_mask)
 
         loss = None if labels is None else self.criterion(scores, labels)
@@ -71,6 +92,18 @@ class KBRDRec(BaseModule):
         return_dict=False,
         topk=3,
     ):
+        """Generate the response given the input_ids.
+
+        Args:
+            raw_input (Union[List[str], str]): The input conversation contexts.
+            tokenizer (KBRDRecTokenizer): The tokenizer of the model.
+            return_dict (bool): Whether to return the output as a dictionary.
+            topk (int): The number of movies to recommend.
+        
+        Returns:
+            Union[List[str], dict]: The output of the model.
+        """
+        
         entities = tokenizer(raw_input)["entities"].to(self.device)
         inputs = {
             "input_ids": entities,

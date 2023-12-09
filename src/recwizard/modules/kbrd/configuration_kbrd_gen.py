@@ -2,6 +2,8 @@ from recwizard.configuration_utils import BaseConfig
 
 
 class KBRDGenConfig(BaseConfig):
+    """Configuration class to store the configuration of a `KBRDGen`."""
+
     def __init__(
         self,
         gen_dim: int = None,

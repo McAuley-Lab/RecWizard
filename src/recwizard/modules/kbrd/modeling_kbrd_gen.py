@@ -13,11 +13,19 @@ from recwizard.modules.monitor import monitor
 
 
 class KBRDGen(BaseModule):
+    """KBRDGen is a module that combines KBRDRec and TransformerGeneratorModel."""
+
     config_class = KBRDGenConfig
     tokenizer_class = KBRDGenTokenizer
     LOAD_SAVE_IGNORES = {"encoder.text_encoder", "decoder"}
 
     def __init__(self, config: KBRDGenConfig, **kwargs):
+        """Initialize the KBRDGen module.
+
+        Args:
+            config (KBRDGenConfig): The configuration of the KBRDGen module.
+        """
+
         super().__init__(config, **kwargs)
 
         self.model = TransformerGeneratorModel(
@@ -34,6 +42,40 @@ class KBRDGen(BaseModule):
         bsz: int = None,
         maxlen: int = 64,
     ):
+        """Generate the response given the input_ids.
+
+        Args:
+            input_ids (torch.LongTensor): The input ids of the input conversation contexts.
+            labels (torch.LongTensor): The labels of the converastions, optional.
+            entities (torch.LongTensor): The movie-related entities tagged in the input.
+            entity_attention_mask (torch.BoolTensor): The entity attention mask of the input.
+            bsz (int): The batch size of the input.
+            maxlen (int): The maximum length of the input.
+
+        Returns:
+            ModelOutput: The output of the model.
+
+        Examples:
+            ```python
+                # load kbrd generator
+                kbrd_gen = KBRDGen.from_pretrained("recwizard/kbrd-gen-redial")
+
+                # test model generate
+                kbrd_gen = kbrd_gen
+                input_ids = torch.LongTensor([[0] * 55])
+                entities, entity_attention_mask = (
+                    torch.LongTensor([[]]),
+                    torch.BoolTensor([[]]),
+                )
+
+                kbrd_gen.generate(
+                    input_ids=input_ids,
+                    labels=None,
+                    entities=entities,
+                    entity_attention_mask=entity_attention_mask,
+                )
+            ```
+        """
         if bsz is None:
             bsz = input_ids.size(0)
 
@@ -51,6 +93,28 @@ class KBRDGen(BaseModule):
         tokenizer: KBRDGenTokenizer,
         return_dict=False,
     ):
+        """Generate the response given the raw input.
+
+        Args:
+            raw_input (Union[List[str], str]): The raw input of the conversation contexts.
+            tokenizer (KBRDGenTokenizer): The tokenizer of the model.
+            return_dict (bool): Whether to return the output as a dictionary.
+
+        Returns:
+            Union[List[str], dict]: The output of the model.
+            
+        Examples:
+            ```python
+                # load kbrd generator
+                kbrd_gen = KBRDGen.from_pretrained("recwizard/kbrd-gen-redial")
+
+                tokenizer = KBRDGenTokenizer.from_pretrained("recwizard/kbrd-gen-redial")
+                kbrd_gen.response(
+                    raw_input=["I like <entity>Titanic</entity>! Can you recommend me more?"],
+                    tokenizer=tokenizer,
+                )
+            ```
+        """
         input_ids = torch.LongTensor(tokenizer(raw_input)["input_ids"]).to(self.device)
         entities = (
             torch.LongTensor(tokenizer.tokenizers[-1](raw_input)["entities"])

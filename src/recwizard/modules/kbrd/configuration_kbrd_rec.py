@@ -2,6 +2,8 @@ from recwizard.configuration_utils import BaseConfig
 
 
 class KBRDRecConfig(BaseConfig):
+    """Configuration class to store the configuration of a `KBRDRec`."""
+
     def __init__(
         self,
         n_entity: int = None,

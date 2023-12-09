@@ -10,6 +10,11 @@ from transformers import PreTrainedTokenizerFast
 
 class NLTKTokenizer:
     def __init__(self, language="english"):
+        """Initialize the NLTK tokenizer.
+
+        Args:
+            language(str): language to use for the tokenizer
+        """
         # nltk.download('punkt')
         st_path = f"tokenizers/punkt/{language}.pickle"
         try:
@@ -22,6 +27,7 @@ class NLTKTokenizer:
     def word_tokenize(
         self, i: int, normalized_string: NormalizedString
     ) -> List[NormalizedString]:
+        """Tokenize a string into words."""
         return [
             normalized_string[s:t]
             for s, t in self.word_tokenizer.span_tokenize(str(normalized_string))
@@ -30,6 +36,7 @@ class NLTKTokenizer:
     def nltk_split(
         self, i: int, normalized_string: NormalizedString
     ) -> List[NormalizedString]:
+        """Split a string into sentences using NLTK."""
         sentences = [
             normalized_string[s:t]
             for s, t in self.tokenizer.span_tokenize(str(normalized_string))
@@ -40,6 +47,7 @@ class NLTKTokenizer:
         return tokenized
 
     def pre_tokenize(self, pretok: PreTokenizedString):
+        """Pre-tokenize a string into sentences using NLTK."""
         # Let's call split on the PreTokenizedString to split using `self.jieba_split`
         pretok.split(self.nltk_split)
 
@@ -48,6 +56,7 @@ tokenizers = {}
 
 
 def get_tokenizer(name="kbrd"):
+    """Return a tokenizer from the cache."""
     return tokenizers[name]
 
 
