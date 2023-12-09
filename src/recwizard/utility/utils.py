@@ -201,5 +201,5 @@ def loadJsonFileFromDataset(dataset: str, file: str, dataset_org=None):
 
     from huggingface_hub import hf_hub_download
     downloaded_file = hf_hub_download(f"{dataset_org}/{dataset}", file, repo_type="dataset")
-    json_file = open(downloaded_file, 'r')
-    return json.load(json_file)
+    with open(downloaded_file, 'r') as json_file:
+        return json.load(json_file)

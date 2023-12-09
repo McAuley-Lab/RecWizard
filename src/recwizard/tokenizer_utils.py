@@ -285,6 +285,7 @@ class BaseTokenizer(PreTrainedTokenizer):
             path = hf_hub_download(pretrained_model_name_or_path, cls.init_kwargs_file)
         except:
             path = os.path.join(pretrained_model_name_or_path, cls.init_kwargs_file)
-        init_kwargs = json.load(open(path, 'r'))
+        with open(path, 'r') as f:
+            init_kwargs = json.load(f)
         kwargs.update(init_kwargs)
         return cls(*args, **kwargs)

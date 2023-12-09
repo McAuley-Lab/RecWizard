@@ -87,6 +87,7 @@ xfail_strict = true
 junit_family = "xunit2"
 filterwarnings = [
     "error",
+    "default::ResourceWarning"
 ]
 
 

@@ -25,7 +25,8 @@ class RedialGen(BaseModule):
         super().__init__(config, **kwargs)
         self.encoder = HRNN(**config.hrnn_params)
         word_embedding = nn.Embedding.from_pretrained(self.prepare_weight(word_embedding, 'decoder.embedding'))
-        self.decoder = SwitchingDecoder(word_embedding=word_embedding, **config.decoder_params)
+        DeviceManager.device = self.device
+        self.decoder = SwitchingDecoder(word_embedding=word_embedding, **config.decoder_params).to(self.device)
         self.n_movies = config.n_movies
 
     def forward(self, dialogue, lengths, recs, context=None, state=None, encode_only=False, **hrnn_input):
@@ -85,7 +86,7 @@ class RedialGen(BaseModule):
         gen_input = DeviceManager.copy_to_device(tokenizer([raw_input]).data, device=self.device)
         context = self.forward(**gen_input, recs=recs, encode_only=True)[0]
         if recs is None:
-            recs = torch.zeros(1, self.n_movies)
+            recs = torch.zeros(1, self.n_movies, device=self.device)
         mentioned_movies = forbid_movies if forbid_movies is not None else set()
 
         inputs = {
@@ -373,7 +374,7 @@ class SwitchingDecoder(nn.Module):
                 beam_forbidden_movies = forbid_movies.union(beam.mentioned_movies)
                 prob = self.forward(
                     input=model_input,
-                    lengths=torch.tensor([len(beam.sequence)]),
+                    lengths=torch.tensor([len(beam.sequence)], device=DeviceManager.device),
                     log_probabilities=False,
                     forbid_movies=beam_forbidden_movies,
                     temperature=temperature,
