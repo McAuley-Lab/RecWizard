@@ -1,5 +1,4 @@
 from typing import Union, List
-from transformers.utils import ModelOutput
 
 import torch
 
@@ -45,11 +44,11 @@ class KBRDGen(BaseModule):
         """Generate the response given the input_ids.
 
         Args:
-            input_ids (torch.LongTensor): The input ids of the input conversation contexts.
-            labels (torch.LongTensor): The labels of the converastions, optional.
-            entities (torch.LongTensor): The movie-related entities tagged in the input.
-            entity_attention_mask (torch.BoolTensor): The entity attention mask of the input.
-            bsz (int): The batch size of the input.
+            input_ids (torch.LongTensor): The input ids of the input conversation contexts, shape: (batch_size, seq_len).
+            labels (torch.LongTensor, optional): The labels of the converastions.
+            entities (torch.LongTensor): The movie-related entities tagged in the input, shape: (batch_size, entity_max_num).
+            entity_attention_mask (torch.BoolTensor): The entity attention mask of the input, `True` if the token is an entity, shape: (batch_size, entity_max_num).
+            bsz (int, optional): The batch size of the input, can be inferred from the input_ids.
             maxlen (int): The maximum length of the input.
 
         Returns:
@@ -76,6 +75,7 @@ class KBRDGen(BaseModule):
                 )
             ```
         """
+
         if bsz is None:
             bsz = input_ids.size(0)
 
@@ -98,11 +98,13 @@ class KBRDGen(BaseModule):
         Args:
             raw_input (Union[List[str], str]): The raw input of the conversation contexts.
             tokenizer (KBRDGenTokenizer): The tokenizer of the model.
-            return_dict (bool): Whether to return the output as a dictionary.
+            return_dict (bool): Whether to return the output as a dictionary (with logits, pred_ids and textual response).
 
         Returns:
-            Union[List[str], dict]: The output of the model.
-            
+            Union[List[str], dict]: The dictionary of the model output with `logits`, 
+                `pred_ids` and textual response if `return_dict` is `True`, else the textual 
+                model response only.
+
         Examples:
             ```python
                 # load kbrd generator

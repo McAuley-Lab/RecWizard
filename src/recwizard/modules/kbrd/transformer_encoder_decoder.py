@@ -16,14 +16,13 @@ class TorchGeneratorModel(nn.Module):
     """
     This Interface expects you to implement model with the following reqs:
 
-    :attribute model.encoder:
-        takes input returns tuple (enc_out, enc_hidden, attn_mask)
-
-    :attribute model.decoder:
-        takes decoder params and returns decoder outputs after attn
-
-    :attribute model.output:
-        takes decoder outputs and returns distr over dictionary
+    Attributes:
+        `START`: LongTensor representing the start of sentence
+        `END`: LongTensor representing the end of sentence
+        `NULL_IDX`: index of null token
+        `model.encoder`: takes input returns tuple (enc_out, enc_hidden, attn_mask)
+        `model.decoder`: takes decoder params and returns decoder outputs after attn
+        `model.output`: takes decoder outputs and returns distr over dictionary
     """
 
     def __init__(
@@ -49,24 +48,13 @@ class TorchGeneratorModel(nn.Module):
         """
         Greedy search
 
-        :param int bsz:
-            Batch size. Because encoder_states is model-specific, it cannot
-            infer this automatically.
+        Args:
+            encoder_states: output of the encoder model
+            bsz: batch size
+            maxlen: max number of tokens to decode
 
-        :param encoder_states:
-            Output of the encoder model.
-
-        :type encoder_states:
-            Model specific
-
-        :param int maxlen:
-            Maximum decoding length
-
-        :return:
-            pair (logits, choices) of the greedy decode
-
-        :rtype:
-            (FloatTensor[bsz, maxlen, vocab], LongTensor[bsz, maxlen])
+        Return:
+            pair (logits, choices) of the greedy decode, shapes: (batch_size, max_len, #vocab), (batch_size, max_len)
         """
         xs = self._starts(bsz)
         incr_state = None
@@ -91,23 +79,13 @@ class TorchGeneratorModel(nn.Module):
         Decode with a fixed, true sequence, computing loss. Useful for
         training, or ranking fixed candidates.
 
-        :param ys:
-            the prediction targets. Contains both the start and end tokens.
+        Args:
+            encoder_states: output of the encoder model, shape: (batch_size, seq_len, hidden_size)
+            ys: target tokens, shape: (batch_size, tgt_len)
 
-        :type ys:
-            LongTensor[bsz, time]
-
-        :param encoder_states:
-            Output of the encoder. Model specific types.
-
-        :type encoder_states:
-            model specific
-
-        :return:
-            pair (logits, choices) containing the logits and MLE predictions
-
-        :rtype:
-            (FloatTensor[bsz, ys, vocab], LongTensor[bsz, ys])
+        Return:
+            pair (logits, choices) containing the logits and MLE predictions,
+                shapes: (batch_size, tgt_len, #vocab), (batch_size, tgt_len)
         """
         bsz = ys.size(0)
         seqlen = ys.size(1)
@@ -130,39 +108,29 @@ class TorchGeneratorModel(nn.Module):
 
         For example, assume that encoder_states is an bsz x 1 tensor of values
 
-        .. code-block:: python
+        ```python
 
             indices = [0, 2, 2]
             encoder_states = [[0.1]
                               [0.2]
                               [0.3]]
+        ```
 
         then the output will be
 
-        .. code-block:: python
+        ```python
 
             output = [[0.1]
                       [0.3]
                       [0.3]]
+        ```
 
-        :param encoder_states:
-            output from encoder. type is model specific.
+        Args:
+            encoder_states: output from encoder. type is model specific.
+            indices (List[int]): the indices to select over. The user must support non-tensor inputs.
 
-        :type encoder_states:
-            model specific
-
-        :param indices:
-            the indices to select over. The user must support non-tensor
-            inputs.
-
-        :type indices: list[int]
-
-        :return:
-            The re-ordered encoder states. It should be of the same type as
-            encoder states, and it must be a valid input to the decoder.
-
-        :rtype:
-            model specific
+        Return:
+            The re-ordered encoder states. It should be of the same type as encoder states, and it must be a valid input to the decoder.
         """
         raise NotImplementedError(
             "reorder_encoder_states must be implemented by the model"
@@ -180,23 +148,15 @@ class TorchGeneratorModel(nn.Module):
         In order to fall back to non-incremental decoding, just return None from this
         method.
 
-        :param incremental_state:
-            second output of model.decoder
-        :type incremental_state:
-            model specific
-        :param inds:
-            indices to select and reorder over.
-        :type inds:
-            LongTensor[n]
+        Args:
+            incremental_state: second output of model.decoder
+            inds (torch.LongTensor): indices to select and reorder over.
 
-        :return:
+        Returns:
             The re-ordered decoder incremental states. It should be the same
             type as incremental_state, and usable as an input to the decoder.
             This method should return None if the model does not support
             incremental decoding.
-
-        :rtype:
-            model specific
         """
         raise NotImplementedError(
             "reorder_decoder_incremental_state must be implemented by model"
@@ -208,35 +168,24 @@ class TorchGeneratorModel(nn.Module):
         """
         Get output predictions from the model.
 
-        :param xs:
-            input to the encoder
-        :type xs:
-            LongTensor[bsz, seqlen]
-        :param ys:
-            Expected output from the decoder. Used
-            for teacher forcing to calculate loss.
-        :type ys:
-            LongTensor[bsz, outlen]
-        :param prev_enc:
-            if you know you'll pass in the same xs multiple times, you can pass
-            in the encoder output from the last forward pass to skip
-            recalcuating the same encoder output.
-        :param maxlen:
-            max number of tokens to decode. if not set, will use the length of
-            the longest label this model has seen. ignored when ys is not None.
-        :param bsz:
-            if ys is not provided, then you must specify the bsz for greedy
-            decoding.
+        Args:
+            xs (torch.LongTensor): input to the encoder, shapes: (batch_size, seq_len)
+            ys (torch.LongTensor): expected output from the decoder, shapes: (batch_size, seq_len)
+            cand_params (torch.FloatTensor): parameters for candidate generation, shape: (batch_size, num_cands, num_params)
+            prev_enc (torch.FloatTensor): if you know you'll pass in the same xs multiple times, you can pass in the encoder
+              output from the last forward pass to skip recalcuating the same encoder output.
+            maxlen (int): max number of tokens to decode. if not set, will use the length of the longest label this model has seen.
+                ignored when ys is not None.
+            bsz (int): if ys is not provided, then you must specify the bsz for greedy decoding.
 
-        :return:
+        Returns:
             (scores, candidate_scores, encoder_states) tuple
-
-            - scores contains the model's predicted token scores.
-              (FloatTensor[bsz, seqlen, num_features])
-            - candidate_scores are the score the model assigned to each candidate.
-              (FloatTensor[bsz, num_cands])
-            - encoder_states are the output of model.encoder. Model specific types.
-              Feed this back in to skip encoding on the next call.
+                - scores contains the model's predicted token scores.
+                (FloatTensor[batch_size, seq_len, num_features])
+                - candidate_scores are the score the model assigned to each candidate.
+                (FloatTensor[batch_size, num_cands])
+                - encoder_states are the output of model.encoder. Model specific types.
+                Feed this back in to skip encoding on the next call.
         """
         if ys is not None:
             # TODO: get rid of longest_label
@@ -336,32 +285,6 @@ class TransformerResponseWrapper(nn.Module):
 
 
 class TransformerEncoder(nn.Module):
-    """
-    Transformer encoder module.
-
-    :param int n_heads: the number of multihead attention heads.
-    :param int n_layers: number of transformer layers.
-    :param int embedding_size: the embedding sizes. Must be a multiple of n_heads.
-    :param int ffn_size: the size of the hidden layer in the FFN
-    :param embedding: an embedding matrix for the bottom layer of the transformer.
-        If none, one is created for this encoder.
-    :param float dropout: Dropout used around embeddings and before layer
-        layer normalizations. This is used in Vaswani 2017 and works well on
-        large datasets.
-    :param float attention_dropout: Dropout performed after the multhead attention
-        softmax. This is not used in Vaswani 2017.
-    :param float relu_attention: Dropout used after the ReLU in the FFN. Not used
-        in Vaswani 2017, but used in Tensor2Tensor.
-    :param int padding_idx: Reserved padding index in the embeddings matrix.
-    :param bool learn_positional_embeddings: If off, sinusoidal embeddings are
-        used. If on, position embeddings are learned from scratch.
-    :param bool embeddings_scale: Scale embeddings relative to their dimensionality.
-        Found useful in fairseq.
-    :param bool reduction: If true, returns the mean vector for the entire encoding
-        sequence.
-    :param int n_positions: Size of the position embeddings matrix.
-    """
-
     def __init__(
         self,
         n_heads,
@@ -379,6 +302,30 @@ class TransformerEncoder(nn.Module):
         reduction=True,
         n_positions=1024,
     ):
+        """Transformer encoder module.
+
+        Args:
+            n_heads (int): the number of multihead attention heads.
+            n_layers (int): number of transformer layers.
+            embedding_size (int): the embedding sizes. Must be a multiple of n_heads.
+            ffn_size (int): the size of the hidden layer in the FFN
+            vocabulary_size (int): size of the vocabulary
+            embedding (nn.Embedding): an embedding matrix for the bottom layer of the transformer.
+                If none, one is created for this encoder.
+            dropout (float): Dropout used around embeddings and before layer
+                layer normalizations. This is used in Vaswani 2017 and works well on
+                large datasets.
+            attention_dropout (float): Dropout performed after the multhead attention
+                softmax. This is not used in Vaswani 2017.
+            relu_dropout (float): Dropout used after the ReLU in the FFN. Not used
+                in Vaswani 2017, but used in Tensor2Tensor.
+            embeddings_scale (bool): Scale embeddings relative to their dimensionality.
+                Found useful in fairseq.
+            learn_positional_embeddings (bool): If off, sinusoidal embeddings are
+                used. If on, position embeddings are learned from scratch.
+            padding_idx (int): Reserved padding index in the embeddings matrix.
+            n_positions (int): Size of the position embeddings matrix.
+        """
         super(TransformerEncoder, self).__init__()
 
         self.embedding_size = embedding_size
@@ -497,30 +444,6 @@ class TransformerEncoderLayer(nn.Module):
 
 
 class TransformerDecoder(nn.Module):
-    """
-    Transformer Decoder layer.
-
-    :param int n_heads: the number of multihead attention heads.
-    :param int n_layers: number of transformer layers.
-    :param int embedding_size: the embedding sizes. Must be a multiple of n_heads.
-    :param int ffn_size: the size of the hidden layer in the FFN
-    :param embedding: an embedding matrix for the bottom layer of the transformer.
-        If none, one is created for this encoder.
-    :param float dropout: Dropout used around embeddings and before layer
-        layer normalizations. This is used in Vaswani 2017 and works well on
-        large datasets.
-    :param float attention_dropout: Dropout performed after the multhead attention
-        softmax. This is not used in Vaswani 2017.
-    :param float relu_attention: Dropout used after the ReLU in the FFN. Not used
-        in Vaswani 2017, but used in Tensor2Tensor.
-    :param int padding_idx: Reserved padding index in the embeddings matrix.
-    :param bool learn_positional_embeddings: If off, sinusoidal embeddings are
-        used. If on, position embeddings are learned from scratch.
-    :param bool embeddings_scale: Scale embeddings relative to their dimensionality.
-        Found useful in fairseq.
-    :param int n_positions: Size of the position embeddings matrix.
-    """
-
     def __init__(
         self,
         n_heads,
@@ -537,6 +460,31 @@ class TransformerDecoder(nn.Module):
         padding_idx=None,
         n_positions=1024,
     ):
+        """Transformer Decoder layer.
+
+        Args:
+            n_heads (int): the number of multihead attention heads.
+            n_layers (int): number of transformer layers.
+            embedding_size (int): the embedding sizes. Must be a multiple of n_heads.
+            ffn_size (int): the size of the hidden layer in the FFN
+            vocabulary_size (int): size of the vocabulary
+            embedding (nn.Embedding): an embedding matrix for the bottom layer of the transformer.
+                If none, one is created for this encoder.
+            dropout (float): Dropout used around embeddings and before layer
+                layer normalizations. This is used in Vaswani 2017 and works well on
+                large datasets.
+            attention_dropout (float): Dropout performed after the multhead attention
+                softmax. This is not used in Vaswani 2017.
+            relu_dropout (float): Dropout used after the ReLU in the FFN. Not used
+                in Vaswani 2017, but used in Tensor2Tensor.
+            embeddings_scale (bool): Scale embeddings relative to their dimensionality.
+                Found useful in fairseq.
+            learn_positional_embeddings (bool): If off, sinusoidal embeddings are
+                used. If on, position embeddings are learned from scratch.
+            padding_idx (int): Reserved padding index in the embeddings matrix.
+            n_positions (int): Size of the position embeddings matrix.
+        """
+
         super().__init__()
         self.embedding_size = embedding_size
         self.ffn_size = ffn_size

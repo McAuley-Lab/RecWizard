@@ -1,7 +1,6 @@
 from typing import Union, List
 from transformers.utils import ModelOutput
 
-import pickle as pkl
 import torch
 
 from recwizard.module_utils import BaseModule
@@ -32,9 +31,9 @@ class KBRDRec(BaseModule):
 
         Args:
             config (KBRDRecConfig): The configuration of the KBRDRec module.
-            edge_index (torch.LongTensor): The edge index of the KBRD model.
-            edge_type (torch.LongTensor): The edge type of the KBRD model.
-            item_index (torch.LongTensor): The item index of the KBRD model.
+            edge_index (torch.LongTensor): The edges (node pairs) of the knowledge graph in KBRD, shape: (2, num_edges).
+            edge_type (torch.LongTensor): The edge type of the knowledge graph in KBRD, shape: (num_edges,).
+            item_index (torch.LongTensor): The recommendation item indices used in KBRD model, shape: (num_items,).
         """
 
         super().__init__(config, **kwargs)
@@ -70,13 +69,14 @@ class KBRDRec(BaseModule):
         """Forward pass of the KBRDRec module.
         
         Args:
-            input_ids (torch.LongTensor): The input ids of the input conversation contexts.
-            attention_mask (torch.BoolTensor): The attention mask of the input.
+            input_ids (torch.LongTensor): The input ids of the input conversation contexts, shape: (batch_size, seq_len).
+            attention_mask (torch.BoolTensor): The attention mask of the input, shape: (batch_size, seq_len).
             labels (torch.LongTensor): The labels of the converastions, optional.
         
         Returns:
             ModelOutput: The output of the model, containing the logits and the loss.
         """
+
         scores = self.model(input_ids, attention_mask)
 
         loss = None if labels is None else self.criterion(scores, labels)
@@ -101,7 +101,9 @@ class KBRDRec(BaseModule):
             topk (int): The number of movies to recommend.
         
         Returns:
-            Union[List[str], dict]: The output of the model.
+            Union[List[str], dict]: The dictionary of the model output with `logits`, 
+                `movieIds` and textual response if `return_dict` is `True`, else the textual 
+                model response only.
         """
         
         entities = tokenizer(raw_input)["entities"].to(self.device)

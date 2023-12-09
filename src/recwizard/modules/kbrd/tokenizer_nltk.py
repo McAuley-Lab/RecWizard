@@ -62,7 +62,7 @@ def get_tokenizer(name="kbrd"):
 
 def KBRDWordTokenizer(vocab, name="kbrd"):
     """
-    Return a tokenizer for RNN models from the given vocabulary
+    Return a tokenizer for language models from the given vocabulary
     Args:
         vocab(List[str]): list of words
         name(str): name of the tokenizer. Used to cache the tokenizer
