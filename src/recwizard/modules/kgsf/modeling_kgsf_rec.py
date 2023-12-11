@@ -24,6 +24,11 @@ class KGSFRec(BaseModule):
     LOAD_SAVE_IGNORES = {'START', 'decoder'}
 
     def __init__(self, config, **kwargs):
+        """Initialize the KGSFRec module.
+
+        Args:
+            config (KGSFRecConfig): The configuration of the KGSFRec module.
+        """
         super().__init__(config,**kwargs)
         self.opt = vars(config)  # converting config to dictionary if needed
         dictionary = json.load(open('../kgsfdata/word2index_redial.json', encoding='utf-8'))
@@ -85,6 +90,16 @@ class KGSFRec(BaseModule):
         self.pretrain = config.pretrain
     
     def infomax_loss(self, db_nodes_features, con_user_emb, db_label, mask):
+        """Calculate the infomax loss.
+        Args:
+            db_nodes_features (torch.Tensor): Features of the nodes in the database graph.
+            con_user_emb (torch.Tensor): User embeddings derived from the context.
+            db_label (torch.Tensor): Labels for the database entries.
+            mask (torch.Tensor): Mask to apply on the loss calculation.
+
+        Returns:
+            torch.Tensor: The computed infomax loss.
+        """
         con_emb=self.info_con_norm(con_user_emb)
         db_scores = F.linear(con_emb, db_nodes_features, self.info_output_db.bias)
 
@@ -93,6 +108,14 @@ class KGSFRec(BaseModule):
         return torch.mean(info_db_loss)
 
     def get_total_loss(self, rec_loss, info_db_loss):
+        """Compute the total loss combining recommendation and infomax losses.
+        Args:
+            rec_loss (torch.Tensor): The recommendation loss.
+            info_db_loss (torch.Tensor): The infomax loss.
+
+        Returns:
+            torch.Tensor: The total loss.
+        """
         if self.pretrain:
             return info_db_loss
         else:
@@ -101,6 +124,21 @@ class KGSFRec(BaseModule):
     # def forward(self, context, response, mask_response, dbpedia_mask, concept_mask, seed_sets, labels, concept_vec, db_vec, entity_vector, rec, entity=None, test=True, cand_params=None, prev_enc=None, maxlen=None, bsz=None):
     # response, concept_mask, seed_sets, labels, db_vec, rec
     def forward(self, response, concept_mask, seed_sets, labels, db_vec, rec, test=True, cand_params=None, prev_enc=None, maxlen=None, bsz=None):
+        """Forward pass of the model.
+
+        Processes the input data through the graph network and computes the losses.
+
+        Args:
+            response (torch.Tensor): The response tensor.
+            concept_mask (torch.Tensor): The concept mask tensor.
+            seed_sets (List[torch.Tensor]): List of entities tensors.
+            labels (torch.Tensor): The labels tensor.
+            db_vec (torch.Tensor): The database vector tensor.
+            rec (torch.Tensor): The recommendation tensor.
+
+        Returns:
+            dict: A dictionary containing the loss, labels, recommendation scores, and recommendation loss.
+        """
         print(type(concept_mask),type(seed_sets),type(db_vec),type(rec))
         if bsz == None:
             #bsz = self.batch_size # this does not work if not enough for a batch
@@ -153,6 +191,17 @@ class KGSFRec(BaseModule):
     @WrapSingleInput
     @monitor
     def response(self, raw_input: Union[List[str], str], tokenizer, return_dict=False, topk=3):
+        """Generate movie recommendations based on the raw text input.
+
+        Args:
+            raw_input (Union[List[str], str]): The raw input text or a list of texts.
+            tokenizer: The tokenizer used for processing the input.
+            return_dict (bool, optional): Flag to return the output as a dictionary. Defaults to False.
+            topk (int, optional): The number of top recommendations to generate. Defaults to 3.
+
+        Returns:
+            Union[List[str], dict]: The movie recommendations as a list of movie names or a dictionary with additional details if `return_dict` is True.
+        """
         movieIds_lst = []
         movieNames_lst = []
         for raw_single in raw_input:

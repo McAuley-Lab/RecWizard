@@ -28,6 +28,24 @@ class KGSFGenTokenizer(BaseTokenizer):
             entity2id: Dict[str, int] = None,
             **kwargs,
     ):
+        """Initialize the KGSFGen tokenizer.
+
+        Args:
+            max_count (int): Maximum number of recent contexts to consider.
+            max_c_length (int): Maximum length for context sequences.
+            max_r_length (int): Maximum length for response sequences.
+            n_entity (int): Total number of unique entities.
+            batch_size (int): Size of the batch for processing.
+            padding_idx (int): Index used for padding in tensor operations.
+            entity2entityId (Dict[str, int]): Mapping from entity names to entity IDs.
+            word2index (Dict[str, int]): Dictionary mapping words to indices.
+            key2index (Dict[str, int]): Dictionary mapping keys to indices for concept masking.
+            entity_ids (List): List of entity IDs.
+            id2name (Dict[str, str]): Mapping from IDs to entity names.
+            id2entity (Dict[int, str]): Dictionary mapping entity IDs to entity names.
+            entity2id (Dict[str, int]): Mapping from entity names to numerical IDs.
+            **kwargs: Additional keyword arguments for the base class.
+        """
         if entity2entityId is None:
             self.entity2entityId=pkl.load(open('../kgsfdata/entity2entityId.pkl','rb'))
         else:
@@ -261,8 +279,14 @@ class KGSFGenTokenizer(BaseTokenizer):
     
     def encode(self,user_input=None, user_context=None, entity=None, system_response=None, movie=0):
         """
+        Processes user input and context to generate various encoded representations.
+
+        This function can operate in two modes:
+        1. If 'user_context' and 'entity' are provided, it uses these directly.
+        2. If 'user_context' and 'entity' are not provided, it derives them from 'user_input'.
+        
         Args:
-            user_input (str): User's current input
+            user_input (str): Raw text of user's current input
             user_context (list of lists): Prior user interactions, each represented as a list of words.
             entity (list): Movies identified in the user context. Defaults to an empty list.
             system_response (list): The system's previous response as a list of words.
@@ -270,8 +294,8 @@ class KGSFGenTokenizer(BaseTokenizer):
 
         Returns:
             dict: A dictionary with the following keys and values:
-                - 'context': A tensor representing the context.
-                - 'response': A tensor representing the response (or None if 'system_response' is None).
+                - 'context': A tensor of tokens representing the context.
+                - 'response': A tensor of tokens representing the response (or None if 'system_response' is None).
                 - 'concept_mask': A tensor representing concept masks.
                 - 'seed_sets': A list containing 'entity'.
                 - 'entity_vector': A tensor representing the entity vector.

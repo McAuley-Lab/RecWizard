@@ -24,6 +24,11 @@ class KGSFGen(BaseModule):
     tokenizer_class = KGSFGenTokenizer
 
     def __init__(self, config, **kwargs):
+        """Initialize the KGSFGen module.
+
+        Args:
+            config (KGSFGenConfig): The configuration of the KGSFGen module.
+        """
         super().__init__(config,**kwargs)
         self.opt = vars(config)  # converting config to dictionary if needed
         dictionary = json.load(open('../kgsfdata/word2index_redial.json', encoding='utf-8'))
@@ -244,6 +249,15 @@ class KGSFGen(BaseModule):
 
 
     def compute_loss(self, output, scores):
+        """Compute the loss for the model's output.
+
+        Args:
+            output (torch.Tensor): The output tensor from the model.
+            scores (torch.Tensor): The target scores tensor.
+
+        Returns:
+            torch.Tensor: The computed loss value.
+        """
         score_view = scores.view(-1)
         output_view = output.view(-1, output.size(-1))
         loss = self.criterion(output_view.to(device), score_view.to(device))
@@ -251,7 +265,20 @@ class KGSFGen(BaseModule):
     
     def forward(self, context, response, concept_mask, seed_sets, entity_vector, entity=None, cand_params=None, prev_enc=None, maxlen=None,
                 bsz=None):
+        """Forward pass of the model.
 
+        Processes the input data through the encoder and graph network, and performs generation based on the context and graph embeddings.
+
+        Args:
+            context (torch.Tensor): The context tensor.
+            response (torch.Tensor): The response tensor.
+            concept_mask (torch.Tensor): The concept mask tensor.
+            seed_sets (List[torch.Tensor]): List of entity tensors.
+            entity_vector (torch.Tensor): The entity vector tensor.
+
+        Returns:
+            dict: A dictionary containing the loss, predictions, response, and context.
+        """
         if response is not None:
             self.longest_label = max(self.longest_label, response.size(1))
         else:
@@ -321,6 +348,18 @@ class KGSFGen(BaseModule):
 
     @monitor
     def response(self, raw_input: str, tokenizer, return_dict=False):
+        """Generate a response based on the raw input.
+
+        This function processes the raw input through the tokenizer and the model to generate a textual response.
+
+        Args:
+            raw_input (str): The raw input text.
+            tokenizer: The tokenizer used for processing the input.
+            return_dict (bool, optional): Flag to return the output as a dictionary. Defaults to False.
+
+        Returns:
+            str: The generated textual response.
+        """
         tokenized_input = tokenizer.encode(raw_input)
         output = self.forward(**tokenized_input)['preds']
         decoded_text = tokenizer.decode(output)

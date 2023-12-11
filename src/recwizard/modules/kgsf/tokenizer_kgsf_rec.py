@@ -29,6 +29,24 @@ class KGSFRecTokenizer(BaseTokenizer):
             entity2id: Dict[str, int] = None,
             **kwargs,
     ):
+        """Initialize the KGSFRec tokenizer.
+
+        Args:
+            max_count (int): Maximum number of recent contexts to consider.
+            max_c_length (int): Maximum length for context sequences.
+            max_r_length (int): Maximum length for response sequences.
+            n_entity (int): Total number of unique entities.
+            batch_size (int): Size of the batch for processing.
+            padding_idx (int): Index used for padding in tensor operations.
+            entity2entityId (Dict[str, int]): Mapping from entity names to entity IDs.
+            word2index (Dict[str, int]): Dictionary mapping words to indices.
+            key2index (Dict[str, int]): Dictionary mapping keys to indices for concept masking.
+            entity_ids (List): List of entity IDs.
+            id2name (Dict[str, str]): Mapping from IDs to entity names.
+            id2entity (Dict[int, str]): Dictionary mapping entity IDs to entity names.
+            entity2id (Dict[str, int]): Mapping from entity names to numerical IDs.
+            **kwargs: Additional keyword arguments for the base class.
+        """
         if entity2entityId is None:
             self.entity2entityId=pkl.load(open('../kgsfdata/entity2entityId.pkl','rb'))
         else:
@@ -162,7 +180,25 @@ class KGSFRecTokenizer(BaseTokenizer):
         return concept_mask,dbpedia_mask
 
     def _names_to_id(self, input_name):
+        """
+        Attempt to map a movie name to its corresponding ID.
 
+        This method takes an input movie name, processes it by stripping leading and trailing spaces,
+        converting it to lowercase, and removing any year information (e.g., '(2005)'). It then compares
+        the processed input name to a dictionary of movie names (in lowercase) and their corresponding IDs.
+        If a match is found, the method returns the corresponding movie ID; otherwise, it returns None.
+
+        Args:
+            input_name (str): The movie name to be mapped to an ID.
+
+        Returns:
+            int or None: The corresponding movie ID if found, or None if no match is found.
+
+        Example:
+            >>> input_movie_name = "Avatar (2009)"
+            >>> _names_to_id(input_movie_name)
+            136983
+        """
         processed_input_name = input_name.strip().lower()
         processed_input_name = re.sub(r'\(\d{4}\)', '', processed_input_name)
         
@@ -173,6 +209,26 @@ class KGSFRecTokenizer(BaseTokenizer):
         return None
     
     def detect_movie(self, sentence):
+        """
+        Detect and extract movies from a given sentence.
+
+        This function identifies movies within a sentence by searching for text enclosed in <entity> tags
+        or by using word boundaries and common punctuation. It then replaces the movie names with corresponding
+        movie IDs, and if available, maps these IDs to entity IDs. The detected tokens are returned as a list,
+        and any mapped entity IDs are also returned as a separate list.
+
+        Args:
+            sentence (str): The input sentence in which movies are to be detected.
+
+        Returns:
+            Tuple[List[str], List[int]]: A tuple containing two lists:
+                - A list of detected tokens in the sentence, where movie names are replaced with '@movie_id'.
+                - A list of entity IDs corresponding to the detected movies.
+
+        Example:
+            >>> "I watched <entity>Avatar</entity> yesterday."
+            (['I', 'watched', '@1', 'yesterday', '.'], [42])
+        """
         # This regular expression pattern will match text surrounded by <movie> tags
         pattern = r"<entity>.*?</entity>|\w+|[.,!?;]"
         print(sentence)
@@ -196,8 +252,14 @@ class KGSFRecTokenizer(BaseTokenizer):
     
     def encode(self,user_input, user_context=None, entity=None, system_response=None, movie=0):
         """
+        Processes user input and context to generate various encoded representations.
+
+        This function can operate in two modes:
+        1. If 'user_context' and 'entity' are provided, it uses these directly.
+        2. If 'user_context' and 'entity' are not provided, it derives them from 'user_input'.
+        
         Args:
-            user_input (str): User's current input
+            user_input (str): Raw text of user's current input
             user_context (list of lists): Prior user interactions, each represented as a list of words.
             entity (list): Movies identified in the user context. Defaults to an empty list.
             system_response (list): The system's previous response as a list of words.
@@ -205,8 +267,8 @@ class KGSFRecTokenizer(BaseTokenizer):
 
         Returns:
             dict: A dictionary with the following keys and values:
-                - 'context': A tensor representing the context.
-                - 'response': A tensor representing the response (or None if 'system_response' is None).
+                - 'context': A tensor of tokens representing the context.
+                - 'response': A tensor of tokens representing the response (or None if 'system_response' is None).
                 - 'concept_mask': A tensor representing concept masks.
                 - 'seed_sets': A list containing 'entity'.
                 - 'entity_vector': A tensor representing the entity vector.
@@ -278,19 +340,3 @@ class KGSFRecTokenizer(BaseTokenizer):
             movieIds.append(movie_id)
             movieNames.append(movie_name)
         return movieIds, movieNames
-if __name__ == "__main__":
-    tokenizer = KGSFRecTokenizer()
-    # test_sentence = 'She also voiced a character in @131869 and @161259'
-    # test_sentence = test_sentence.split(' ')
-    test_sentence = 'She also voiced a character in <entity>Despicable Me 3 (2017)</entity> and <entity>How to Train Your Dragon </entity> '
-    print(tokenizer.encode(test_sentence))
-    # test_sentence_user = ['Hello', '_split_', 'hi', 'how', 'are', 'u', '_split_', 'Great', '.', 'How', 'are', 'you', 'this', 'morning', '?', '_split_', 'would', 'u', 'have', 'any', 'recommendations', 'for', 'me', 'im', 'good', 'thanks', 'fo', 'asking']
-    # vector, ml, concept_mask, db_mask = tokenizer.padding_w2v(test_sentence,30)
-    # print(vector,ml,concept_mask,db_mask)
-
-    test_conv = [['Hello'], ['hi', 'how', 'are', 'u'], ['Great', '.', 'How', 'are', 'you', 'this', 'morning', '?'], ['would', 'u', 'have', 'any', 'recommendations', 'for', 'me', 'im', 'good', 'thanks', 'fo', 'asking'], ['What', 'type', 'of', 'movie', 'are', 'you', 'looking', 'for', '?'], ['comedies', 'i', 'like', 'kristin', 'wigg'], ['Okay', ',', 'have', 'you', 'seen', '@136983', '?'], ['something', 'like', 'yes', 'have', 'watched', '@140066', '?']]
-    #concept_mask,dbpedia_mask = tokenizer.padding_context(test_conv)
-    # print(vec,vl,concept_mask,dbpedia_mask,length)
-    result = tokenizer.encode(test_conv,[28207, 5771],test_sentence,22727)
-    print(result)
-    print('passed')
