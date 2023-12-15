@@ -2,7 +2,7 @@
 
 ### 1. CRS Models as a Whole
 
-After installing [🤖️ RecBOT](./index), we quickly load an existing Converstional Recommender Bot using a model name as follows:
+After installing [RecWizard](./index), we quickly load an existing Converstional Recommender Bot using a model name as follows:
 
 ```python
 from recwizard import AutoModel
@@ -51,7 +51,7 @@ We have the response from the UniCRS variant with ChatGPT generator module soon:
      classic movie like The Shawshank Redemption (1994)"
 ```
 
-So, this example shows that we can load the CRS modules first (they are typically recommender modules and generator modules). Then, feed the instantiated modules into a higher-level RecBOT model, where the model knows how to manage the usages and the results from different modules. If you are willing to know more about the model / module concepts in RecBOT, please check this [concept section](./).
+So, this example shows that we can load the CRS modules first (they are typically recommender modules and generator modules). Then, feed the instantiated modules into a higher-level RecWizard model, where the model knows how to manage the usages and the results from different modules. If you are willing to know more about the model / module concepts in RecWizard, please check this [concept section](./).
 
 ### 3. Single CRS Modules
 

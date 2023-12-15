@@ -7,9 +7,7 @@
 | Name     | Module Card                  | Details                                                          | 
 |----------|------------------------------|------------------------------------------------------------------|
 | AutoRec  | [ReDIAL](./), [INSPIRED](./) | Autoencoder-based recommender trained on ReDIAL or INSPIRED.     |
-| MF       | [ReDIAL](./), [INSPIRED](./) | Matrix Factorization recommmender trained on ReDIAL or INSPIRED. |
 | SASRec   | [ReDIAL](./), [INSPIRED](./) | Sequential recommmender trained on ReDIAL or INSPIRED.           |
-| LightGCN | [ReDIAL](./), [INSPIRED](./) | Graph-based recommmender trained on ReDIAL or INSPIRED.          |
 
 #### 1.2. KG-enriched Recommender 
 

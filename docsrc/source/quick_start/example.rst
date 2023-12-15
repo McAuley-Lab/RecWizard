@@ -1,9 +1,9 @@
-First Recwizard pipeline
+First RecWizard pipeline
 ------------------------
 Let's start by building a ``ExpansionPipeline`` using a ChatGPT-based generator with an AutoRec-based recommender [1]_.
 
 1. Setup the pipeline
----------------------
+^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -17,7 +17,7 @@ Let's start by building a ``ExpansionPipeline`` using a ChatGPT-based generator 
     )
 
 2. Format the input
--------------------
+^^^^^^^^^^^^^^^^^^^
 
 You would want to format your dialogue history like this before passing it to the pipeline:
 
@@ -36,7 +36,7 @@ Currently, the formatting contains 3 aspects:
 3. (Optional) We mark the entities in the text manually so that the named entities can be extracted by the downstream modules.
 
 3. Get Response!
-----------------
+^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 

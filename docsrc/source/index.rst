@@ -64,10 +64,7 @@ RecBOT Overview
    :hidden:
 
    reference/overview
-   reference/BaseConfig
-   reference/BaseModule
-   reference/BasePipeline
-   reference/BaseTokenizer
+   reference/baseclass
    reference/pipelines
    reference/modules
 

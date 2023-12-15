@@ -1,6 +1,6 @@
 ## Model Zoo
 
-Please contact [Zhankui He](zhh004@ucsd.edu) if you are willing to share your `RecBOT Model` in our model zoo.
+Please contact [Zhankui He](zhh004@ucsd.edu) if you are willing to share your `RecWizard Model` in our model zoo.
 
 ### 1. Model Types
 
