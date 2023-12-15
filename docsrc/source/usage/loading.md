@@ -26,14 +26,12 @@ We can find more shared CRS model cards in our [resource section](resource/model
 Apart from loading models with an one-liner similar to the module-level example above, it is also flexible to create model variants by using different module-level combinations. Here we specify a [UniCRS](https://arxiv.org/abs/2206.09363) variant by using a new [ChatGPT](https://openai.com/blog/introducing-chatgpt-and-whisper-apis)-based generator module to build a `unicrs_model_variant`:
 
 ```python
-from recwizard import AutoModel, AutoModule, AutoToeknizer
+from recwizard import FillBlankPipeline, FillBlankConfig, UnicrsRec, ChatgptGen
 
 unicrs_model_variant = recwizard.AutoModel(
-    config=recwizard.FillBlankConfig(), 
-    rec_module=AutoModule.from_pretrained('UnicrsRec-redial')
-    rec_tokenizer=AutoTokenizer.from_pretrained('UnicrsRec-redial')
-    gen_module=AutoModule.from_pretrained('UnicrsGen-chatgpt')
-    gen_tokenizer=AutoTokenizer.from_pretrained('UnicrsGen-chatgpt'),
+    config=FillBlankConfig(), 
+    rec_module=UnicrsRec.from_pretrained('RecWizard/unicrs-rec-redial'),
+    gen_module=ChatgptGen.from_pretrained('RecWizard/chatgpt-gen-fillblank')
 )
 ```
 
@@ -55,38 +53,40 @@ So, this example shows that we can load the CRS modules first (they are typicall
 
 ### 3. Single CRS Modules
 
-Specially, as shown in Case 2, we can load CRS modules first. Also, we can use the CRS (recommender or generator) module independently, let us use the recommender module from UniCRS as an example:
+Specially, as shown in Case 2, we can load CRS modules first. Also, we can use the CRS (recommender or generator) module independently, let us use the recommender module from ReDIAL as an example:
 
 ```python
-from recwizard import AutoModule, AutoToeknizer
+from recwizard import RedialRec, RedialRecTokenizer
 
-# load unicrs recommender module
-unicrs_rec=AutoModule.from_pretrained('UnicrsRec-redial')
+# load redial recommender module
+redial_rec_module = RedialRec.from_pretrained('RecWizard/redial-rec')
 
-# load unicrs recommender module tokenizer (convert text data to tensor data)
-unicrs_rec_tokenizer=AutoTokenizer.from_pretrained('UnicrsRec-redial')
+# load redial recommender module tokenizer (convert text data to tensor data)
+redial_rec_tokenizer = RedialRecTokenizer.from_pretrained('RecWizard/redial-rec')
 ```
 
 #### 3.1. Deal with Text Data 
 
-We can play with the module directly using natural language inputs, where if you wrap all the mentioned item titles with `<entity>` labels, such as `<entity> Titanic </entity>`, the `Titanic` mention will be mapped to the corresponding *item id*. Otherwise, the `Titanic` mention will be mapped to normal corresponding *word id*:
+We can play with the module directly using natural language inputs, where if you wrap all the mentioned item titles with `<entity>` labels, such as `<entity>Titanic</entity>`, the `Titanic` mention will be mapped to the corresponding *item id*. Otherwise, the `Titanic` mention will be mapped to normal corresponding *word id*:
 
 ```python
-unicrs_rec.response(
-    raw_input="Recommend me some popular and classic movies, I like <entity> Titanic </entity>.",
-    tokenizer=unicrs_rec_tokenizer,
+redial_rec_module.response(
+    raw_input="Recommend me some popular and classic movies, I like <entity>Titanic</entity>.",
+    tokenizer=redial_rec_tokenizer,
     topk=5,
 )
 ```
 
-Then we obtain the top-5 results from the UniCRS recommender module:
+Then we obtain the top-5 results from the ReDIAL recommender module:
 
 ```bash
-"<entity> The Shawshank Redemption (1994) </entity>
- <entity> The Godfather (1972) </entity>
- <entity> The Dark Knight (2008) </entity>
- <entity> The Godfather: Part II (1974) </entity> 
- <entity> The Lord of the Rings: The Return of the King (2003) </entity>"
+[
+ 'The Big Sick (2017)',
+ 'Bad Moms (2016)',
+ 'Dumb and Dumber (1994)',
+ '21 Jump Street (2012)',
+ 'Star Wars: Episode VIII – The Last Jedi (2017)'
+]
 ```
 
 #### 3.2. Deal with Tensor Data 
@@ -96,32 +96,38 @@ All the above examples are using the `.response` method to deal with **text data
 ##### 3.2.1. Tokenzier `encode`
 
 ```python 
-raw_input="Recommend me some popular and classic movies, I like <entity> Titanic </entity>."
-tensor_input = unicrs_rec_tokenizer.encode(raw_input)
+raw_input='User: Hi I am looking for a movie like <entity>Super Troopers (2001)</entity>'
+tensor_input = redial_rec_tokenizer([raw_input])
+tensor_input
 ```
 
 ```bash
-TODO: add the example tensor data as the outputs from "unicrs_rec_tokenizer.encode(raw_input)"
+{'attention_mask': tensor([[[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]]), 'senders': tensor([[1]]), 'input_ids': tensor([[[    0, 30086,    38,   524,   546,    13,    10,  1569,   101,  1582,
+           6354, 18158,     2]]]), 'movieIds': tensor([[1901]]), 'conversation_lengths': tensor([1]), 'movie_occurrences': [tensor([[[0., 0., 0., 0., 0., 0., 0., 0., 1., 1., 0., 0., 0.]]])]}
 ```
 
 ##### 3.2.2. Module `forward` 
 
 ```python
-tensor_ouput = unicrs_rec(**tensor_input) # equivalent to unicrs_rec.forward(**tensor_input)
+tensor_output = redial_rec_module(**tensor_input) # equivalent to redial_rec_module.forward(**tensor_input)
+print(tensor_output)
 ```
 
 ```bash
-TODO: add the example tensor data as the outputs from "unicrs_rec.forward(**tensor_input)"
+tensor([[[-20.4876, -13.0947, -20.1804,  ..., -20.6572, -21.6375, -20.9953]]],
+       grad_fn=<AsStridedBackward0>)
 ```
 
 ##### 3.2.2. Tokenizer `decode`
 
 ```python
-text_ouput = unicrs_rec_tokenizer.decode(tensor_output)
+movieIds = tensor_output.topk(k=3, dim=-1).indices[:, -1,
+                   :].tolist()
+tokenizer.decode(movieIds[0])
 ```
 
 ```bash
-TODO: add the example tensor data as the outputs from "unicrs_rec_tokenizer.decode(tensor_output)"
+['The Big Sick (2017)', 'Bad Moms (2016)', 'Dumb and Dumber (1994)']
 ```
 
 Additionally, if you are interestd in more existing modules, please check our [resource section](resource/module_zoo).
