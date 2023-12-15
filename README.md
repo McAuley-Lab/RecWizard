@@ -18,7 +18,7 @@ We abstract a CRS model into two levels as shown in the figure below:
   another `rectbot.BaseModule` for generating natural-language responses.
   We can further introduce processor `rectbot.BaseModule` to extract important information (e.g., entity linking) from
   users' raw features;
-- **Model Level**: We treat a `recwizard.BasePipeline` as a high-level manager to decide when and how to call the
+- **Pipeline Level**: We treat a `recwizard.BasePipeline` as a high-level manager to decide when and how to call the
   lower-level modules, and how to combine the results from such modules.
 
 <img src="pipeline.png" alt="pipeline" width="500"/> 
