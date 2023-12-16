@@ -92,7 +92,7 @@ class KBRDRec(BaseModule):
         return_dict=False,
         topk=3,
     ):
-        """Generate the response given the input_ids.
+        """Generate the textual response or results dict given the input_ids.
 
         Args:
             raw_input (Union[List[str], str]): The input conversation contexts.

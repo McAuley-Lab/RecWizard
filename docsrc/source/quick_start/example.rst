@@ -1,5 +1,6 @@
-First RecWizard pipeline
-------------------------
+First Example
+-------------
+
 Let's start by building a ``ExpansionPipeline`` using a ChatGPT-based generator with an AutoRec-based recommender [1]_.
 
 1. Setup the pipeline

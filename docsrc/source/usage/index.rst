@@ -1,8 +1,9 @@
-Overview 
--------------------
+=====
+USAGE 
+=====
 
 Current Usage
-^^^^^^^^^^^^^^
+-------------
 
 Now, we mainly use **RecWizard** for three usage scenarios:
 
@@ -11,9 +12,22 @@ Now, we mainly use **RecWizard** for three usage scenarios:
 3. **Develop New Models**: Develop new CRS models with **RecWizard**, and share them with others.
 
 Future Plan
-^^^^^^^^^^^^^
+-----------
 
 Since **RecWizard** is modular, portable and interactive, we plan to use it for more scenarios:
 
 1. **Benchmarking**: Build a benchmark for CRS models, similar to this `Huggingface leaderboard <https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard>`_.
 2. **User Studies**: Add more features to the interactive features to ease the user studies.
+
+
+Usage Details
+------------
+
+.. toctree::
+   :caption: User environment
+   :maxdepth: 1
+
+   loading/index
+   interface/index
+   development/index
+   

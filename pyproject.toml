@@ -6,19 +6,22 @@ build-backend = "hatchling.build"
 ignore-vcs = true
 [tool.hatch.build.targets.wheel]
 packages = ["src/recwizard"]
+[tool.sphinx-theme-builder]
+theme-name = "pydata_sphinx_theme"
+node-version = "16.13.2"
 
 [project]
 name = "recwizard"
 description = "RecWizard: A Plug-n-Play Toolkit for Conversational Recommendation with Modular, Portable Models and Interactive User Interfaces"
 readme = "README.md"
 requires-python = ">=3.8"
-license = "MIT"
 authors = [
     { name = "Tanmay Laud", email = "tanmaylaud@gmail.com"},
     { name = "Zeyuan Zhang", email ="zez018@ucsd.edu"},
     { name = "Zihang He", email = "z6he@ucsd.edu"},
     { name = "Zhankui He", email = "zhh004@ucsd.edu"}
 ]
+license = "MIT"
 classifiers = [
     "Intended Audience :: Information Technology",
     "Operating System :: OS Independent",
@@ -31,6 +34,7 @@ classifiers = [
     "Topic :: Software Development",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+
 ]
    
 dependencies = [
@@ -69,6 +73,36 @@ dev = [
     "sphinx-rtd-theme==1.0.0",
     "pytest==7.4.3",
     "pytest-mock==3.12.0"
+]
+
+doc = [
+  "numpydoc",
+  "linkify-it-py", # for link shortening
+  "rich",
+  "sphinxext-rediraffe",
+  "sphinx-sitemap",
+  "sphinx-autoapi>=3.0.0",
+  # For examples section
+  "myst-parser",
+  "ablog>=0.11.0rc2",
+  "jupyter_sphinx",
+  "pandas",
+  "plotly",
+  "matplotlib",
+  "numpy",
+  "xarray",
+  "sphinx-copybutton",
+  "sphinx-design",
+  "sphinx-togglebutton",
+  "jupyterlite-sphinx",
+  "sphinxcontrib-youtube<1.4",
+  "sphinx-favicon>=1.0.1",
+  "ipykernel",
+  "nbsphinx",
+  "furo",
+  "ipyleaflet",
+  "colorama",
+  "pydata_sphinx_theme"
 ]
 
 [tool.hatch.version]

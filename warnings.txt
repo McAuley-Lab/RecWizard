@@ -1,0 +1,16 @@
+
+Traceback (most recent call last):
+  File "/Users/zhankui/Desktop/RecWizard/.nox/docs/lib/python3.8/site-packages/sphinx/cmd/build.py", line 285, in build_main
+    app = Sphinx(args.sourcedir, args.confdir, args.outputdir,
+  File "/Users/zhankui/Desktop/RecWizard/.nox/docs/lib/python3.8/site-packages/sphinx/application.py", line 268, in __init__
+    self._init_builder()
+  File "/Users/zhankui/Desktop/RecWizard/.nox/docs/lib/python3.8/site-packages/sphinx/application.py", line 339, in _init_builder
+    self.events.emit('builder-inited')
+  File "/Users/zhankui/Desktop/RecWizard/.nox/docs/lib/python3.8/site-packages/sphinx/events.py", line 96, in emit
+    results.append(listener.handler(self.app, *args))
+  File "/Users/zhankui/Desktop/RecWizard/.nox/docs/lib/python3.8/site-packages/autoapi/extension.py", line 81, in run_autoapi
+    raise ExtensionError(
+sphinx.errors.ExtensionError: AutoAPI Directory `/Users/zhankui/Desktop/RecWizard/src/pydata_sphinx_theme` not found. Please check your `autoapi_dirs` setting.
+
+[91mExtension error:[39;49;00m
+AutoAPI Directory `/Users/zhankui/Desktop/RecWizard/src/pydata_sphinx_theme` not found. Please check your `autoapi_dirs` setting.

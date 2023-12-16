@@ -11,31 +11,36 @@ import sys
 
 sys.path.insert(0, os.path.abspath("../../src"))
 
-project = 'RecBot'
+project = 'RecWizard'
 copyright = '2023, McAuley Lab'
 author = 'McAuley Lab'
-release = 'v0.1'
+release = 'v0.0.1'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['m2r',     
+extensions = ["m2r",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
-    "sphinx_rtd_theme"
 ]
 
 source_suffix = ['.rst', '.md']
 exclude_patterns = []
-
-
+html_theme = "furo"
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'sphinx_rtd_theme'
-html_static_path = ['_static']
-
 autodoc_member_order = 'bysource'
+
+html_title = "RecWizard"
+
+html_static_path = ["_static"]
+
+html_theme_options = {
+    "sidebar_hide_name": True,
+    "light_logo": "logo.png",
+    "dark_logo": "logo.png",
+}
