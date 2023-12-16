@@ -24,8 +24,6 @@ Usage Details
 ------------
 
 .. toctree::
-   :caption: User environment
-   :maxdepth: 1
 
    loading/index
    interface/index

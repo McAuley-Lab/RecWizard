@@ -1,3 +1,5 @@
+.. _getting-started:
+
 Concepts
 --------
 
@@ -14,7 +16,7 @@ By default, all the modules are communicating in natural-language (e.g., **text 
 2. Features
 ^^^^^^^^^^^
 
-With the seamless compatibility of the Huggingface, stemming from our design principles to "let modules communicate in natural language" while "exposing low-level APIs to users", RecBOT shows the following properties:
+With the seamless compatibility of the Huggingface, stemming from our design principles to "let modules communicate in natural language" while "exposing low-level APIs to users", RecWizard shows the following properties:
 
 - **Modular**: CRS model = (lower) *module level* + (higher) *pipline level*.
 - **Portable**: Share or load CRS modules and pipelines from Huggingface Hub! 

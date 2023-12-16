@@ -1,9 +1,7 @@
-BaseClass
----------
+Base Classes
+------------
 
 .. toctree::
-   :caption: Base Classes
-   :maxdepth: 1
 
    config 
    tokenizer

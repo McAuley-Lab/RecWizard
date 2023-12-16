@@ -1,4 +1,4 @@
-Switch Decode
+SwitchDecode
 ^^^^^^^^^^^^^
 
 

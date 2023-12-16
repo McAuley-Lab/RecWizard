@@ -1,4 +1,4 @@
-Fill Blank
+FillBlank
 ^^^^^^^^^^
 
 .. autoclass:: recwizard.pipelines.fill_blank.configuration_fill_blank.FillBlankConfig

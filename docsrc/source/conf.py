@@ -24,6 +24,7 @@ extensions = ["m2r",
     "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
+    "sphinx_design"
 ]
 
 source_suffix = ['.rst', '.md']
