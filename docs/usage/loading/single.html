@@ -1,0 +1,418 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Interact with Models" href="../interface/index.html" /><link rel="prev" title="2. CRS Models at Module Level" href="module.html" />
+
+    <!-- Generated with Sphinx 7.1.2 and Furo 2023.09.10 -->
+        <title>3. Single CRS Modules - RecWizard</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">RecWizard</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" src="../../_static/logo.png" alt="Light Logo"/>
+    <img class="sidebar-logo only-dark" src="../../_static/logo.png" alt="Dark Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">GET STARTED</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/concept.html">Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start/example.html">First Example</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">USER GUIDE</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Use Existing Models</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Use Existing Models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="whole.html">1. CRS Models as a Whole</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module.html">2. CRS Models at Module Level</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">3. Single CRS Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../interface/index.html">Interact with Models</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Interact with Models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interface/launch.html">1. Launch Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interface/info.html">2. INFO Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interface/debug.html">3. DEBUG Mode</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../development/index.html">Develop New Models</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of Develop New Models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development/setup.html">1. Tutorial Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/recommender.html">2. NEW Recommender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/generator.html">3.  NEW Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/pipeline.html">4. NEW Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/interface.html">5. NEW Interactive Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/sharing.html">6. Share NEW models</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API REFERENCE</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/baseclass/index.html">Base Classes</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Base Classes</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/baseclass/config.html">recwizard.BaseConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/baseclass/tokenizer.html">recwizard.BaseTokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/baseclass/module.html">recwizard.BaseModule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/baseclass/pipeline.html">recwizard.BasePipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/pipelines/index.html">Pipelines</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Pipelines</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/pipelines/expansion.html">Expansion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/pipelines/fill_blank.html">FillBlank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/pipelines/switch_decode.html">SwitchDecode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/pipelines/chatgpt.html">ChatGPT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/pipelines/trivial.html">Trivial</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/modules/index.html">Modules</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Modules</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../reference/modules/redial/index.html">ReDIAL</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of ReDIAL</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/modules/redial/recommender.html">Recommender Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/modules/redial/generator.html">Generator Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/modules/redial/supporting.html">Supporting Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../reference/modules/kbrd/index.html">KBRD</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of KBRD</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/modules/kbrd/recommender.html">Recommender Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/modules/kbrd/generator.html">Generator Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/modules/kbrd/supporting.html">Supporting Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../reference/modules/kgsf/index.html">KGSF</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of KGSF</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/modules/kgsf/recommender.html">Recommender Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/modules/kgsf/generator.html">Generator Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/modules/kgsf/supporting.html">Supporting Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../reference/modules/unicrs/index.html">UniCRS</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of UniCRS</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/modules/unicrs/recommender.html">Recommender Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/modules/unicrs/generator.html">Generator Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/modules/unicrs/supporting.html">Supporting Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../reference/modules/llms/index.html">LLMs</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of LLMs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/modules/llms/general.html">General LLM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/modules/llms/chatgpt.html">ChatGPT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/modules/llms/llama.html">Llama</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="single-crs-modules">
+<h1>3. Single CRS Modules<a class="headerlink" href="#single-crs-modules" title="Permalink to this heading">#</a></h1>
+<p>Specially, as shown in Case 2, we can load CRS modules first. Also, we can use the CRS (recommender or generator) module independently, let us use the recommender module from ReDIAL as an example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">recwizard</span> <span class="kn">import</span> <span class="n">RedialRec</span><span class="p">,</span> <span class="n">RedialRecTokenizer</span>
+
+<span class="c1"># load redial recommender module</span>
+<span class="n">redial_rec_module</span> <span class="o">=</span> <span class="n">RedialRec</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">&#39;RecWizard/redial-rec&#39;</span><span class="p">)</span>
+
+<span class="c1"># load redial recommender module tokenizer (convert text data to tensor data)</span>
+<span class="n">redial_rec_tokenizer</span> <span class="o">=</span> <span class="n">RedialRecTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">&#39;RecWizard/redial-rec&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="deal-with-text-data">
+<h2>3.1. Deal with Text Data<a class="headerlink" href="#deal-with-text-data" title="Permalink to this heading">#</a></h2>
+<p>We can play with the module directly using natural language inputs, where if you wrap all the mentioned item titles with <code class="docutils literal notranslate"><span class="pre">&lt;entity&gt;</span></code> labels, such as <code class="docutils literal notranslate"><span class="pre">&lt;entity&gt;Titanic&lt;/entity&gt;</span></code>, the <code class="docutils literal notranslate"><span class="pre">Titanic</span></code> mention will be mapped to the corresponding <em>item id</em>. Otherwise, the <code class="docutils literal notranslate"><span class="pre">Titanic</span></code> mention will be mapped to normal corresponding <em>word id</em>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">redial_rec_module</span><span class="o">.</span><span class="n">response</span><span class="p">(</span>
+    <span class="n">raw_input</span><span class="o">=</span><span class="s2">&quot;Recommend me some popular and classic movies, I like &lt;entity&gt;Titanic&lt;/entity&gt;.&quot;</span><span class="p">,</span>
+    <span class="n">tokenizer</span><span class="o">=</span><span class="n">redial_rec_tokenizer</span><span class="p">,</span>
+    <span class="n">topk</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Then we obtain the top-5 results from the ReDIAL recommender module:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>
+<span class="w"> </span><span class="s1">&#39;The Big Sick (2017)&#39;</span>,
+<span class="w"> </span><span class="s1">&#39;Bad Moms (2016)&#39;</span>,
+<span class="w"> </span><span class="s1">&#39;Dumb and Dumber (1994)&#39;</span>,
+<span class="w"> </span><span class="s1">&#39;21 Jump Street (2012)&#39;</span>,
+<span class="w"> </span><span class="s1">&#39;Star Wars: Episode VIII – The Last Jedi (2017)&#39;</span>
+<span class="o">]</span>
+</pre></div>
+</div>
+</section>
+<section id="deal-with-tensor-data">
+<h2>3.2. Deal with Tensor Data<a class="headerlink" href="#deal-with-tensor-data" title="Permalink to this heading">#</a></h2>
+<p>All the above examples are using the <code class="docutils literal notranslate"><span class="pre">.response</span></code> method to deal with <strong>text data</strong>, but for the internal mechanism within (recommender or generator) modules, they are typically dealing with <strong>tensor data</strong>. So, a lower-level control is also provided if the users are curious about the <strong>tensor data</strong>. Bascially, <code class="docutils literal notranslate"><span class="pre">response</span></code> is equivalent to “tokenzier <code class="docutils literal notranslate"><span class="pre">encode</span></code> -&gt; module <code class="docutils literal notranslate"><span class="pre">forward</span></code> -&gt; tokenizer <code class="docutils literal notranslate"><span class="pre">decode</span></code>.</p>
+<p><a href="#id1"><span class="problematic" id="id2">**</span></a>3.2.1. Tokenzier <code class="docutils literal notranslate"><span class="pre">encode</span></code>**</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">raw_input</span><span class="o">=</span><span class="s1">&#39;User: Hi I am looking for a movie like &lt;entity&gt;Super Troopers (2001)&lt;/entity&gt;&#39;</span>
+<span class="n">tensor_input</span> <span class="o">=</span> <span class="n">redial_rec_tokenizer</span><span class="p">([</span><span class="n">raw_input</span><span class="p">])</span>
+<span class="n">tensor_input</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span><span class="s1">&#39;attention_mask&#39;</span>:<span class="w"> </span>tensor<span class="o">([[[</span><span class="m">1</span>,<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">1</span><span class="o">]]])</span>,<span class="w"> </span><span class="s1">&#39;senders&#39;</span>:<span class="w"> </span>tensor<span class="o">([[</span><span class="m">1</span><span class="o">]])</span>,<span class="w"> </span><span class="s1">&#39;input_ids&#39;</span>:<span class="w"> </span>tensor<span class="o">([[[</span><span class="w">    </span><span class="m">0</span>,<span class="w"> </span><span class="m">30086</span>,<span class="w">    </span><span class="m">38</span>,<span class="w">   </span><span class="m">524</span>,<span class="w">   </span><span class="m">546</span>,<span class="w">    </span><span class="m">13</span>,<span class="w">    </span><span class="m">10</span>,<span class="w">  </span><span class="m">1569</span>,<span class="w">   </span><span class="m">101</span>,<span class="w">  </span><span class="m">1582</span>,
+<span class="w">           </span><span class="m">6354</span>,<span class="w"> </span><span class="m">18158</span>,<span class="w">     </span><span class="m">2</span><span class="o">]]])</span>,<span class="w"> </span><span class="s1">&#39;movieIds&#39;</span>:<span class="w"> </span>tensor<span class="o">([[</span><span class="m">1901</span><span class="o">]])</span>,<span class="w"> </span><span class="s1">&#39;conversation_lengths&#39;</span>:<span class="w"> </span>tensor<span class="o">([</span><span class="m">1</span><span class="o">])</span>,<span class="w"> </span><span class="s1">&#39;movie_occurrences&#39;</span>:<span class="w"> </span><span class="o">[</span>tensor<span class="o">([[[</span><span class="m">0</span>.,<span class="w"> </span><span class="m">0</span>.,<span class="w"> </span><span class="m">0</span>.,<span class="w"> </span><span class="m">0</span>.,<span class="w"> </span><span class="m">0</span>.,<span class="w"> </span><span class="m">0</span>.,<span class="w"> </span><span class="m">0</span>.,<span class="w"> </span><span class="m">0</span>.,<span class="w"> </span><span class="m">1</span>.,<span class="w"> </span><span class="m">1</span>.,<span class="w"> </span><span class="m">0</span>.,<span class="w"> </span><span class="m">0</span>.,<span class="w"> </span><span class="m">0</span>.<span class="o">]]])]}</span>
+</pre></div>
+</div>
+<p><a href="#id3"><span class="problematic" id="id4">**</span></a>3.2.2. Module <code class="docutils literal notranslate"><span class="pre">forward</span></code>**</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tensor_output</span> <span class="o">=</span> <span class="n">redial_rec_module</span><span class="p">(</span><span class="o">**</span><span class="n">tensor_input</span><span class="p">)</span> <span class="c1"># equivalent to redial_rec_module.forward(**tensor_input)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tensor_output</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tensor<span class="o">([[[</span>-20.4876,<span class="w"> </span>-13.0947,<span class="w"> </span>-20.1804,<span class="w">  </span>...,<span class="w"> </span>-20.6572,<span class="w"> </span>-21.6375,<span class="w"> </span>-20.9953<span class="o">]]]</span>,
+<span class="w">       </span><span class="nv">grad_fn</span><span class="o">=</span>&lt;AsStridedBackward0&gt;<span class="o">)</span>
+</pre></div>
+</div>
+<p><a href="#id5"><span class="problematic" id="id6">**</span></a>3.2.2. Tokenizer <code class="docutils literal notranslate"><span class="pre">decode</span></code>**</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">movieIds</span> <span class="o">=</span> <span class="n">tensor_output</span><span class="o">.</span><span class="n">topk</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">indices</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                   <span class="p">:]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">movieIds</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><span class="s1">&#39;The Big Sick (2017)&#39;</span>,<span class="w"> </span><span class="s1">&#39;Bad Moms (2016)&#39;</span>,<span class="w"> </span><span class="s1">&#39;Dumb and Dumber (1994)&#39;</span><span class="o">]</span>
+</pre></div>
+</div>
+<p>Additionally, if you are interestd in more existing modules, please check our <a class="reference external" href="resource/module_zoo">resource section</a>.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../interface/index.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Interact with Models</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="module.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">2. CRS Models at Module Level</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, McAuley Lab
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">3. Single CRS Modules</a><ul>
+<li><a class="reference internal" href="#deal-with-text-data">3.1. Deal with Text Data</a></li>
+<li><a class="reference internal" href="#deal-with-tensor-data">3.2. Deal with Tensor Data</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=57cfd03c"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
+    </body>
+</html>

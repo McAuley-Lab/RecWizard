@@ -1,0 +1,904 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="KGSF" href="../kgsf/index.html" /><link rel="prev" title="Generator Module" href="generator.html" />
+
+    <!-- Generated with Sphinx 7.1.2 and Furo 2023.09.10 -->
+        <title>Supporting Modules - RecWizard</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=362ab14a" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=36a5483c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">RecWizard</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" src="../../../_static/logo.png" alt="Light Logo"/>
+    <img class="sidebar-logo only-dark" src="../../../_static/logo.png" alt="Dark Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">GET STARTED</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/concept.html">Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick_start/example.html">First Example</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">USER GUIDE</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../usage/loading/index.html">Use Existing Models</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Use Existing Models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/loading/whole.html">1. CRS Models as a Whole</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/loading/module.html">2. CRS Models at Module Level</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/loading/single.html">3. Single CRS Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../usage/interface/index.html">Interact with Models</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Interact with Models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/interface/launch.html">1. Launch Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/interface/info.html">2. INFO Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/interface/debug.html">3. DEBUG Mode</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../usage/development/index.html">Develop New Models</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of Develop New Models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/development/setup.html">1. Tutorial Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/development/recommender.html">2. NEW Recommender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/development/generator.html">3.  NEW Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/development/pipeline.html">4. NEW Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/development/interface.html">5. NEW Interactive Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/development/sharing.html">6. Share NEW models</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API REFERENCE</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../baseclass/index.html">Base Classes</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Base Classes</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../baseclass/config.html">recwizard.BaseConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../baseclass/tokenizer.html">recwizard.BaseTokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../baseclass/module.html">recwizard.BaseModule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../baseclass/pipeline.html">recwizard.BasePipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../pipelines/index.html">Pipelines</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Pipelines</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/expansion.html">Expansion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/fill_blank.html">FillBlank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/switch_decode.html">SwitchDecode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/chatgpt.html">ChatGPT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/trivial.html">Trivial</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">Modules</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Modules</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../redial/index.html">ReDIAL</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of ReDIAL</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../redial/recommender.html">Recommender Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../redial/generator.html">Generator Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../redial/supporting.html">Supporting Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">KBRD</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of KBRD</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="recommender.html">Recommender Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generator.html">Generator Module</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Supporting Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../kgsf/index.html">KGSF</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of KGSF</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../kgsf/recommender.html">Recommender Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kgsf/generator.html">Generator Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kgsf/supporting.html">Supporting Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../unicrs/index.html">UniCRS</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of UniCRS</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../unicrs/recommender.html">Recommender Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../unicrs/generator.html">Generator Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../unicrs/supporting.html">Supporting Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../llms/index.html">LLMs</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of LLMs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../llms/general.html">General LLM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../llms/chatgpt.html">ChatGPT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../llms/llama.html">Llama</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="supporting-modules">
+<h1>Supporting Modules<a class="headerlink" href="#supporting-modules" title="Permalink to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.tokenizer_nltk.NLTKTokenizer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">recwizard.modules.kbrd.tokenizer_nltk.</span></span><span class="sig-name descname"><span class="pre">NLTKTokenizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">language</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'english'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/tokenizer_nltk.html#NLTKTokenizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.tokenizer_nltk.NLTKTokenizer" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.tokenizer_nltk.get_tokenizer">
+<span class="sig-prename descclassname"><span class="pre">recwizard.modules.kbrd.tokenizer_nltk.</span></span><span class="sig-name descname"><span class="pre">get_tokenizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kbrd'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/tokenizer_nltk.html#get_tokenizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.tokenizer_nltk.get_tokenizer" title="Permalink to this definition">#</a></dt>
+<dd><p>Return a tokenizer from the cache.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.tokenizer_nltk.KBRDWordTokenizer">
+<span class="sig-prename descclassname"><span class="pre">recwizard.modules.kbrd.tokenizer_nltk.</span></span><span class="sig-name descname"><span class="pre">KBRDWordTokenizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vocab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kbrd'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/tokenizer_nltk.html#KBRDWordTokenizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.tokenizer_nltk.KBRDWordTokenizer" title="Permalink to this definition">#</a></dt>
+<dd><p>Return a tokenizer for language models from the given vocabulary
+:param vocab: list of words
+:type vocab: List[str]
+:param name: name of the tokenizer. Used to cache the tokenizer
+:type name: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>PreTrainedTokenizerFast</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">recwizard.modules.kbrd.transformer_encoder_decoder.</span></span><span class="sig-name descname"><span class="pre">TorchGeneratorModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">padding_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longest_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TorchGeneratorModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel" title="Permalink to this definition">#</a></dt>
+<dd><p>This Interface expects you to implement model with the following reqs:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">`START`</span></span></dt>
+<dd><p>LongTensor representing the start of sentence</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">`END`</span></span></dt>
+<dd><p>LongTensor representing the end of sentence</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">`NULL_IDX`</span></span></dt>
+<dd><p>index of null token</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">`model.encoder`</span></span></dt>
+<dd><p>takes input returns tuple (enc_out, enc_hidden, attn_mask)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">`model.decoder`</span></span></dt>
+<dd><p>takes decoder params and returns decoder outputs after attn</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">`model.output`</span></span></dt>
+<dd><p>takes decoder outputs and returns distr over dictionary</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">padding_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longest_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TorchGeneratorModel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel.__init__" title="Permalink to this definition">#</a></dt>
+<dd><p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel._starts">
+<span class="sig-name descname"><span class="pre">_starts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bsz</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TorchGeneratorModel._starts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel._starts" title="Permalink to this definition">#</a></dt>
+<dd><p>Return bsz start tokens.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel.decode_greedy">
+<span class="sig-name descname"><span class="pre">decode_greedy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoder_states</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bsz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxlen</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TorchGeneratorModel.decode_greedy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel.decode_greedy" title="Permalink to this definition">#</a></dt>
+<dd><p>Greedy search</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>encoder_states</strong> – output of the encoder model</p></li>
+<li><p><strong>bsz</strong> – batch size</p></li>
+<li><p><strong>maxlen</strong> – max number of tokens to decode</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(batch_size, max_len, #vocab), (batch_size, max_len)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pair (logits, choices) of the greedy decode, shapes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel.decode_forced">
+<span class="sig-name descname"><span class="pre">decode_forced</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoder_states</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TorchGeneratorModel.decode_forced"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel.decode_forced" title="Permalink to this definition">#</a></dt>
+<dd><p>Decode with a fixed, true sequence, computing loss. Useful for
+training, or ranking fixed candidates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>encoder_states</strong> – output of the encoder model, shape: (batch_size, seq_len, hidden_size)</p></li>
+<li><p><strong>ys</strong> – target tokens, shape: (batch_size, tgt_len)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>pair (logits, choices) containing the logits and MLE predictions,</dt><dd><p>shapes: (batch_size, tgt_len, #vocab), (batch_size, tgt_len)</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel.reorder_encoder_states">
+<span class="sig-name descname"><span class="pre">reorder_encoder_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoder_states</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TorchGeneratorModel.reorder_encoder_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel.reorder_encoder_states" title="Permalink to this definition">#</a></dt>
+<dd><p>Reorder encoder states according to a new set of indices.</p>
+<p>This is an abstract method, and <em>must</em> be implemented by the user.</p>
+<p>Its purpose is to provide beam search with a model-agnostic interface for
+beam search. For example, this method is used to sort hypotheses,
+expand beams, etc.</p>
+<p>For example, assume that encoder_states is an bsz x 1 tensor of values</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>python</p>
+<blockquote>
+<div><p>indices = [0, 2, 2]
+encoder_states = [[0.1]</p>
+<blockquote>
+<div><p>[0.2]
+[0.3]]</p>
+</div></blockquote>
+</div></blockquote>
+<p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+<p>then the output will be</p>
+<p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a>python</p>
+<blockquote>
+<div><dl class="simple">
+<dt>output = [[0.1]</dt><dd><p>[0.3]
+[0.3]]</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>encoder_states</strong> – output from encoder. type is model specific.</p></li>
+<li><p><strong>indices</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – the indices to select over. The user must support non-tensor inputs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The re-ordered encoder states. It should be of the same type as encoder states, and it must be a valid input to the decoder.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel.reorder_decoder_incremental_state">
+<span class="sig-name descname"><span class="pre">reorder_decoder_incremental_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incremental_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TorchGeneratorModel.reorder_decoder_incremental_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel.reorder_decoder_incremental_state" title="Permalink to this definition">#</a></dt>
+<dd><p>Reorder incremental state for the decoder.</p>
+<p>Used to expand selected beams in beam_search. Unlike reorder_encoder_states,
+implementing this method is optional. However, without incremental decoding,
+decoding a single beam becomes O(n^2) instead of O(n), which can make
+beam search impractically slow.</p>
+<p>In order to fall back to non-incremental decoding, just return None from this
+method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>incremental_state</strong> – second output of model.decoder</p></li>
+<li><p><strong>inds</strong> (<em>torch.LongTensor</em>) – indices to select and reorder over.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The re-ordered decoder incremental states. It should be the same
+type as incremental_state, and usable as an input to the decoder.
+This method should return None if the model does not support
+incremental decoding.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cand_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prev_enc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxlen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bsz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TorchGeneratorModel.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel.forward" title="Permalink to this definition">#</a></dt>
+<dd><p>Get output predictions from the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xs</strong> (<em>torch.LongTensor</em>) – input to the encoder, shapes: (batch_size, seq_len)</p></li>
+<li><p><strong>ys</strong> (<em>torch.LongTensor</em>) – expected output from the decoder, shapes: (batch_size, seq_len)</p></li>
+<li><p><strong>cand_params</strong> (<em>torch.FloatTensor</em>) – parameters for candidate generation, shape: (batch_size, num_cands, num_params)</p></li>
+<li><p><strong>prev_enc</strong> (<em>torch.FloatTensor</em>) – if you know you’ll pass in the same xs multiple times, you can pass in the encoder
+output from the last forward pass to skip recalcuating the same encoder output.</p></li>
+<li><p><strong>maxlen</strong> (<em>int</em>) – max number of tokens to decode. if not set, will use the length of the longest label this model has seen.
+ignored when ys is not None.</p></li>
+<li><p><strong>bsz</strong> (<em>int</em>) – if ys is not provided, then you must specify the bsz for greedy decoding.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl>
+<dt>(scores, candidate_scores, encoder_states) tuple</dt><dd><ul class="simple">
+<li><p>scores contains the model’s predicted token scores.</p></li>
+</ul>
+<p>(FloatTensor[batch_size, seq_len, num_features])
+- candidate_scores are the score the model assigned to each candidate.
+(FloatTensor[batch_size, num_cands])
+- encoder_states are the output of model.encoder. Model specific types.
+Feed this back in to skip encoding on the next call.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TransformerEncoder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">recwizard.modules.kbrd.transformer_encoder_decoder.</span></span><span class="sig-name descname"><span class="pre">TransformerEncoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_heads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_layers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ffn_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vocabulary_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relu_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learn_positional_embeddings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embeddings_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_positions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1024</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TransformerEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerEncoder" title="Permalink to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TransformerEncoder.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_heads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_layers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ffn_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vocabulary_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relu_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learn_positional_embeddings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embeddings_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_positions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1024</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TransformerEncoder.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerEncoder.__init__" title="Permalink to this definition">#</a></dt>
+<dd><p>Transformer encoder module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_heads</strong> (<em>int</em>) – the number of multihead attention heads.</p></li>
+<li><p><strong>n_layers</strong> (<em>int</em>) – number of transformer layers.</p></li>
+<li><p><strong>embedding_size</strong> (<em>int</em>) – the embedding sizes. Must be a multiple of n_heads.</p></li>
+<li><p><strong>ffn_size</strong> (<em>int</em>) – the size of the hidden layer in the FFN</p></li>
+<li><p><strong>vocabulary_size</strong> (<em>int</em>) – size of the vocabulary</p></li>
+<li><p><strong>embedding</strong> (<em>nn.Embedding</em>) – an embedding matrix for the bottom layer of the transformer.
+If none, one is created for this encoder.</p></li>
+<li><p><strong>dropout</strong> (<em>float</em>) – Dropout used around embeddings and before layer
+layer normalizations. This is used in Vaswani 2017 and works well on
+large datasets.</p></li>
+<li><p><strong>attention_dropout</strong> (<em>float</em>) – Dropout performed after the multhead attention
+softmax. This is not used in Vaswani 2017.</p></li>
+<li><p><strong>relu_dropout</strong> (<em>float</em>) – Dropout used after the ReLU in the FFN. Not used
+in Vaswani 2017, but used in Tensor2Tensor.</p></li>
+<li><p><strong>embeddings_scale</strong> (<em>bool</em>) – Scale embeddings relative to their dimensionality.
+Found useful in fairseq.</p></li>
+<li><p><strong>learn_positional_embeddings</strong> (<em>bool</em>) – If off, sinusoidal embeddings are
+used. If on, position embeddings are learned from scratch.</p></li>
+<li><p><strong>padding_idx</strong> (<em>int</em>) – Reserved padding index in the embeddings matrix.</p></li>
+<li><p><strong>n_positions</strong> (<em>int</em>) – Size of the position embeddings matrix.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TransformerEncoder.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TransformerEncoder.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerEncoder.forward" title="Permalink to this definition">#</a></dt>
+<dd><p>input data is a FloatTensor of shape [batch, seq_len, dim]
+mask is a ByteTensor of shape [batch, seq_len], filled with 1 when
+inside the sequence and 0 outside.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TransformerEncoderLayer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">recwizard.modules.kbrd.transformer_encoder_decoder.</span></span><span class="sig-name descname"><span class="pre">TransformerEncoderLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_heads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ffn_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relu_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TransformerEncoderLayer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerEncoderLayer" title="Permalink to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TransformerEncoderLayer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_heads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ffn_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relu_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TransformerEncoderLayer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerEncoderLayer.__init__" title="Permalink to this definition">#</a></dt>
+<dd><p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TransformerEncoderLayer.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TransformerEncoderLayer.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerEncoderLayer.forward" title="Permalink to this definition">#</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TransformerDecoder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">recwizard.modules.kbrd.transformer_encoder_decoder.</span></span><span class="sig-name descname"><span class="pre">TransformerDecoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_heads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_layers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ffn_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vocabulary_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relu_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embeddings_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learn_positional_embeddings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_positions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1024</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TransformerDecoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerDecoder" title="Permalink to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TransformerDecoder.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_heads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_layers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ffn_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vocabulary_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relu_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embeddings_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learn_positional_embeddings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_positions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1024</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TransformerDecoder.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerDecoder.__init__" title="Permalink to this definition">#</a></dt>
+<dd><p>Transformer Decoder layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_heads</strong> (<em>int</em>) – the number of multihead attention heads.</p></li>
+<li><p><strong>n_layers</strong> (<em>int</em>) – number of transformer layers.</p></li>
+<li><p><strong>embedding_size</strong> (<em>int</em>) – the embedding sizes. Must be a multiple of n_heads.</p></li>
+<li><p><strong>ffn_size</strong> (<em>int</em>) – the size of the hidden layer in the FFN</p></li>
+<li><p><strong>vocabulary_size</strong> (<em>int</em>) – size of the vocabulary</p></li>
+<li><p><strong>embedding</strong> (<em>nn.Embedding</em>) – an embedding matrix for the bottom layer of the transformer.
+If none, one is created for this encoder.</p></li>
+<li><p><strong>dropout</strong> (<em>float</em>) – Dropout used around embeddings and before layer
+layer normalizations. This is used in Vaswani 2017 and works well on
+large datasets.</p></li>
+<li><p><strong>attention_dropout</strong> (<em>float</em>) – Dropout performed after the multhead attention
+softmax. This is not used in Vaswani 2017.</p></li>
+<li><p><strong>relu_dropout</strong> (<em>float</em>) – Dropout used after the ReLU in the FFN. Not used
+in Vaswani 2017, but used in Tensor2Tensor.</p></li>
+<li><p><strong>embeddings_scale</strong> (<em>bool</em>) – Scale embeddings relative to their dimensionality.
+Found useful in fairseq.</p></li>
+<li><p><strong>learn_positional_embeddings</strong> (<em>bool</em>) – If off, sinusoidal embeddings are
+used. If on, position embeddings are learned from scratch.</p></li>
+<li><p><strong>padding_idx</strong> (<em>int</em>) – Reserved padding index in the embeddings matrix.</p></li>
+<li><p><strong>n_positions</strong> (<em>int</em>) – Size of the position embeddings matrix.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TransformerDecoder.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoder_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incr_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TransformerDecoder.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerDecoder.forward" title="Permalink to this definition">#</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TransformerDecoderLayer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">recwizard.modules.kbrd.transformer_encoder_decoder.</span></span><span class="sig-name descname"><span class="pre">TransformerDecoderLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_heads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ffn_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relu_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TransformerDecoderLayer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerDecoderLayer" title="Permalink to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TransformerDecoderLayer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_heads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ffn_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attention_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relu_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TransformerDecoderLayer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerDecoderLayer.__init__" title="Permalink to this definition">#</a></dt>
+<dd><p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TransformerDecoderLayer.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoder_output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoder_mask</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TransformerDecoderLayer.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerDecoderLayer.forward" title="Permalink to this definition">#</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TransformerGeneratorModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">recwizard.modules.kbrd.transformer_encoder_decoder.</span></span><span class="sig-name descname"><span class="pre">TransformerGeneratorModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kbrd_rec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TransformerGeneratorModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerGeneratorModel" title="Permalink to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TransformerGeneratorModel.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kbrd_rec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TransformerGeneratorModel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerGeneratorModel.__init__" title="Permalink to this definition">#</a></dt>
+<dd><p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TransformerGeneratorModel.reorder_encoder_states">
+<span class="sig-name descname"><span class="pre">reorder_encoder_states</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoder_states</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TransformerGeneratorModel.reorder_encoder_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerGeneratorModel.reorder_encoder_states" title="Permalink to this definition">#</a></dt>
+<dd><p>Reorder encoder states according to a new set of indices.</p>
+<p>This is an abstract method, and <em>must</em> be implemented by the user.</p>
+<p>Its purpose is to provide beam search with a model-agnostic interface for
+beam search. For example, this method is used to sort hypotheses,
+expand beams, etc.</p>
+<p>For example, assume that encoder_states is an bsz x 1 tensor of values</p>
+<p><a href="#id17"><span class="problematic" id="id18">``</span></a><a href="#id19"><span class="problematic" id="id20">`</span></a>python</p>
+<blockquote>
+<div><p>indices = [0, 2, 2]
+encoder_states = [[0.1]</p>
+<blockquote>
+<div><p>[0.2]
+[0.3]]</p>
+</div></blockquote>
+</div></blockquote>
+<p><a href="#id21"><span class="problematic" id="id22">``</span></a><a href="#id23"><span class="problematic" id="id24">`</span></a></p>
+<p>then the output will be</p>
+<p><a href="#id25"><span class="problematic" id="id26">``</span></a><a href="#id27"><span class="problematic" id="id28">`</span></a>python</p>
+<blockquote>
+<div><dl class="simple">
+<dt>output = [[0.1]</dt><dd><p>[0.3]
+[0.3]]</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><a href="#id29"><span class="problematic" id="id30">``</span></a><a href="#id31"><span class="problematic" id="id32">`</span></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>encoder_states</strong> – output from encoder. type is model specific.</p></li>
+<li><p><strong>indices</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – the indices to select over. The user must support non-tensor inputs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The re-ordered encoder states. It should be of the same type as encoder states, and it must be a valid input to the decoder.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.BasicAttention">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">recwizard.modules.kbrd.transformer_encoder_decoder.</span></span><span class="sig-name descname"><span class="pre">BasicAttention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cosine'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#BasicAttention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.BasicAttention" title="Permalink to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.BasicAttention.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cosine'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#BasicAttention.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.BasicAttention.__init__" title="Permalink to this definition">#</a></dt>
+<dd><p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.BasicAttention.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#BasicAttention.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.BasicAttention.forward" title="Permalink to this definition">#</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.MultiHeadAttention">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">recwizard.modules.kbrd.transformer_encoder_decoder.</span></span><span class="sig-name descname"><span class="pre">MultiHeadAttention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_heads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#MultiHeadAttention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.MultiHeadAttention" title="Permalink to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.MultiHeadAttention.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_heads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#MultiHeadAttention.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.MultiHeadAttention.__init__" title="Permalink to this definition">#</a></dt>
+<dd><p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.MultiHeadAttention.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#MultiHeadAttention.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.MultiHeadAttention.forward" title="Permalink to this definition">#</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TransformerFFN">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">recwizard.modules.kbrd.transformer_encoder_decoder.</span></span><span class="sig-name descname"><span class="pre">TransformerFFN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim_hidden</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relu_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TransformerFFN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerFFN" title="Permalink to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TransformerFFN.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim_hidden</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relu_dropout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TransformerFFN.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerFFN.__init__" title="Permalink to this definition">#</a></dt>
+<dd><p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="recwizard.modules.kbrd.transformer_encoder_decoder.TransformerFFN.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/recwizard/modules/kbrd/transformer_encoder_decoder.html#TransformerFFN.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerFFN.forward" title="Permalink to this definition">#</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../kgsf/index.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">KGSF</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="generator.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Generator Module</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, McAuley Lab
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Supporting Modules</a><ul>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.tokenizer_nltk.NLTKTokenizer"><code class="docutils literal notranslate"><span class="pre">NLTKTokenizer</span></code></a></li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.tokenizer_nltk.get_tokenizer"><code class="docutils literal notranslate"><span class="pre">get_tokenizer()</span></code></a></li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.tokenizer_nltk.KBRDWordTokenizer"><code class="docutils literal notranslate"><span class="pre">KBRDWordTokenizer()</span></code></a></li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel"><code class="docutils literal notranslate"><span class="pre">TorchGeneratorModel</span></code></a><ul>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel.__init__"><code class="docutils literal notranslate"><span class="pre">TorchGeneratorModel.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel._starts"><code class="docutils literal notranslate"><span class="pre">TorchGeneratorModel._starts()</span></code></a></li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel.decode_greedy"><code class="docutils literal notranslate"><span class="pre">TorchGeneratorModel.decode_greedy()</span></code></a></li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel.decode_forced"><code class="docutils literal notranslate"><span class="pre">TorchGeneratorModel.decode_forced()</span></code></a></li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel.reorder_encoder_states"><code class="docutils literal notranslate"><span class="pre">TorchGeneratorModel.reorder_encoder_states()</span></code></a></li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel.reorder_decoder_incremental_state"><code class="docutils literal notranslate"><span class="pre">TorchGeneratorModel.reorder_decoder_incremental_state()</span></code></a></li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TorchGeneratorModel.forward"><code class="docutils literal notranslate"><span class="pre">TorchGeneratorModel.forward()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerEncoder"><code class="docutils literal notranslate"><span class="pre">TransformerEncoder</span></code></a><ul>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerEncoder.__init__"><code class="docutils literal notranslate"><span class="pre">TransformerEncoder.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerEncoder.forward"><code class="docutils literal notranslate"><span class="pre">TransformerEncoder.forward()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerEncoderLayer"><code class="docutils literal notranslate"><span class="pre">TransformerEncoderLayer</span></code></a><ul>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerEncoderLayer.__init__"><code class="docutils literal notranslate"><span class="pre">TransformerEncoderLayer.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerEncoderLayer.forward"><code class="docutils literal notranslate"><span class="pre">TransformerEncoderLayer.forward()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerDecoder"><code class="docutils literal notranslate"><span class="pre">TransformerDecoder</span></code></a><ul>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerDecoder.__init__"><code class="docutils literal notranslate"><span class="pre">TransformerDecoder.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerDecoder.forward"><code class="docutils literal notranslate"><span class="pre">TransformerDecoder.forward()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerDecoderLayer"><code class="docutils literal notranslate"><span class="pre">TransformerDecoderLayer</span></code></a><ul>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerDecoderLayer.__init__"><code class="docutils literal notranslate"><span class="pre">TransformerDecoderLayer.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerDecoderLayer.forward"><code class="docutils literal notranslate"><span class="pre">TransformerDecoderLayer.forward()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerGeneratorModel"><code class="docutils literal notranslate"><span class="pre">TransformerGeneratorModel</span></code></a><ul>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerGeneratorModel.__init__"><code class="docutils literal notranslate"><span class="pre">TransformerGeneratorModel.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerGeneratorModel.reorder_encoder_states"><code class="docutils literal notranslate"><span class="pre">TransformerGeneratorModel.reorder_encoder_states()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.BasicAttention"><code class="docutils literal notranslate"><span class="pre">BasicAttention</span></code></a><ul>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.BasicAttention.__init__"><code class="docutils literal notranslate"><span class="pre">BasicAttention.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.BasicAttention.forward"><code class="docutils literal notranslate"><span class="pre">BasicAttention.forward()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.MultiHeadAttention"><code class="docutils literal notranslate"><span class="pre">MultiHeadAttention</span></code></a><ul>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.MultiHeadAttention.__init__"><code class="docutils literal notranslate"><span class="pre">MultiHeadAttention.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.MultiHeadAttention.forward"><code class="docutils literal notranslate"><span class="pre">MultiHeadAttention.forward()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerFFN"><code class="docutils literal notranslate"><span class="pre">TransformerFFN</span></code></a><ul>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerFFN.__init__"><code class="docutils literal notranslate"><span class="pre">TransformerFFN.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#recwizard.modules.kbrd.transformer_encoder_decoder.TransformerFFN.forward"><code class="docutils literal notranslate"><span class="pre">TransformerFFN.forward()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=57cfd03c"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../../../_static/design-tabs.js?v=36754332"></script>
+    </body>
+</html>

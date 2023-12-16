@@ -1,0 +1,751 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" />
+
+    <!-- Generated with Sphinx 7.1.2 and Furo 2023.09.10 -->
+        <title>Overview - RecWizard</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=362ab14a" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">RecWizard</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" src="../_static/logo.png" alt="Light Logo"/>
+    <img class="sidebar-logo only-dark" src="../_static/logo.png" alt="Dark Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">GET STARTED</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/concept.html">Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/example.html">First Example</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">USER GUIDE</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../usage/loading/index.html">Use Existing Models</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Use Existing Models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../usage/loading/whole.html">1. CRS Models as a Whole</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage/loading/module.html">2. CRS Models at Module Level</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage/loading/single.html">3. Single CRS Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../usage/interface/index.html">Interact with Models</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Interact with Models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../usage/interface/launch.html">1. Launch Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage/interface/info.html">2. INFO Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage/interface/debug.html">3. DEBUG Mode</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../usage/development/index.html">Develop New Models</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of Develop New Models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../usage/development/setup.html">1. Tutorial Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage/development/recommender.html">2. NEW Recommender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage/development/generator.html">3.  NEW Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage/development/pipeline.html">4. NEW Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage/development/interface.html">5. NEW Interactive Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../usage/development/sharing.html">6. Share NEW models</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API REFERENCE</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../reference/baseclass/index.html">Base Classes</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Base Classes</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/baseclass/config.html">recwizard.BaseConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/baseclass/tokenizer.html">recwizard.BaseTokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/baseclass/module.html">recwizard.BaseModule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/baseclass/pipeline.html">recwizard.BasePipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../reference/pipelines/index.html">Pipelines</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Pipelines</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../reference/pipelines/expansion.html">Expansion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/pipelines/fill_blank.html">FillBlank</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/pipelines/switch_decode.html">SwitchDecode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/pipelines/chatgpt.html">ChatGPT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/pipelines/trivial.html">Trivial</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../reference/modules/index.html">Modules</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Modules</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../reference/modules/redial/index.html">ReDIAL</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of ReDIAL</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/modules/redial/recommender.html">Recommender Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/modules/redial/generator.html">Generator Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/modules/redial/supporting.html">Supporting Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../reference/modules/kbrd/index.html">KBRD</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of KBRD</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/modules/kbrd/recommender.html">Recommender Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/modules/kbrd/generator.html">Generator Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/modules/kbrd/supporting.html">Supporting Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../reference/modules/kgsf/index.html">KGSF</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of KGSF</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/modules/kgsf/recommender.html">Recommender Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/modules/kgsf/generator.html">Generator Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/modules/kgsf/supporting.html">Supporting Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../reference/modules/unicrs/index.html">UniCRS</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of UniCRS</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/modules/unicrs/recommender.html">Recommender Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/modules/unicrs/generator.html">Generator Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/modules/unicrs/supporting.html">Supporting Modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../reference/modules/llms/index.html">LLMs</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of LLMs</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../reference/modules/llms/general.html">General LLM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/modules/llms/chatgpt.html">ChatGPT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference/modules/llms/llama.html">Llama</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h1>
+<p>This is an overview about How to create new <code class="docutils literal notranslate"><span class="pre">RecWizard</span></code> modules (such as generators, recommenders and processors) or models (such as UniCRS models).
+In this tutorial, we aim to create and share a new model, called, NEW trained on <cite>``INSPIRED`</cite> &lt;&gt;`_ to go through the journey of contributing to <code class="docutils literal notranslate"><span class="pre">RecWizard</span></code>.</p>
+<section id="tutorial-setup">
+<h2>1. Tutorial Setup<a class="headerlink" href="#tutorial-setup" title="Permalink to this heading">#</a></h2>
+<p>We create and share the NEW as a new conversational recommender in three steps:</p>
+<ol class="arabic simple">
+<li><p>Create and train a NEW recommender;</p></li>
+<li><p>Create and train a NEW generator;</p></li>
+<li><p>Assemble the NEW recommender and generator under the NEW model;</p></li>
+<li><p>Add interface features to NEW model;</p></li>
+<li><p>More details about how to contribute to RecWizard codebase.</p></li>
+</ol>
+<p>Let us look at the desired NEW model in advance, and check the detailed implementation steps in the corresponding sections:</p>
+<section id="new-recommender-details">
+<h3>1.1 NEW Recommender <a class="reference external" href="./module">[details]</a><a class="headerlink" href="#new-recommender-details" title="Permalink to this heading">#</a></h3>
+<p>A NEW recommender can be used individually in this way:</p>
+<ol class="arabic">
+<li><p>Raw text input and output</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>System: Hello!&lt;sep&gt;
+User: Hi. I like horror movies, such as &lt;entity&gt;The Shining (1980)&lt;/entity&gt; and &lt;entity&gt;Annabelle (2014)&lt;/entity&gt;.
+Would you please recommend me some other movies?
+</pre></div>
+</div>
+<div class="highlight-output notranslate"><div class="highlight"><pre><span></span><span class="go">[&#39;21 Bridges (2019)&#39;, &#39;The Conjuring (2013)&#39;, &#39;The Exorcist (1973)&#39;]</span>
+</pre></div>
+</div>
+</li>
+<li><p>Tensor input and output</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># inputs</span>
+<span class="p">{</span><span class="s1">&#39;input_ids&#39;</span><span class="p">:</span> <span class="n">tensor</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]),</span> <span class="s1">&#39;attention_mask&#39;</span><span class="p">:</span> <span class="n">tensor</span><span class="p">([[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">]])}</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># logits</span>
+<span class="n">tensor</span><span class="p">([[</span> <span class="mf">4.3385</span><span class="p">,</span>  <span class="mf">7.7007</span><span class="p">,</span>  <span class="mf">6.6780</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.6603</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.5623</span><span class="p">,</span>  <span class="mf">3.8379</span><span class="p">,</span>  <span class="mf">2.0713</span><span class="p">,</span>  <span class="mf">0.2687</span><span class="p">]],</span> <span class="n">grad_fn</span><span class="o">=&lt;</span><span class="n">SumBackward1</span><span class="o">&gt;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>We need to implement three components for this NEW recommender:</p>
+<blockquote>
+<div><p>3.1. Recommender Configuration: <code class="docutils literal notranslate"><span class="pre">NEWRecConfig</span></code></p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   from recwizard.configuration_utils import BaseConfig
+
+   class NEWRecConfig(BaseConfig):
+       &quot;&quot;&quot;Configuration class to sotre the
+       configuration of the NEW recommender.&quot;&quot;&quot;
+
+       def __init__(self, n_items: int = None, dim: int = None, **kwargs):
+           super().__init__(**kwargs)
+
+           self.n_items = n_items
+           self.dim = dim
+
+   # use it!
+   config = NEWRecConfig(n_items=8, dim=10)
+
+3.2. Recommender Tokenizer: ``NEWRecTokenizer``
+
+```python
+from typing import List
+
+from recwizard.tokenizer_utils import BaseTokenizer
+from recwizard.utility.utils import WrapSingleInput
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>class NEWRecTokenizer(BaseTokenizer):
+    &quot;&quot;&quot;Tokenizer class for the NEW recommender.&quot;&quot;&quot;
+
+    @WrapSingleInput
+    def decode(self, ids, *args, **kwargs) -&gt; List[str]:
+        &quot;&quot;&quot;Decode a list of token ids into a list of strings.
+        Args:
+            ids (List[int]): list of token ids to decode;
+        Returns:
+            List[str]: list of decoded strings;
+        &quot;&quot;&quot;
+        return [self.id2entity[id] for id in ids if id in self.id2entity]
+
+    def __call__(self, *args, **kwargs):
+        &quot;&quot;&quot;Tokenize a string into a list of token ids.&quot;&quot;&quot;
+        kwargs.update(return_tensors=&quot;pt&quot;, padding=True, truncation=True)
+        return super().__call__(*args, **kwargs)
+
+# use it!
+tokenizer = NEWRecTokenizer(id2entity={
+    0: &#39;21 Bridges (2019)&#39;,
+    1: &#39;The Shining (1980)&#39;,
+    2: &#39;Annabelle (2014)&#39;,
+    3: &#39;The Conjuring (2013)&#39;,
+    4: &#39;The Exorcist (1973)&#39;,
+    5: &#39;The Conjuring 2 (2016)&#39;,
+    6: &#39;The Nun (2018)&#39;,
+    7: &#39;X men (2019)&#39;,
+})
+```
+
+3.3. Recommender Module: `NewRec`
+
+```python
+import torch
+
+from recwizard.module_utils import BaseModule
+from transformers.utils import ModelOutput
+
+
+class NEWRec(BaseModule):
+    &quot;&quot;&quot;NEW is a module that implements the NEW recommender.&quot;&quot;&quot;
+
+    config_class = NEWRecConfig
+    tokenizer_class = NEWRecTokenizer
+
+    def __init__(self, config: NEWRecConfig, **kwargs):
+        super().__init__(config, **kwargs)
+
+        self.embeds = torch.nn.Embedding(config.n_items, config.dim)
+
+    def forward(self, input_ids, attention_mask=None):
+        &quot;&quot;&quot;Forward pass of the NEW recommender.&quot;&quot;&quot;
+
+        embeds = self.embeds(input_ids)
+        avg_embeds = embeds.sum(dim=1) / (attention_mask.sum(dim=-1, keepdim=True) + 1e-8)
+        logits = (self.embeds.weight * avg_embeds.unsqueeze(1)).sum(dim=-1)
+        return ModelOutput({&quot;rec_logits&quot;: logits})
+
+    @WrapSingleInput
+    def response(self, raw_input, tokenizer, return_dict=False, topk=3):
+        &quot;&quot;&quot;Generate response from the NEW recommender.&quot;&quot;&quot;
+
+        # convert text input to tensor input
+        entities = tokenizer(raw_input)[&#39;entities&#39;].to(self.device)
+        inputs = {
+            &quot;input_ids&quot;: entities,
+            &quot;attention_mask&quot;: entities != tokenizer.pad_entity_id,
+        }
+
+        # recommend top-k items
+        logits = self.forward(**inputs)[&quot;rec_logits&quot;]
+        print(inputs, logits)
+        logits[torch.arange(logits.size(0)), entities] = float(&quot;-inf&quot;)
+        recommended = logits.topk(topk).indices.tolist()
+        output = tokenizer.batch_decode(recommended)
+
+        # return the output
+        if return_dict:
+            return {
+                &quot;output&quot;: output,
+                &quot;input&quot;: raw_input,
+                &quot;recommended&quot;: recommended
+            }
+        return output
+
+# use it!
+
+model = NEWRec(config)
+
+query = (&#39;System: Hello!&#39;
+         &#39;&lt;sep&gt;User: Hi. I like horror movies, such as &lt;entity&gt;The Shining (1980)&lt;/entity&gt; and &lt;entity&gt;Annabelle (2014)&lt;/entity&gt;.&#39;
+         &#39;Would you please recommend me some other movies?&#39;
+         )
+
+resp = model.response(
+    raw_input=query,
+    tokenizer=tokenizer,
+    return_dict=True
+)
+```
+</pre></div>
+</div>
+<p>The complete implementation is in <code class="docutils literal notranslate"><span class="pre">examples/develop_model/new_recommender.py</span></code>.</p>
+</section>
+<section id="new-generator-details">
+<h3>1.2 NEW Generator <a class="reference external" href="./module">[details]</a><a class="headerlink" href="#new-generator-details" title="Permalink to this heading">#</a></h3>
+<p>A NEW recommender can be used individually in this way:</p>
+<ol class="arabic">
+<li><p>Raw text input and output</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</li>
+<li><p>Tensor input and output</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</li>
+<li><p>We need to implement three components for this NEW generator:</p>
+<blockquote>
+<div><p>3.1. Generator Configuration: <code class="docutils literal notranslate"><span class="pre">NEWGenConfig</span></code></p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   from recwizard.configuration_utils import BaseConfig
+
+   class NEWGenConfig(BaseConfig):
+       &quot;&quot;&quot;Configuration class to sotre the
+       configuration of the NEW Generator.&quot;&quot;&quot;
+
+       def __init__(
+           self, base_model: str = &quot;microsoft/DialoGPT-small&quot;, n_items: int = None, max_gen_len=100, **kwargs
+       ):
+           super().__init__(**kwargs)
+
+           self.base_model = base_model
+           self.n_items = n_items
+           self.max_gen_len = max_gen_len
+
+   # use it!
+   config = NEWGenConfig(base_model=&#39;microsoft/DialoGPT-small&#39;, n_items=8)
+
+3.2. Generator Tokenizer: ``NEWGenTokenizer``
+
+```python
+from recwizard.tokenizer_utils import BaseTokenizer
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>class NEWGenTokenizer(BaseTokenizer):
+    &quot;&quot;&quot;Tokenizer class for the NEW generator.&quot;&quot;&quot;
+
+    def __call__(self, *args, **kwargs):
+        &quot;&quot;&quot;Tokenize a string into a list of token ids.&quot;&quot;&quot;
+        kwargs.update(return_tensors=&quot;pt&quot;, padding=True, truncation=True)
+        return super().__call__(*args, **kwargs)
+
+# use it!
+word_tokenizer = GPT2Tokenizer.from_pretrained(&quot;microsoft/DialoGPT-small&quot;)
+word_tokenizer.pad_token = word_tokenizer.eos_token
+tokenizer = NEWGenTokenizer(
+    tokenizers=[word_tokenizer],
+    id2entity={
+        0: &quot;21 Bridges (2019)&quot;,
+        1: &quot;The Shining (1980)&quot;,
+        2: &quot;Annabelle (2014)&quot;,
+        3: &quot;The Conjuring (2013)&quot;,
+        4: &quot;The Exorcist (1973)&quot;,
+        5: &quot;The Conjuring 2 (2016)&quot;,
+        6: &quot;The Nun (2018)&quot;,
+        7: &quot;X men (2019)&quot;,
+    },
+)
+```
+
+3.3. Generator Module: `NEWGen`
+
+```python
+
+import torch
+
+from recwizard.module_utils import BaseModule
+from recwizard.utility.utils import WrapSingleInput
+from transformers import GPT2LMHeadModel
+
+
+class NEWGen(BaseModule):
+    &quot;&quot;&quot;NEW is a module that implements the NEW generator.&quot;&quot;&quot;
+
+    config_class = NEWGenConfig
+    tokenizer_class = NEWGenTokenizer
+
+    def __init__(self, config: NEWGenConfig, **kwargs):
+        super().__init__(config, **kwargs)
+
+        self.gpt2_model = GPT2LMHeadModel.from_pretrained(config.base_model)
+        self.entity_embeds = torch.nn.Embedding(
+            config.n_items, self.gpt2_model.config.n_embd
+        )
+        self.max_gen_len = config.max_gen_len
+
+    def generate(self, context, entities, attention_mask, **kwargs):
+        &quot;&quot;&quot;Forward pass of the NEW generator.&quot;&quot;&quot;
+
+        embeds = self.entity_embeds(entities)
+        avg_embeds = embeds.sum(dim=1, keepdim=True) / (
+            attention_mask.sum(dim=-1, keepdim=True) + 1e-8
+        )
+        text_embeds = self.gpt2_model.transformer.wte(context[&quot;input_ids&quot;])
+        inputs_embeds = torch.cat([avg_embeds, text_embeds], dim=1)
+        attention_mask = torch.cat(
+            [
+                torch.ones(*avg_embeds.shape[:2]).to(avg_embeds.device),
+                context[&quot;attention_mask&quot;],
+            ],
+            dim=1,
+        )
+
+        return self.gpt2_model.generate(
+            inputs_embeds=inputs_embeds,
+            attention_mask=attention_mask,
+            max_new_tokens=self.max_gen_len,
+            return_dict_in_generate=True,
+            **kwargs,
+        )
+
+    @WrapSingleInput
+    def response(self, raw_input, tokenizer, return_dict=False):
+        &quot;&quot;&quot;Generate response from the NEW generator.&quot;&quot;&quot;
+
+        inputs = tokenizer(raw_input)
+        context = {
+            &quot;input_ids&quot;: inputs[&quot;input_ids&quot;].to(self.device),
+            &quot;attention_mask&quot;: inputs[&quot;attention_mask&quot;].to(self.device),
+        }
+
+        # convert text input to entity input
+        entities = inputs[&quot;entities&quot;].to(self.device)
+        attention_mask = entities != tokenizer.pad_entity_id
+
+        # generate response
+        generated = self.generate(
+            context=context, entities=entities, attention_mask=attention_mask
+        )
+        output = tokenizer.batch_decode(generated.sequences)
+
+        # return the output
+        if return_dict:
+            return {&quot;output&quot;: output, &quot;input&quot;: raw_input, &quot;generated&quot;: generated}
+        return output
+
+# use it!
+model = NEWGen(config)
+
+query = (
+    &quot;System: Hello!&quot;
+    &quot;&lt;sep&gt;User: Hi. I like horror movies, such as &lt;entity&gt;The Shining (1980)&lt;/entity&gt; and &lt;entity&gt;Annabelle (2014)&lt;/entity&gt;.&quot;
+    &quot;Would you please recommend me some other movies?&quot;
+)
+
+resp = model.response(raw_input=query, tokenizer=tokenizer, return_dict=True)
+```
+</pre></div>
+</div>
+</section>
+<section id="new-pipeline-details">
+<h3>1.3 NEW Pipeline <a class="reference external" href="./model">[details]</a><a class="headerlink" href="#new-pipeline-details" title="Permalink to this heading">#</a></h3>
+<p>NEW Model can define the logitics of how to use NEW recommender and generator.</p>
+<ol class="arabic">
+<li><p>Raw text input and output</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</li>
+<li><p>Tensor input and output</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</li>
+<li><p>Create this high-level NEW Pipeline</p>
+<blockquote>
+<div><p>3.1. Create NEW Pipeline Configuration: <code class="docutils literal notranslate"><span class="pre">NEWConfig</span></code></p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   from recwizard.configuration_utils import BaseConfig
+
+   class NEWConfig(BaseConfig):
+       def __init__(self, **kwargs):
+           super().__init__(**kwargs)
+
+3.2. Create NEW Pipeline: ``NEWPipeline``
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">recwizard.model_utils</span> <span class="kn">import</span> <span class="n">BasePipeline</span>
+
+<span class="k">class</span> <span class="nc">NEWPipeline</span><span class="p">(</span><span class="n">BasePipeline</span><span class="p">):</span>
+    <span class="n">config_class</span> <span class="o">=</span> <span class="n">NEWConfig</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_ids</span><span class="p">,</span> <span class="n">attention_mask</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="nd">@monitor</span>
+    <span class="k">def</span> <span class="nf">response</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">return_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rec_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gen_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="n">rec_args</span> <span class="o">=</span> <span class="n">rec_args</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">gen_args</span> <span class="o">=</span> <span class="n">gen_args</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">rec_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rec_module</span><span class="o">.</span><span class="n">response</span><span class="p">(</span>
+            <span class="n">query</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rec_tokenizer</span><span class="p">,</span> <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">rec_args</span>
+        <span class="p">)</span>
+
+        <span class="n">query_condition_on_rec</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">q</span> <span class="o">+</span> <span class="s2">&quot;System: I recommend &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rec_tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;because&quot;</span>
+            <span class="k">for</span> <span class="n">q</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">rec_output</span><span class="p">[</span><span class="s2">&quot;recommended&quot;</span><span class="p">])</span>
+        <span class="p">]</span>
+
+        <span class="n">gen_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gen_module</span><span class="o">.</span><span class="n">response</span><span class="p">(</span>
+            <span class="n">query_condition_on_rec</span><span class="p">,</span>
+            <span class="n">tokenizer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_tokenizer</span><span class="p">,</span>
+            <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">gen_args</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">return_dict</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="s2">&quot;rec_logits&quot;</span><span class="p">:</span> <span class="n">rec_output</span><span class="p">[</span><span class="s2">&quot;logits&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;gen_logits&quot;</span><span class="p">:</span> <span class="n">gen_output</span><span class="p">[</span><span class="s2">&quot;logits&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;rec_output&quot;</span><span class="p">:</span> <span class="n">rec_output</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;gen_output&quot;</span><span class="p">:</span> <span class="n">gen_output</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
+            <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">gen_output</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - &quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> - &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rec_output</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="new-interactive-interface-details">
+<h3>1.4 NEW Interactive Interface <a class="reference external" href="./model">[details]</a><a class="headerlink" href="#new-interactive-interface-details" title="Permalink to this heading">#</a></h3>
+<p>We can use <code class="docutils literal notranslate"><span class="pre">recwizard.Monitor</span></code> to define and launch the interactive interface after building the model.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, McAuley Lab
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Overview</a><ul>
+<li><a class="reference internal" href="#tutorial-setup">1. Tutorial Setup</a><ul>
+<li><a class="reference internal" href="#new-recommender-details">1.1 NEW Recommender [details]</a></li>
+<li><a class="reference internal" href="#new-generator-details">1.2 NEW Generator [details]</a></li>
+<li><a class="reference internal" href="#new-pipeline-details">1.3 NEW Pipeline [details]</a></li>
+<li><a class="reference internal" href="#new-interactive-interface-details">1.4 NEW Interactive Interface [details]</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=57cfd03c"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    </body>
+</html>
