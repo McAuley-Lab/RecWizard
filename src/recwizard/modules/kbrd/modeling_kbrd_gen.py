@@ -8,8 +8,6 @@ from .tokenizer_kbrd_gen import KBRDGenTokenizer
 from .modeling_kbrd_rec import KBRDRecConfig, KBRDRec
 from .transformer_encoder_decoder import TransformerGeneratorModel
 
-from recwizard.modules.monitor import monitor
-
 
 class KBRDGen(BaseModule):
     """KBRDGen is a module that combines KBRDRec and TransformerGeneratorModel."""

@@ -3,8 +3,7 @@ import os
 from typing import Union, List
 from openai import OpenAI
 
-from recwizard import BaseModule
-from recwizard.modules.monitor import monitor
+from recwizard import BaseModule, monitor
 from .tokenizer_chatgpt import ChatgptTokenizer
 from .configuration_llm_rec import LLMRecConfig
 import logging

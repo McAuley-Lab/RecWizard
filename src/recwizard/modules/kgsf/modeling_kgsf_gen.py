@@ -15,7 +15,7 @@ from .tokenizer_kgsf_gen import KGSFGenTokenizer
 from .utils import _create_embeddings,_create_entity_embeddings, _edge_list, seed_everything
 from .graph_utils import SelfAttentionLayer,SelfAttentionLayer_batch
 from .transformer_utils import TransformerEncoder, TransformerDecoderKG
-from recwizard.modules.monitor import monitor
+from recwizard import monitor
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
