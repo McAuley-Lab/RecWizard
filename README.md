@@ -110,9 +110,6 @@ recwizard
 │   │   ├── modeling_kbrd_rec.py
 │   │   ├── shared_encoder.py
 │   │   └── tokenizer_kbrd_rec.py
-│   ├── monitor
-│   │   ├── __init__.py
-│   │   └── monitor.py
 │   ├── redial
 │   │   ├── __init__.py
 │   │   ├── autorec.py
@@ -162,7 +159,8 @@ recwizard
     ├── device_manager.py
     ├── entity_linking.py
     ├── singleton.py
-    └── utils.py
+    ├── utils.py
+    └── monitor.py
 
 ```
 
