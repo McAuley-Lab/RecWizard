@@ -9,7 +9,7 @@ from .configuration_kbrd_rec import KBRDRecConfig
 from .tokenizer_kbrd_rec import KBRDRecTokenizer
 from .entity_attention_encoder import KBRD
 
-from recwizard.modules.monitor import monitor
+from recwizard import monitor
 
 
 class KBRDRec(BaseModule):

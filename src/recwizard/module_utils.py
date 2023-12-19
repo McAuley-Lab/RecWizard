@@ -9,7 +9,7 @@ import torch
 from torch.nn.modules.module import _IncompatibleKeys
 from transformers import PreTrainedModel, PreTrainedTokenizer, AutoTokenizer
 
-from .modules.monitor import monitor
+from .utility import monitor
 from .configuration_utils import BaseConfig
 
 

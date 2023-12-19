@@ -1,5 +1,5 @@
 from recwizard.model_utils import BasePipeline
-from recwizard.modules.monitor import monitor
+from recwizard import monitor
 
 from .configuration_trivial import TrivialConfig
 
