@@ -78,7 +78,7 @@ Both movies have Sandler's signature humor and are quite entertaining.
 | ReDIAL     | [redial-rec](https://huggingface.co/recwizard/redial-rec)    | [redial-gen](https://huggingface.co/recwizard/redial-gen)    |
 | KBRD       | [kbrd-rec-redial](https://huggingface.co/recwizard/kbrd-rec-redial) | [kbrd-rec-redial](https://huggingface.co/recwizard/kbrd-gen-redial) |
 | UniCRS     | [unicrs-rec-redial](https://huggingface.co/recwizard/unicrs-rec-redial)/[unicrs-rec-inspired](https://huggingface.co/recwizard/unicrs-rec-inspired) | [unicrs-gen-redial](https://huggingface.co/recwizard/unicrs-gen-redial)/[unicrs-gen-inspired](https://huggingface.co/recwizard/unicrs-gen-inspired) |
-| KGSF       | kgsf-rec                                                     | kgsf-gen                                                     |
+| KGSF       | [kgsf-rec](https://huggingface.co/recwizard/kgsf-rec)                                                     | [kgsf-gen](https://huggingface.co/recwizard/kgsf-gen)                                                     |
 | ChatGPT    | [chatgpt-rec-fillblank](https://huggingface.co/recwizard/chatgpt-rec-fillblank) | [chatgpt-gen-fillblank](https://huggingface.co/recwizard/chatgpt-gen-fillblank)/[chatgpt-gen-expansion](https://huggingface.co/recwizard/chatgpt-gen-expansion) |
 | Llama2     |                                                              | [llama-expansion](https://huggingface.co/recwizard/llama-expansion) |
 
