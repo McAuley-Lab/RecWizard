@@ -2,5 +2,5 @@
 ^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
-
-    $ TODO from Tanmay
+    $ cd server
+    $ bash start.sh <frontend_port>
