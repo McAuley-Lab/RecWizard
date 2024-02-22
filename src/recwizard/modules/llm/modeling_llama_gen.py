@@ -4,7 +4,8 @@ import openai
 from transformers import AutoModelForCausalLM
 
 
-from recwizard import BaseModule, monitor
+from recwizard import BaseModule
+from recwizard.modules.monitor import monitor
 from recwizard.utility import DeviceManager
 from .configuration_llm import LLMConfig
 from .tokenizer_llama import LlamaTokenizer

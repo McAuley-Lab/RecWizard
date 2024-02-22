@@ -3,7 +3,8 @@ from torch import nn as nn
 from torch.nn import functional as F
 from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
 
-from recwizard import BaseModule, monitor
+from recwizard import BaseModule
+from recwizard.modules.monitor import monitor
 from recwizard.utility import sort_for_packed_sequence, DeviceManager
 from .beam_search import BeamSearch, Beam, get_best_beam
 from .configuration_redial_gen import RedialGenConfig

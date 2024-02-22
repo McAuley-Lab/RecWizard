@@ -8,7 +8,7 @@ from .tokenizer_utils import BaseTokenizer
 from .modules.llm import ChatgptGen, LLMConfig, ChatgptTokenizer
 from .modules.llm import ChatgptRec, LLMRecConfig
 
-from .utility import monitoring, monitor
+from .modules.monitor import monitoring, monitor
 
 from .modules.redial.modeling_redial_rec import RedialRec, RedialRecConfig,  RedialRecTokenizer 
 from .modules.redial.modeling_redial_gen import RedialGen, RedialGenConfig, RedialGenTokenizer

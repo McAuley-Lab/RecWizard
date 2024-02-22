@@ -2,12 +2,13 @@ import torch
 from transformers import GenerationConfig
 from transformers.utils import ModelOutput
 
-from recwizard import BaseModule, monitor
+from recwizard import BaseModule
 from recwizard.utility import deterministic_seed, SEP_TOKEN, Singleton
 from .configuration_unicrs_gen import UnicrsGenConfig
 from .tokenizer_unicrs_gen import UnicrsGenTokenizer
 from .kg_prompt import KGPrompt
 from .prompt_gpt2 import PromptGPT2LMHead
+from recwizard.modules.monitor import monitor
 
 
 class UnicrsGen(BaseModule):

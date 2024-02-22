@@ -5,7 +5,8 @@ from .configuration_redial_rec import RedialRecConfig
 from .tokenizer_redial_rec import RedialRecTokenizer
 from .hrnn_for_classification import HRNNForClassification
 from .autorec import AutoRec
-from recwizard.utility import WrapSingleInput, DeviceManager, monitor
+from recwizard.utility import WrapSingleInput, DeviceManager
+from recwizard.modules.monitor import monitor
 import torch
 
 

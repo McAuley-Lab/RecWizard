@@ -2,12 +2,13 @@ from typing import Union, List
 from transformers.utils import ModelOutput
 import torch
 
-from recwizard import BaseModule, monitor
+from recwizard import BaseModule
 from recwizard.utility import WrapSingleInput, deterministic_seed, Singleton, EntityLink
 from .tokenizer_unicrs_rec import UnicrsRecTokenizer
 from .kg_prompt import KGPrompt
 from .prompt_gpt2 import PromptGPT2LMHead
 from .configuration_unicrs_rec import UnicrsRecConfig
+from recwizard.modules.monitor import monitor
 
 
 class UnicrsRec(BaseModule):

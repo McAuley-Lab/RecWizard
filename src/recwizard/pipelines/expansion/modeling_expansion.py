@@ -1,5 +1,5 @@
 from recwizard.model_utils import BasePipeline
-from recwizard import monitor
+from recwizard.modules.monitor import monitor
 from recwizard.utility import EntityLink
 from .configuration_expansion import ExpansionConfig
 

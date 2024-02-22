@@ -1,7 +1,7 @@
 import logging
 from typing import Iterable
 
-from .utility import monitor
+from .modules.monitor import monitor
 from .configuration_utils import BaseConfig
 from .module_utils import BaseModule
 from .tokenizer_utils import BaseTokenizer
