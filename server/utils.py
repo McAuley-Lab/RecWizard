@@ -5,6 +5,7 @@ import base64
 from pathlib import Path
 import streamlit as st
 
+
 def strip_debug(chat_history, model_name):
     chat_history = copy.deepcopy(chat_history[model_name])
     chat_history = [c for c in chat_history if "debug_message" not in c]
@@ -15,10 +16,8 @@ def create_graph(response):
     G = nx.DiGraph()
     # Add nodes and edges to the graph
     for curr_step, next_step in zip(response["graph"], response["graph"][1:]):
-        G.add_node(curr_step["node"], attr={"name": curr_step["node"],
-                                            "time": round(curr_step["time"], 3)})
-        G.add_node(next_step["node"], attr={"name": next_step["node"],
-                                            "time": round(next_step["time"], 3)})
+        G.add_node(curr_step["node"], attr={"name": curr_step["node"], "time": round(curr_step["time"], 3)})
+        G.add_node(next_step["node"], attr={"name": next_step["node"], "time": round(next_step["time"], 3)})
         G.add_edge(curr_step["node"], next_step["node"])
     return G
 
@@ -26,16 +25,29 @@ def create_graph(response):
 def matplotlib_plot(G):
     fig, ax = plt.subplots(figsize=(8, 6))
     pos = nx.kamada_kawai_layout(G)
-    labels = nx.get_node_attributes(G, 'attr')
-    nx.draw(G, pos, labels=labels, with_labels=False, node_size=400,
-            node_color="skyblue", font_size=8, font_color="black",
-            font_weight="bold", ax=ax, arrows=True)
+    labels = nx.get_node_attributes(G, "attr")
+    nx.draw(
+        G,
+        pos,
+        labels=labels,
+        with_labels=False,
+        node_size=400,
+        node_color="skyblue",
+        font_size=8,
+        font_color="black",
+        font_weight="bold",
+        ax=ax,
+        arrows=True,
+    )
     for node, data in G.nodes(data=True):
         x, y = pos[node]
-        ax.text(x, y + 0.1,
-                s=f"{data['attr']['name']}: {round(data['attr']['time'], 3)}s",
-                bbox=dict(facecolor='red', alpha=0.1),
-                horizontalalignment='center')
+        ax.text(
+            x,
+            y + 0.1,
+            s=f"{data['attr']['name']}: {round(data['attr']['time'], 3)}s",
+            bbox=dict(facecolor="red", alpha=0.1),
+            horizontalalignment="center",
+        )
 
     return fig
 
@@ -56,23 +68,24 @@ def plotly_timeline(graph):
     df = pd.DataFrame(nodes)
     # rename "node" to "method"
     df = df.rename(columns={"node": "Function Call", "time": "time (in seconds)"})
-    fig = px.bar(df,
-                    base="start_time",
-                    x="time (in seconds)",
-                    y="Function Call",
-                    color="time (in seconds)",
-                    hover_name="Function Call",
-                    hover_data={
-                        "start_time": False,
-                        "end_time": False,
-                        "time (in seconds)": ":.3f",
-                        "Function Call": False,
-                    },
-                    color_continuous_scale="bluered",
-                    color_continuous_midpoint=2,
-                    height=min(170 + 30 * len(nodes), 600),
-                    orientation='h'
-                    )
+    fig = px.bar(
+        df,
+        base="start_time",
+        x="time (in seconds)",
+        y="Function Call",
+        color="time (in seconds)",
+        hover_name="Function Call",
+        hover_data={
+            "start_time": False,
+            "end_time": False,
+            "time (in seconds)": ":.3f",
+            "Function Call": False,
+        },
+        color_continuous_scale="bluered",
+        color_continuous_midpoint=2,
+        height=min(170 + 30 * len(nodes), 600),
+        orientation="h",
+    )
     fig.update_yaxes(autorange="reversed")
     return fig
 
@@ -98,28 +111,21 @@ def plotly_plot(G):
         node_x.append(x)
         node_y.append(y)
 
-    edge_trace = go.Scatter(
-        x=edge_x, y=edge_y,
-        line=dict(width=1.0, color='#888'),
-        hoverinfo='none',
-        mode='lines')
+    edge_trace = go.Scatter(x=edge_x, y=edge_y, line=dict(width=1.0, color="#888"), hoverinfo="none", mode="lines")
 
     node_trace = go.Scatter(
-        x=node_x, y=node_y,
-        mode='lines+markers+text',
-        textposition='top right',
-        hoverinfo='none',
+        x=node_x,
+        y=node_y,
+        mode="lines+markers+text",
+        textposition="top right",
+        hoverinfo="none",
         marker=dict(
             showscale=False,
-            colorscale='YlGnBu',
+            colorscale="YlGnBu",
             size=10,
-            colorbar=dict(
-                thickness=15,
-                xanchor='left',
-                titleside='right'
-            )
+            colorbar=dict(thickness=15, xanchor="left", titleside="right"),
         ),
-        showlegend=False
+        showlegend=False,
     )
 
     node_text = []
@@ -128,14 +134,16 @@ def plotly_plot(G):
 
     node_trace.text = node_text
 
-    fig = go.Figure(data=[edge_trace, node_trace],
-                    layout=go.Layout(
-                        showlegend=False,
-                        hovermode='closest',
-                        margin=dict(l=20, r=20, t=0, b=0),
-                        xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-                        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False))
-                    )
+    fig = go.Figure(
+        data=[edge_trace, node_trace],
+        layout=go.Layout(
+            showlegend=False,
+            hovermode="closest",
+            margin=dict(l=20, r=20, t=0, b=0),
+            xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+            yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+        ),
+    )
     camera = dict(eye=dict(x=2.0, y=2.0))
     fig.update_layout(scene_camera=camera)
     return fig
@@ -149,7 +157,7 @@ def img_to_bytes(img_path):
 
 def img_to_html(img_path, text):
     st.markdown(
-    """
+        """
     <style>
     .container {
         display: flex;
@@ -167,9 +175,9 @@ def img_to_html(img_path, text):
     }
     </style>
     """,
-    unsafe_allow_html=True
-)
-    img_html = f'''<div class="container">
+        unsafe_allow_html=True,
+    )
+    img_html = f"""<div class="container">
                 <img class="logo-img" src='data:image/png;base64,{img_to_bytes(img_path)}'><h1 class="logo-text">{text}</h1>
-                </div>'''
+                </div>"""
     return img_html

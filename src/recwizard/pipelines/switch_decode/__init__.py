@@ -1,2 +1,0 @@
-from .configuration_switch_decode import SwitchDecodeConfig
-from .modeling_switch_decode import SwitchDecodePipeline

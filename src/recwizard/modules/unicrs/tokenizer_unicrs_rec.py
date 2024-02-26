@@ -1,84 +1,63 @@
-from typing import Dict, List, Callable, Union
-from transformers import AutoTokenizer, BatchEncoding
-
-from recwizard.utility.utils import WrapSingleInput, loadJsonFileFromDataset
-from recwizard.tokenizer_utils import BaseTokenizer
-
-gpt2_special_tokens_dict = {
-    'pad_token': '<pad>',
-    'additional_special_tokens': ['<movie>'],
-}
-
-prompt_special_tokens_dict = {
-    'additional_special_tokens': ['<movie>'],
-}
+from recwizard.tokenizers import EntityTokenizer
+from recwizard.tokenizers import MultiTokenizer as UnicrsRecTokenizer
 
 
-class UnicrsRecTokenizer(BaseTokenizer):
+if __name__ == "__main__":
 
-    def __init__(
-            self,
-            context_tokenizer: str = "microsoft/DialoGPT-small",
-            prompt_tokenizer: str = "roberta-base",
-            context_max_length: int = 200,
-            prompt_max_length: int = 200,
-            pad_entity_id: int = 31161,
-            entity2id: Dict[str, int] = None,
-            **kwargs,
-    ):
-        context_tokenizer = AutoTokenizer.from_pretrained(context_tokenizer, truncation_side='left')
-        prompt_tokenizer = AutoTokenizer.from_pretrained(prompt_tokenizer, truncation_side='left')
-        context_tokenizer.add_special_tokens(gpt2_special_tokens_dict)
-        prompt_tokenizer.add_special_tokens(prompt_special_tokens_dict)
-        tokenizers = [
-            context_tokenizer,
-            prompt_tokenizer
-        ]
-        super().__init__(tokenizers=tokenizers, entity2id=entity2id, pad_entity_id=pad_entity_id, **kwargs)
-        self.context_max_length = context_max_length
-        self.prompt_max_length = prompt_max_length
+    import os, json
+    from transformers import AutoTokenizer
+    from tokenizers.normalizers import Replace, Sequence
 
-    def __call__(self, *args, **kwargs):
-        kwargs.update(return_tensors='pt', padding=True, truncation=True)
-        return super().__call__(*args, **kwargs)
+    path = "../../../../../local_repo/unicrs-rec"
 
-    @classmethod
-    def load_from_dataset(cls, dataset='redial_unicrs', **kwargs):
-        entityName2id = loadJsonFileFromDataset(dataset, 'entityName2id.json')
-        entity2id = loadJsonFileFromDataset(dataset, 'entity2id.json')
-        return cls(entity2id=entityName2id, pad_entity_id=max(entity2id.values()) + 1, **kwargs)
+    # Initialize the Entity tokenizer
+    entity2id = json.load(open(os.path.join(path, "raw_vocab", "entity2id.json")))
+    entity_tokenizer = EntityTokenizer(vocab=entity2id, unk_token="[UNK]", pad_token="[PAD]")
 
-    @staticmethod
-    def mergeEncoding(encodings: List[BatchEncoding]) -> BatchEncoding:
-        res = encodings[0].copy()
-        if len(encodings) == 0:
-            return res
-        res.data = {
-            'context': encodings[0],
-            'prompt': encodings[1]
+    # Initialize the context (DialoGPT) and prompt (RoBERTa) tokenizers
+    context_tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-small", truncation_side="left")
+    prompt_tokenizer = AutoTokenizer.from_pretrained("roberta-base", truncation_side="left")
+    context_tokenizer.add_special_tokens(
+        {
+            "pad_token": "<pad>",
+            "additional_special_tokens": ["<movie>"],
         }
-        return res
+    )
+    prompt_tokenizer.add_special_tokens(
+        {
+            "additional_special_tokens": ["<movie>"],
+        }
+    )
 
-    def encodes(self, encode_funcs: List[Callable], texts: List[Union[str, List[str]]], *args, **kwargs) -> List[
-        BatchEncoding]:
-        kwargs1 = kwargs.copy()
-        kwargs1.update(
-            max_length=self.context_max_length
-        )
-        kwargs2 = kwargs.copy()
-        kwargs2.update(
-            max_length=self.prompt_max_length
-        )
-        return [
-            encode_funcs[0](texts[0], *args, **kwargs1),
-            encode_funcs[1](texts[1], *args, **kwargs2),
-        ]
+    context_tokenizer.backend_tokenizer.normalizer = Sequence(
+        [Replace("<entity>", ""), Replace("</entity>", ""), Replace("_", " ")]
+    )
+    prompt_tokenizer.backend_tokenizer.normalizer = Sequence(
+        [Replace("<entity>", ""), Replace("</entity>", ""), Replace("_", " ")]
+    )
 
-    @WrapSingleInput
-    def decode(
-            self,
-            ids,
-            *args,
-            **kwargs,
-    ) -> List[str]:
-        return [self.id2entity[id] for id in ids]
+    context_tokenizer.chat_template = "{% for message in messages %}{% if message['role'] == 'user' %}{{ 'User: ' + message['content'] }}{% elif message['role'] == 'assistant' %}{{ 'System: ' + message['content'] }}{% endif %}{{ eos_token }}{% endfor %}"
+    prompt_tokenizer.chat_template = "{{cls_token}}{% for message in messages %}{% if message['role'] == 'user' %}{{ 'User: ' + message['content'] }}{% elif message['role'] == 'assistant' %}{{ 'System: ' + message['content'] }}{% endif %}{{ sep_token }}{% endfor %}"
+
+    # tokenizers
+    tokenizers = {
+        "item": entity_tokenizer,
+        "context": context_tokenizer,
+        "prompt": prompt_tokenizer,
+    }
+
+    tokenizer = UnicrsRecTokenizer(tokenizers=tokenizers, tokenizer_key_for_decoding="item")
+
+    print(tokenizer(f"System: Hi! <sep> User: I like <entity>Titanic</entity>! Can you recommend me more?"))
+
+    tokenizer.save_pretrained(path)
+
+    # Load the new tokenizer
+    tokenizer = UnicrsRecTokenizer.from_pretrained(path)
+    print(tokenizer(f"System: Hi! <sep> User: I like <entity>Titanic</entity>! Can you recommend me more?"))
+
+    # Save raw vocab
+    import os, json
+
+    os.makedirs(os.path.join(path, "raw_vocab"), exist_ok=True)
+    json.dump(entity2id, open(os.path.join(path, "raw_vocab", "entity2id.json"), "w"))

@@ -1,9 +1,11 @@
 from transformers import PretrainedConfig
 
+
 class BaseConfig(PretrainedConfig):
     r"""
-    The base config for all modules/pipelines.
+    The base config for all modules / pipelines.
     """
+
     def __init__(self, WEIGHT_DIMENSIONS=None, **kwargs):
         """
 
@@ -16,4 +18,3 @@ class BaseConfig(PretrainedConfig):
         """
         super().__init__(**kwargs)
         self.WEIGHT_DIMENSIONS = {} if WEIGHT_DIMENSIONS is None else WEIGHT_DIMENSIONS
-

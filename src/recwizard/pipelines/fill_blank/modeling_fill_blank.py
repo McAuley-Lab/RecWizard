@@ -1,6 +1,6 @@
 import re
 
-from recwizard.model_utils import BasePipeline
+from recwizard.pipeline_utils import BasePipeline
 from recwizard.utility import SEP_TOKEN, EntityLink, monitor
 
 from .configuration_fill_blank import FillBlankConfig
@@ -10,19 +10,26 @@ class FillBlankPipeline(BasePipeline):
     config_class = FillBlankConfig
 
     def __init__(self, config, use_resp=True, **kwargs):
+        """Initialize the fill-blank pipeline.
+
+        Args:
+            config (FillBlankConfig): The configuration of the fill-blank pipeline.
+            use_resp (bool, optional): Whether to use the response as the input for recommendation. Defaults to True.
+        """
         super().__init__(config, **kwargs)
         self.movie_pattern = re.compile(config.rec_pattern)
         self.use_resp = use_resp
         self.entity_linker = EntityLink()
+
+    def forward(self, input_ids, attention_mask, labels=None, **kwargs):
+        raise NotImplementedError
 
     @monitor
     def response(self, query, return_dict=False, gen_args=None, rec_args=None):
         gen_args = gen_args or {}
         rec_args = rec_args or {}
         # generate response template
-        gen_output = self.gen_module.response(
-            query, tokenizer=self.gen_tokenizer, return_dict=return_dict, **gen_args
-        )
+        gen_output = self.gen_module.response(query, tokenizer=self.gen_tokenizer, return_dict=return_dict, **gen_args)
         resp = gen_output["output"] if return_dict else gen_output
         # resp = 'System: <movie>, <movie>, and <movie> are some good options.'
         # generate topk recommendations
@@ -48,21 +55,19 @@ class FillBlankPipeline(BasePipeline):
             rec_output = {}
         if return_dict:
             if rec_output.get("links"):  # special case for llm
-                movieLinks = rec_output["links"]
-            elif "movieIds" in rec_output:
-                movieIds = rec_output.get("movieIds")
-                movieNames = self.rec_tokenizer.batch_decode(movieIds)
-                movieLinks = {
-                    movieName: self.entity_linker(movieName) for movieName in movieNames
-                }
+                item_links = rec_output["links"]
+            elif "item_ids" in rec_output:
+                item_ids = rec_output.get("item_ids")
+                item_names = self.rec_tokenizer.batch_decode(item_ids)
+                item_links = {item_name: self.entity_linker(item_name) for item_name in item_names}
             else:
-                movieLinks = {}
+                item_links = {}
             return {
                 "gen_input": query,
                 "gen_output": gen_output,
                 "rec_input": rec_input,
                 "rec_output": rec_output,
                 "output": resp,
-                "links": movieLinks,
+                "links": item_links,
             }
         return resp

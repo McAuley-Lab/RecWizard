@@ -1,12 +1,13 @@
-from typing import Union, List
-
 import torch
 
+from recwizard import monitor
 from recwizard.module_utils import BaseModule
-from .configuration_kbrd_gen import KBRDGenConfig
-from .tokenizer_kbrd_gen import KBRDGenTokenizer
-from .modeling_kbrd_rec import KBRDRecConfig, KBRDRec
-from .transformer_encoder_decoder import TransformerGeneratorModel
+from recwizard.modules.kbrd.configuration_kbrd_gen import KBRDGenConfig
+from recwizard.modules.kbrd.tokenizer_kbrd_gen import KBRDGenTokenizer
+from recwizard.modules.kbrd.modeling_kbrd_rec import KBRDRecConfig, KBRDRec
+from recwizard.modules.kbrd.original_transformer_encoder_decoder import TransformerGeneratorModel
+
+from recwizard.utility import create_chat_message
 
 
 class KBRDGen(BaseModule):
@@ -44,7 +45,7 @@ class KBRDGen(BaseModule):
         Args:
             input_ids (torch.LongTensor): The input ids of the input conversation contexts, shape: (batch_size, seq_len).
             labels (torch.LongTensor, optional): The labels of the converastions.
-            entities (torch.LongTensor): The movie-related entities tagged in the input, shape: (batch_size, entity_max_num).
+            entities (torch.LongTensor): The item-related entities tagged in the input, shape: (batch_size, entity_max_num).
             entity_attention_mask (torch.BoolTensor): The entity attention mask of the input, `True` if the token is an entity, shape: (batch_size, entity_max_num).
             bsz (int, optional): The batch size of the input, can be inferred from the input_ids.
             maxlen (int): The maximum length of the input.
@@ -78,29 +79,28 @@ class KBRDGen(BaseModule):
             bsz = input_ids.size(0)
 
         if entities is not None:
-            user_representation, _ = self.model.kbrd.model.user_representation(
-                entities, entity_attention_mask
-            )
+            user_representation, _ = self.model.kbrd.model.user_representation(entities, entity_attention_mask)
             self.model.user_representation = user_representation.detach()
 
         return self.model(*(input_ids,), bsz=bsz, ys=labels, maxlen=maxlen)
 
+    @monitor
     def response(
         self,
-        raw_input: Union[List[str], str],
+        raw_input: str,
         tokenizer: KBRDGenTokenizer,
         return_dict=False,
     ):
         """Generate the response given the raw input.
 
         Args:
-            raw_input (Union[List[str], str]): The raw input of the conversation contexts.
+            raw_input str: The raw input of the conversation contexts.
             tokenizer (KBRDGenTokenizer): The tokenizer of the model.
             return_dict (bool): Whether to return the output as a dictionary (with logits, pred_ids and textual response).
 
         Returns:
-            Union[List[str], dict]: The dictionary of the model output with `logits`, 
-                `pred_ids` and textual response if `return_dict` is `True`, else the textual 
+            Union[List[str], dict]: The dictionary of the model output with `logits`,
+                `pred_ids` and textual response if `return_dict` is `True`, else the textual
                 model response only.
 
         Examples:
@@ -115,25 +115,41 @@ class KBRDGen(BaseModule):
                 )
             ```
         """
-        input_ids = torch.LongTensor(tokenizer(raw_input)["input_ids"]).to(self.device)
-        entities = (
-            torch.LongTensor(tokenizer.tokenizers[-1](raw_input)["entities"])
-            .to(self.device)
-            .unsqueeze(dim=0)
-        )
+        # raw input to chat message
+        chat_message = create_chat_message(raw_input)
+        chat_inputs = tokenizer.apply_chat_template(chat_message, tokenize=False)
+
+        # chat message to model inputs
+        results = tokenizer(chat_inputs, return_token_type_ids=False, return_tensors="pt").to(self.device)
         inputs = {
-            "input_ids": input_ids,
-            "entities": entities,
-            "entity_attention_mask": entities != tokenizer.tokenizers[-1].pad_entity_id,
+            "input_ids": results["nltk"]["input_ids"],
+            "entities": results["entity"]["input_ids"],
+            "entity_attention_mask": results["entity"]["attention_mask"],
         }
+
+        # model generates
         outputs = self.generate(**inputs)
+        output = tokenizer.decode(outputs[1].flatten().tolist(), skip_special_tokens=True)
 
-        # mask all non-movie indices
+        # return the output
         if return_dict:
-            return {
-                "logits": outputs[0],
-                "pred_ids": outputs[1],
-                "output": tokenizer.batch_decode(outputs[1].tolist()),
-            }
+            return {"chat_inputs": chat_inputs, "logits": outputs[0], "gen_ids": outputs[1], "output": output}
 
-        return tokenizer.batch_decode(outputs[1].tolist())
+        return output
+
+
+if __name__ == "__main__":
+
+    # load kbrd generator
+    path = "../../../../../local_repo/kbrd-gen"
+    kbrd_gen = KBRDGen.from_pretrained(path)
+
+    tokenizer = KBRDGenTokenizer.from_pretrained(path)
+    resp = kbrd_gen.response(
+        raw_input="I like <entity>Avatar</entity>, and you?",
+        tokenizer=tokenizer,
+    )
+
+    kbrd_gen.save_pretrained(path)
+
+    print(resp)

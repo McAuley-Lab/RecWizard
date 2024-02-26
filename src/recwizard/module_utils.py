@@ -1,15 +1,15 @@
 import copy
 import logging
 import os
-from collections import defaultdict, OrderedDict
-from typing import Tuple, Callable, Optional, Iterable, List, Type, Union
+from collections import OrderedDict
+from typing import Optional, Iterable, List, Type, Union
 
 import numpy as np
 import torch
 from torch.nn.modules.module import _IncompatibleKeys
 from transformers import PreTrainedModel, PreTrainedTokenizer, AutoTokenizer
 
-from .utility import monitor
+from recwizard import monitor
 from .configuration_utils import BaseConfig
 
 
@@ -63,7 +63,8 @@ class BaseModule(PreTrainedModel):
                 return self.tokenizer_class.from_pretrained(self.model_name_or_path)
             except:
                 raise EnvironmentError(
-                    f'Please make sure "{self.model_name_or_path}" is a repo or path where the tokenizer is saved')
+                    f'Please make sure "{self.model_name_or_path}" is a repo or path where the tokenizer is saved'
+                )
         else:
             return None
 
@@ -84,8 +85,10 @@ class BaseModule(PreTrainedModel):
             the saved `shape` and `dtype` in the module config.
         """
         if weight is None:
-            return torch.zeros(self.config.WEIGHT_DIMENSIONS[name + ".shape"],
-                               dtype=eval(self.config.WEIGHT_DIMENSIONS[name + ".dtype"]))
+            return torch.zeros(
+                self.config.WEIGHT_DIMENSIONS[name + ".shape"],
+                dtype=eval(self.config.WEIGHT_DIMENSIONS[name + ".dtype"]),
+            )
         else:
             weight = torch.as_tensor(weight)
             self.config.WEIGHT_DIMENSIONS[name + ".shape"] = list(weight.shape)
@@ -113,19 +116,14 @@ class BaseModule(PreTrainedModel):
         logits = self.forward(tokenized_input, **kwargs)
         output = tokenizer.batch_decode(logits, skip_special_tokens=True)
         if return_dict:
-            return {
-                "input": raw_input,
-                "tokenized_input": tokenized_input,
-                "logits": logits,
-                "output": output
-            }
+            return {"input": raw_input, "tokenized_input": tokenized_input, "logits": logits, "output": output}
         else:
             return output
 
     def forward(self, *inputs, **kwargs):
         raise NotImplementedError
 
-    def state_dict(self, *args, destination=None, prefix='', keep_vars=False):
+    def state_dict(self, *args, destination=None, prefix="", keep_vars=False):
         r"""
 
         .. note::
@@ -191,7 +189,7 @@ class BaseModule(PreTrainedModel):
             if name in self.LOAD_SAVE_IGNORES:
                 logging.debug(f"Ignored state dict for {prefix + name}")
                 continue
-            module.state_dict(destination=destination, prefix=prefix + name + '.', keep_vars=keep_vars)
+            module.state_dict(destination=destination, prefix=prefix + name + ".", keep_vars=keep_vars)
 
         # remove chained destination
         destination = self.remove_ignores(self.LOAD_SAVE_IGNORES, destination)
@@ -202,14 +200,15 @@ class BaseModule(PreTrainedModel):
                 destination = hook_result
         return destination
 
-    def load_state_dict(self,
-                        state_dict: 'OrderedDict[str, torch.TensorType]',
-                        strict: bool = True,
-                        allow_unexpected=False,
-                        LOAD_PREFIX: Optional[str] = '',
-                        LOAD_MAPPINGS: Optional[dict] = None,
-                        LOAD_IGNORES: Optional[Iterable[str]] = tuple(),
-                        ):
+    def load_state_dict(
+        self,
+        state_dict: "OrderedDict[str, torch.TensorType]",
+        strict: bool = True,
+        allow_unexpected=False,
+        LOAD_PREFIX: Optional[str] = "",
+        LOAD_MAPPINGS: Optional[dict] = None,
+        LOAD_IGNORES: Optional[Iterable[str]] = tuple(),
+    ):
         r"""
         .. note::
             Adapted from pytorch's original implementation to support partial loading and state dict mapping.
@@ -255,27 +254,30 @@ class BaseModule(PreTrainedModel):
         error_msgs: List[str] = []
 
         # copy state_dict so _load_from_state_dict can modify it
-        metadata = getattr(state_dict, '_metadata', None)
+        metadata = getattr(state_dict, "_metadata", None)
         state_dict = state_dict.copy()
         if metadata is not None:
             # mypy isn't aware that "_metadata" exists in state_dict
             state_dict._metadata = metadata  # type: ignore[attr-defined]
 
-        def load(module, prefix=''):
-            if prefix.strip('.') in LOAD_IGNORES:  # skip chained LOAD_IGNORE. e.g. processor.encoder
+        def load(module, prefix=""):
+            if prefix.strip(".") in LOAD_IGNORES:  # skip chained LOAD_IGNORE. e.g. processor.encoder
                 return
-            if module.__dict__.get(
-                    "LOAD_IGNORES") and "" in module.LOAD_IGNORES:  # skip the whole module when specified
+            if (
+                module.__dict__.get("LOAD_IGNORES") and "" in module.LOAD_IGNORES
+            ):  # skip the whole module when specified
                 return
             local_metadata = {} if metadata is None else metadata.get(prefix[:-1], {})
             module._load_from_state_dict(
-                state_dict, prefix, local_metadata, True, missing_keys, unexpected_keys, error_msgs)
+                state_dict, prefix, local_metadata, True, missing_keys, unexpected_keys, error_msgs
+            )
             for name, child in module._modules.items():
-                if module.__dict__.get(
-                        "LOAD_IGNORES") and name in module.LOAD_IGNORES:  # skip submodules when specified
+                if (
+                    module.__dict__.get("LOAD_IGNORES") and name in module.LOAD_IGNORES
+                ):  # skip submodules when specified
                     continue
                 if child is not None:
-                    load(child, prefix + name + '.')
+                    load(child, prefix + name + ".")
             return
 
         load(self, prefix=LOAD_PREFIX)
@@ -283,17 +285,20 @@ class BaseModule(PreTrainedModel):
 
         if not allow_unexpected and len(unexpected_keys) > 0:
             error_msgs.insert(
-                0, 'Unexpected key(s) in state_dict: {}. '.format(
-                    ', '.join('"{}"'.format(k) for k in unexpected_keys)))
+                0, "Unexpected key(s) in state_dict: {}. ".format(", ".join('"{}"'.format(k) for k in unexpected_keys))
+            )
         if len(missing_keys) > 0:
             error_msgs.insert(
-                0, 'Missing key(s) in state_dict: {}. '.format(
-                    ', '.join('"{}"'.format(k) for k in missing_keys)))
+                0, "Missing key(s) in state_dict: {}. ".format(", ".join('"{}"'.format(k) for k in missing_keys))
+            )
 
         if len(error_msgs) > 0:
             if strict:
-                raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
-                    self.__class__.__name__, "\n\t".join(error_msgs)))
+                raise RuntimeError(
+                    "Error(s) in loading state_dict for {}:\n\t{}".format(
+                        self.__class__.__name__, "\n\t".join(error_msgs)
+                    )
+                )
             else:  # NOTE: I modified the original implementation for debug
                 for msg in error_msgs:
                     logging.debug(msg)
@@ -317,7 +322,7 @@ class BaseModule(PreTrainedModel):
             has_mapping = False
             for prefix, mapped_prefix in name_mappings.items():
                 if key.startswith(prefix) and prefix != mapped_prefix:
-                    new_key = mapped_prefix + key[len(prefix):]
+                    new_key = mapped_prefix + key[len(prefix) :]
                     new_dict[new_key] = copy.deepcopy(value)
                     if not remove_origin:
                         new_dict[key] = value
@@ -370,10 +375,10 @@ class BaseModule(PreTrainedModel):
 
     @classmethod
     def from_pretrained(
-            cls,
-            pretrained_model_name_or_path: Optional[Union[str, os.PathLike]],
-            *model_args,
-            **kwargs,
+        cls,
+        pretrained_model_name_or_path: Optional[Union[str, os.PathLike]],
+        *model_args,
+        **kwargs,
     ):
         """
         Saves the `pretrained_model_name_or_path` as a member variable of the model, so when
@@ -383,15 +388,3 @@ class BaseModule(PreTrainedModel):
         model = super().from_pretrained(pretrained_model_name_or_path, *model_args, **kwargs)
         model.model_name_or_path = pretrained_model_name_or_path
         return model
-
-# def bind_weights(module1: torch.nn.Module, module2: torch.nn.Module):
-#     """
-#     Bind the weights of two PyTorch modules so they share the same memory space.
-#
-#     Args:
-#         module1 (torch.nn.Module): the first module.
-#         module2 (torch.nn.Module): the second module.
-#     """
-#     for param1, param2 in zip(module1.parameters(), module2.parameters()):
-#         param2.data.set_(param1.data)
-#         param2.requires_grad = param1.requires_grad

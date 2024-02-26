@@ -1,8 +1,6 @@
 import re
-from recwizard.model_utils import BasePipeline
+from recwizard.pipeline_utils import BasePipeline
 from .configuration_chatgpt_agent import ChatgptAgentConfig
-import sys
-sys.path.append('./src')
 import openai
 
 
@@ -26,7 +24,7 @@ class ChatgptAgent(BasePipeline):
         Args:
             config (ChatgptAgentConfig): The config file.
             prompt (str, optional): A prompt to override the prompt from config file.
-            model_name (str, optional): The specified GPT model's name. 
+            model_name (str, optional): The specified GPT model's name.
         """
 
         super().__init__(config, **kwargs)
@@ -50,25 +48,17 @@ class ChatgptAgent(BasePipeline):
 
         gen_output = self.gen_module.response(query, tokenizer=self.gen_tokenizer)
         resp_start = gen_output.rfind(self.config.resp_prompt)
-        context, resp = gen_output[:resp_start], gen_output[resp_start:]
+        _, resp = gen_output[:resp_start], gen_output[resp_start:]
         n_movies = len(self.movie_pattern.findall(resp))
         rec = self.rec_module.response(gen_output, topk=n_movies, tokenizer=self.rec_tokenizer)
 
-        pure_output = gen_output.split('System: ')[1]
-        input = ('Please replace the "<{}>" in the text "{}" by the following phrases "{}" respectively. '
-                 .format(self.answer_type, pure_output, rec))
+        pure_output = gen_output.split("System: ")[1]
+        input = f'Please replace the "<{self.answer_type}>" in the text "{pure_output}" by the following phrases "{rec}" respectively. '
         input += self.prompt
 
-        messages = [
-            {
-                "role": "user",
-                "content": input
-            }
-        ]
-        resp = openai.ChatCompletion.create(
-            model=self.model_name,
-            messages=messages,
-            temperature=self.temperature
-        )['choices'][0]['message']['content']
+        messages = [{"role": "user", "content": input}]
+        resp = openai.ChatCompletion.create(model=self.model_name, messages=messages, temperature=self.temperature)[
+            "choices"
+        ][0]["message"]["content"]
 
         return resp

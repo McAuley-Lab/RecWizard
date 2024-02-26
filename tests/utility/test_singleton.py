@@ -1,12 +1,14 @@
 from recwizard.utility import Singleton
 import torch
 
+
 # Tests
 def test_singleton_creates_instance():
     uid = "test_uid"
     instance = torch.nn.Module()
     result = Singleton(uid, instance)
     assert result is instance
+
 
 def test_singleton_reuses_instance():
     uid = "test_uid"
@@ -21,6 +23,7 @@ def test_singleton_reuses_instance():
     assert result1.__dict__ == instance1.__dict__
     assert result2.__dict__ == instance1.__dict__
 
+
 def test_singleton_instance_count():
     uid = "test_uid"
     instance1 = torch.nn.Module()
@@ -33,6 +36,7 @@ def test_singleton_instance_count():
     assert type(result2) is type(instance1)
     assert result1.__dict__ == instance1.__dict__
     assert result2.__dict__ == instance1.__dict__
+
 
 def test_singleton_different_uids():
     uid1 = "test_uid_1"

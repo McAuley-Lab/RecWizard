@@ -29,10 +29,6 @@ from recwizard import (
     RedialRec,
 )
 
-from recwizard.utility import DeviceManager
-
-DeviceManager.initialize("cpu")
-
 
 @app.get("/")
 def read_root():
@@ -76,9 +72,7 @@ def load_model(model_name):
         if model_name == "ChatGPT-expansion":
             state[model_name] = ExpansionPipeline(
                 config=ExpansionConfig(),
-                gen_module=ChatgptGen.from_pretrained(
-                    "recwizard/chatgpt-gen-expansion"
-                ),
+                gen_module=ChatgptGen.from_pretrained("recwizard/chatgpt-gen-expansion"),
                 rec_module=RedialRec.from_pretrained("recwizard/redial-rec"),
                 use_rec_logits=False,
             )
@@ -87,9 +81,7 @@ def load_model(model_name):
             state[model_name] = FillBlankPipeline(
                 config=FillBlankConfig(),
                 gen_module=UnicrsGen.from_pretrained("recwizard/unicrs-gen-redial"),
-                rec_module=ChatgptRec.from_pretrained(
-                    "recwizard/chatgpt-rec-fillblank"
-                ),
+                rec_module=ChatgptRec.from_pretrained("recwizard/chatgpt-rec-fillblank"),
             )
 
         return "success"
@@ -109,9 +101,7 @@ def predict(
     logger.info(f"Query: {query}")
     load_model(model_name)
     with monitoring(mode) as m:
-        response = state[model_name].response(
-            query, return_dict=True, rec_args=rec_args, gen_args=gen_args
-        )
+        response = state[model_name].response(query, return_dict=True, rec_args=rec_args, gen_args=gen_args)
         logger.info(f"Response: {response}")
         return {
             "query": query,

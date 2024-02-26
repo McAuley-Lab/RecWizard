@@ -1,5 +1,6 @@
 from recwizard.configuration_utils import BaseConfig
 
+
 class TrivialConfig(BaseConfig):
     model_type = "trivial"
 

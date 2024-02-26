@@ -1,161 +1,111 @@
-from typing import Union, List
-from transformers.utils import ModelOutput
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from torch_geometric.nn.conv.rgcn_conv import RGCNConv
-from torch_geometric.nn.conv.gcn_conv import GCNConv
-import json
-import pickle as pkl
 from recwizard import BaseModule
-from recwizard.utility.utils import WrapSingleInput
-from .tokenizer_kgsf_rec import KGSFRecTokenizer
-from .configuration_kgsf_rec import KGSFRecConfig
-from .utils import _create_embeddings,_create_entity_embeddings, _edge_list
-from .graph_utils import SelfAttentionLayer,SelfAttentionLayer_batch
-from recwizard import monitor
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+from recwizard.modules.kgsf.tokenizer_kgsf_rec import KGSFRecTokenizer
+from recwizard.modules.kgsf.configuration_kgsf_rec import KGSFRecConfig
+from recwizard.modules.kgsf.original_model import RecModel
+
+from recwizard import monitor
+from recwizard.utility import create_chat_message
+
+
 class KGSFRec(BaseModule):
     config_class = KGSFRecConfig
     tokenizer_class = KGSFRecTokenizer
-    LOAD_SAVE_IGNORES = {'START', 'decoder'}
+    LOAD_SAVE_IGNORES = {"START", "decoder"}
 
-    def __init__(self, config, **kwargs):
-        super().__init__(config,**kwargs)
-        dictionary = config.dictionary
-        self.batch_size = config.batch_size
-        self.max_r_length = config.max_r_length
-        self.NULL_IDX = config.padding_idx
-        self.END_IDX = config.end_idx
-        self.longest_label = config.longest_label
+    def __init__(
+        self,
+        config,
+        item_index=None,
+        pretrained_word_embedding=None,
+        dbpedia_edge_sets=None,
+        concept_edge_sets=None,
+        **kwargs,
+    ):
+        super().__init__(config, **kwargs)
 
-        self.pad_idx = config.padding_idx
-        self.embeddings = _create_embeddings(
-            dictionary, config.embedding_size, self.pad_idx, config.embedding_data
-        )
+        # prepare weights
+        item_index = self.prepare_weight(item_index, "item_index")
+        pretrained_word_embedding = self.prepare_weight(pretrained_word_embedding, "pretrained_word_embedding")
+        dbpedia_edge_sets = self.prepare_weight(dbpedia_edge_sets, "dbpedia_edge_sets")
+        concept_edge_sets = self.prepare_weight(concept_edge_sets, "concept_edge_sets")
 
-        self.concept_embeddings = _create_entity_embeddings(
-            config.n_concept + 1, config.dim, 0)
-        self.concept_padding = 0
+        # include the tensors into state_dict
+        self.item_index = torch.nn.Parameter(item_index, requires_grad=False)
+        self.pretrained_word_embedding = torch.nn.Parameter(pretrained_word_embedding, requires_grad=False)
+        self.dbpedia_edge_sets = torch.nn.Parameter(dbpedia_edge_sets, requires_grad=False)
+        self.concept_edge_sets = torch.nn.Parameter(concept_edge_sets, requires_grad=False)
 
-        self.kg = {int(k): v for k, v in config.subkg.items()}
+        # initialize the model
+        self.model = RecModel(config, pretrained_word_embedding, dbpedia_edge_sets, concept_edge_sets, **kwargs)
 
-        self.n_positions = config.n_positions
+    def forward(self, concept_ids, item_ids, entity_ids, *args, **kwargs):
+        return self.model(concept_ids, item_ids, entity_ids, *args, **kwargs)
 
-        self.criterion = nn.CrossEntropyLoss(reduce=False)
-        self.self_attn = SelfAttentionLayer_batch(config.dim, config.dim)
-
-        self.self_attn_db = SelfAttentionLayer(config.dim, config.dim)
-
-        self.user_norm = nn.Linear(config.dim * 2, config.dim)
-        self.gate_norm = nn.Linear(config.dim, 1)
-        self.copy_norm = nn.Linear(config.embedding_size * 2 + config.embedding_size, config.embedding_size)
-        self.representation_bias = nn.Linear(config.embedding_size, len(dictionary) + 4)
-
-        self.info_con_norm = nn.Linear(config.dim, config.dim)
-        self.info_db_norm = nn.Linear(config.dim, config.dim)
-        self.info_output_db = nn.Linear(config.dim, config.n_entity)
-        self.info_output_con = nn.Linear(config.dim, config.n_concept + 1)
-        self.info_con_loss = nn.MSELoss(size_average=False, reduce=False)
-        self.info_db_loss = nn.MSELoss(size_average=False, reduce=False)
-
-        self.output_en = nn.Linear(config.dim, config.n_entity)
-
-        self.embedding_size = config.embedding_size
-        self.dim = config.dim
-
-        edge_list, self.n_relation = _edge_list(self.kg, config.n_entity, hop=2)
-        edge_list = list(set(edge_list))
-        self.dbpedia_edge_sets = torch.LongTensor(edge_list).to(device)
-        self.db_edge_idx = self.dbpedia_edge_sets[:, :2].t()
-        self.db_edge_type = self.dbpedia_edge_sets[:, 2]
-
-        self.dbpedia_RGCN = RGCNConv(config.n_entity, self.dim, self.n_relation, num_bases=config.num_bases)
-        self.concept_edge_sets = torch.LongTensor(config.edge_set).to(device)
-        self.concept_GCN = GCNConv(self.dim, self.dim)
-
-        self.pretrain = config.pretrain
-    
-    def infomax_loss(self, db_nodes_features, con_user_emb, db_label, mask):
-        con_emb=self.info_con_norm(con_user_emb)
-        db_scores = F.linear(con_emb, db_nodes_features, self.info_output_db.bias)
-
-        info_db_loss=torch.sum(self.info_db_loss(db_scores,db_label.to(device).float()),dim=-1)*mask.to(device)
-
-        return torch.mean(info_db_loss)
-
-    def get_total_loss(self, rec_loss, info_db_loss):
-        if self.pretrain:
-            return info_db_loss
-        else:
-            return rec_loss+0.025*info_db_loss
-
-    def forward(self, response, concept_mask, seed_sets, labels, db_vec, rec, test=True, cand_params=None, prev_enc=None, maxlen=None, bsz=None):
-        print(type(concept_mask),type(seed_sets),type(db_vec),type(rec))
-        if bsz == None:
-            bsz = len(seed_sets)
-
-        # graph network
-        db_nodes_features = self.dbpedia_RGCN(None, self.db_edge_idx, self.db_edge_type) # entity_encoder
-        con_nodes_features=self.concept_GCN(self.concept_embeddings.weight,self.concept_edge_sets) # word_encoder
-
-        user_representation_list = []
-        db_con_mask=[]
-        for i, seed_set in enumerate(seed_sets):
-            if len(seed_set) == 0:
-                user_representation_list.append(torch.zeros(self.dim).to(device))
-                db_con_mask.append(torch.zeros([1]))
-                continue
-            user_representation = db_nodes_features[seed_set]  # torch can reflect
-            user_representation = self.self_attn_db(user_representation)
-            user_representation_list.append(user_representation)
-            db_con_mask.append(torch.ones([1]))
-
-        db_user_emb=torch.stack(user_representation_list)
-        db_con_mask=torch.stack(db_con_mask)
-
-        graph_con_emb=con_nodes_features[concept_mask]
-        con_emb_mask=concept_mask==self.concept_padding
-
-        con_user_emb=graph_con_emb
-        con_user_emb,attention=self.self_attn(con_user_emb,con_emb_mask.to(device))
-        user_emb=self.user_norm(torch.cat([con_user_emb,db_user_emb],dim=-1))
-        uc_gate = F.sigmoid(self.gate_norm(user_emb))
-        user_emb = uc_gate * db_user_emb + (1 - uc_gate) * con_user_emb
-        entity_scores = F.linear(user_emb, db_nodes_features, self.output_en.bias)
-
-        if response is not None:
-            info_db_loss = self.infomax_loss(db_nodes_features,con_user_emb,db_vec,db_con_mask)
-            rec_loss=self.criterion(entity_scores.squeeze(1).squeeze(1).float(), labels.to(device))
-            rec_loss = torch.sum(rec_loss*rec.float().to(device))
-
-            loss = self.get_total_loss(rec_loss,info_db_loss)
-            labels = torch.tensor(labels)
-            rec_loss = torch.tensor(rec_loss)
-        else:
-            loss = None
-            rec_loss = None
-        result = {'loss': loss, 'labels': labels, 'rec_scores': torch.tensor(entity_scores), 'rec_loss': rec_loss}
-        print(result,labels)
-        return result
-
-    @WrapSingleInput
     @monitor
-    def response(self, raw_input: Union[List[str], str], tokenizer, return_dict=False, topk=3):
-        movieIds_lst = []
-        movieNames_lst = []
-        for raw_single in raw_input:
-            inputs = tokenizer.encode(raw_single)
-            logits = self.forward(**inputs)['rec_scores']
-            movieIds, movieNames = tokenizer.decode(logits)
-            movieIds_lst.append(movieIds)
-            movieNames_lst.append(movieNames)
+    def response(self, raw_input: str, tokenizer, return_dict=False, topk=3):
+
+        # raw input to chat message
+        chat_message = create_chat_message(raw_input)
+        chat_inputs = tokenizer.apply_chat_template(chat_message, tokenize=False)
+
+        # chat message to model inputs
+        inputs = tokenizer(chat_inputs, return_token_type_ids=False, return_tensors="pt").to(self.device)
+        inputs = {
+            "concept_ids": inputs["concept"]["input_ids"],
+            "item_ids": inputs["item"]["input_ids"],
+            "entity_ids": inputs["entity"]["input_ids"],
+        }
+
+        logits = self.forward(**inputs)["rec_logits"]
+
+        # mask all non-item indices
+        offset = 0 * logits.clone() + float("-inf")
+        offset[:, self.item_index] = 0
+        logits += offset
+
+        # get topk items
+        item_ids = logits.topk(k=topk, dim=1).indices.flatten().tolist()
+        output = tokenizer.decode(item_ids)
+
+        # return the output
         if return_dict:
             return {
-                'logits': logits,
-                'movieIds': movieIds_lst,
-                'movieNames': movieNames_lst,
+                "chat_inputs": chat_inputs,
+                "logits": logits,
+                "item_ids": item_ids,
+                "output": output,
             }
-        return movieNames_lst
-        
+        return output
+
+
+if __name__ == "__main__":
+
+    path = "../../../../../local_repo/kgsf-rec"
+    kgsf_rec = KGSFRec.from_pretrained(path)
+    tokenizer = KGSFRecTokenizer.from_pretrained(path)
+
+    resp = kgsf_rec.response(
+        raw_input="System: Hi! <sep> User: I like <entity>Titanic</entity>! Can you recommend me more?",
+        tokenizer=tokenizer,
+        return_dict=True,
+    )
+
+    # save raw inputs
+    import os
+    import numpy as np
+
+    os.makedirs(os.path.join(path, "raw_model_inputs"), exist_ok=True)
+    for name, data in [
+        ("item_index", kgsf_rec.item_index.cpu().numpy()),
+        ("pretrained_word_embedding", kgsf_rec.pretrained_word_embedding.cpu().numpy()),
+        ("dbpedia_edge_sets", kgsf_rec.dbpedia_edge_sets.cpu().numpy()),
+        ("concept_edge_sets", kgsf_rec.concept_edge_sets.cpu().numpy()),
+    ]:
+        with open(os.path.join(path, "raw_model_inputs", f"{name}.npy"), "wb") as f:
+            np.save(f, data)
+
+    print(resp)
+
+    kgsf_rec.save_pretrained(path)

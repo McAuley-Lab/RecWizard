@@ -1,15 +1,14 @@
-from typing import Union, List
 from transformers.utils import ModelOutput
 
 import torch
 
 from recwizard.module_utils import BaseModule
-from recwizard.utility import WrapSingleInput
-from .configuration_kbrd_rec import KBRDRecConfig
-from .tokenizer_kbrd_rec import KBRDRecTokenizer
-from .entity_attention_encoder import KBRD
+from recwizard.modules.kbrd.configuration_kbrd_rec import KBRDRecConfig
+from recwizard.modules.kbrd.tokenizer_kbrd_rec import KBRDRecTokenizer
+from recwizard.modules.kbrd.original_entity_attention_encoder import KBRD
 
 from recwizard import monitor
+from recwizard.utility import create_chat_message
 
 
 class KBRDRec(BaseModule):
@@ -67,12 +66,12 @@ class KBRDRec(BaseModule):
         labels: torch.LongTensor = None,
     ):
         """Forward pass of the KBRDRec module.
-        
+
         Args:
             input_ids (torch.LongTensor): The input ids of the input conversation contexts, shape: (batch_size, seq_len).
             attention_mask (torch.BoolTensor): The attention mask of the input, shape: (batch_size, seq_len).
             labels (torch.LongTensor): The labels of the converastions, optional.
-        
+
         Returns:
             ModelOutput: The output of the model, containing the logits and the loss.
         """
@@ -83,11 +82,10 @@ class KBRDRec(BaseModule):
 
         return ModelOutput({"rec_logits": scores, "rec_loss": loss})
 
-    @WrapSingleInput
     @monitor
     def response(
         self,
-        raw_input: Union[List[str], str],
+        raw_input: str,
         tokenizer: KBRDRecTokenizer,
         return_dict=False,
         topk=3,
@@ -95,34 +93,58 @@ class KBRDRec(BaseModule):
         """Generate the response given the input_ids.
 
         Args:
-            raw_input (Union[List[str], str]): The input conversation contexts.
+            raw_input str: The input conversation contexts.
             tokenizer (KBRDRecTokenizer): The tokenizer of the model.
             return_dict (bool): Whether to return the output as a dictionary.
-            topk (int): The number of movies to recommend.
-        
+            topk (int): The number of items to recommend.
+
         Returns:
-            Union[List[str], dict]: The dictionary of the model output with `logits`, 
-                `movieIds` and textual response if `return_dict` is `True`, else the textual 
+            Union[List[str], dict]: The dictionary of the model output with `logits`,
+                `item_ids` and textual response if `return_dict` is `True`, else the textual
                 model response only.
         """
-        
-        entities = tokenizer(raw_input)["entities"].to(self.device)
-        inputs = {
-            "input_ids": entities,
-            "attention_mask": entities != tokenizer.pad_entity_id,
-        }
+
+        # raw input to chat message
+        chat_message = create_chat_message(raw_input)
+        chat_inputs = tokenizer.apply_chat_template(chat_message, tokenize=False)
+
+        # chat message to model inputs
+        inputs = tokenizer(chat_inputs, return_token_type_ids=False, return_tensors="pt").to(self.device)
         logits = self.forward(**inputs)["rec_logits"]
-        # mask all non-movie indices
+
+        # mask all non-item indices
         offset = 0 * logits.clone() + float("-inf")
         offset[:, self.item_index] = 0
         logits += offset
-        movieIds = logits.topk(k=topk, dim=1).indices.tolist()
-        output = tokenizer.batch_decode(movieIds)
 
+        # get topk items
+        item_ids = logits.topk(k=topk, dim=1).indices.flatten().tolist()
+        output = tokenizer.decode(item_ids)
+
+        # return the output
         if return_dict:
             return {
+                "chat_inputs": chat_inputs,
                 "logits": logits,
-                "movieIds": movieIds,
+                "item_ids": item_ids,
                 "output": output,
             }
         return output
+
+
+if __name__ == "__main__":
+
+    # test KBRDRec
+    path = "../../../../../local_repo/kbrd-rec"
+    kbrd_rec = KBRDRec.from_pretrained(path)
+
+    tokenizer = KBRDRecTokenizer.from_pretrained(path)
+    resp = kbrd_rec.response(
+        raw_input="I like <entity>Titanic</entity>! Can you recommend me more?",
+        tokenizer=tokenizer,
+        return_dict=True,
+    )
+
+    kbrd_rec.save_pretrained(path)
+
+    print(resp)

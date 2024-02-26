@@ -1,61 +1,52 @@
-import os
-import json
-from typing import List, Dict
-
-from recwizard.tokenizer_utils import BaseTokenizer
-from recwizard.utility.utils import WrapSingleInput
-
-from .tokenizer_nltk import KBRDWordTokenizer
-from .tokenizer_kbrd_rec import KBRDRecTokenizer
+from recwizard.tokenizers import EntityTokenizer, NLTKTokenizer
+from recwizard.tokenizers import MultiTokenizer as KBRDGenTokenizer
 
 
-class KBRDGenTokenizer(BaseTokenizer):
-    def __init__(
-        self,
-        vocab: List[str],
-        id2entity: Dict[int, str] = None,
-        **kwargs,
-    ):
-        """Initialize the KBRDGen tokenizer.
-        
-        Args:
-            vocab (List[str]): list of words in the NLTK tokenizer;
-            id2entity (Dict[int, str]): dictionary mapping entity ids to entity names;
-        """
-        id2entity = {int(k): v for k, v in id2entity.items()}
-        super().__init__(
-            tokenizers=[
-                KBRDWordTokenizer(vocab=vocab),
-                KBRDRecTokenizer(id2entity=id2entity),
-            ],
-            **kwargs,
-        )
-        self.vocab = vocab
-        self.id2entity = {int(k): v for k, v in id2entity.items()}
+if __name__ == "__main__":
+    """How to use EntityTokenizer and NLTKTokenizer to build tokenizers as KBRDGenTokenizer."""
 
-    def get_init_kwargs(self):
-        """
-        The kwargs for initialization. Override this function to declare the necessary initialization kwargs (
-        they will be saved when the tokenizer is saved or pushed to huggingface model hub.)
+    import os, json
 
-        See also: :meth:`~save_vocabulary`
-        """
-        return {
-            "vocab": self.vocab,
-            "id2entity": self.id2entity,
-        }
+    path = "../../../../../local_repo/kbrd-gen"
 
-    @WrapSingleInput
-    def decode(
-        self,
-        ids,
-        *args,
-        **kwargs,
-    ) -> List[str]:
-        """Decode a list of token ids into a list of strings from the NLTK tokenizer."""
-        return self.tokenizers[0].decode(ids)
+    # Initialize the NLTK tokenizer
+    word2id = json.load(open(os.path.join(path, "raw_vocab", "word2id.json")))
 
-    def __call__(self, *args, **kwargs):
-        """Tokenize a string into a list of token ids"""
-        kwargs.update(return_tensors="pt", padding=True, truncation=True)
-        return super().__call__(*args, **kwargs)
+    nltk_tokenizer = NLTKTokenizer(
+        vocab=word2id,
+        nltk_sent_language="english",
+        nltk_word_tokenizer="treebank",
+        unk_token="__unk__",
+        pad_token="__null__",
+        bos_token="__start__",
+        eos_token="__end__",
+    )
+
+    print(nltk_tokenizer(f"I like <entity>Avatar</entity>!"))
+
+    # Initialize the Entity tokenizer
+    entity2id = json.load(open(os.path.join(path, "raw_vocab", "entity2id.json")))
+
+    entity_tokenizer = EntityTokenizer(vocab=entity2id, unk_token="[UNK]", pad_token="[PAD]")
+    print(entity_tokenizer(f"I like <entity>The_Godfather</entity>!"))
+
+    # Assemble the MultiTokenizer as a combination of the two tokenizers
+    tokenizers = {
+        "nltk": nltk_tokenizer,
+        "entity": entity_tokenizer,
+    }
+
+    multi_tokenizer = KBRDGenTokenizer(tokenizers=tokenizers, tokenizer_key_for_decoding="nltk")
+
+    print(multi_tokenizer(f"I like <entity>Avatar</entity>!"))
+    multi_tokenizer.save_pretrained(path)
+
+    # Evaluate the saved tokenizer
+    multi_tokenizer = KBRDGenTokenizer.from_pretrained(path)
+    print(multi_tokenizer(f"I like <entity>Avatar</entity>!"))
+
+    # Evaluate the saved tokenizer
+    from recwizard.utility import create_chat_message
+
+    test = create_chat_message("I like <entity>The_Godfather</entity>!")
+    print(multi_tokenizer.apply_chat_template(test, tokenize=False))
