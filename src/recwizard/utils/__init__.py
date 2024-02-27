@@ -18,6 +18,7 @@ ENTITY_TEMPLATE = "<entity>{}</entity>"
 
 
 from .entity_linkers import EntityLink
-from .decorators import Singleton
+from .decorators import Singleton, WrapSingleInput
 from .chat_template import create_chat_message, DEFAULT_CHAT_TEMPLATE
 from .others import *
+from .device_manager import DeviceManager
