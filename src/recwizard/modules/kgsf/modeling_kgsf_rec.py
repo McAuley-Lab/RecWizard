@@ -6,7 +6,7 @@ from recwizard.modules.kgsf.configuration_kgsf_rec import KGSFRecConfig
 from recwizard.modules.kgsf.original_model import RecModel
 
 from recwizard import monitor
-from recwizard.utility import create_chat_message
+from recwizard.utils import create_chat_message
 
 
 class KGSFRec(BaseModule):

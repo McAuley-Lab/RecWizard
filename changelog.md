@@ -58,13 +58,14 @@
             - [x] Clean `modeling_unicrs_gen.py` and change the `movie*` to `item*`.
             - [ ] Add docstring to `modeling_unicrs_rec.py`.
             - [ ] Add docstring to `modeling_unicrs_gen.py`.
-        - [ ] llm:
+        - [x] llm -> zero_shot:
             - [x] Change the `llm` folder into `chatgpt` and `llama`, which work as two examples of using llms for rec.
             - [x] Finish the `ChatGPT` folder.
+            - [x] Finish all the other Huggingface LLMs.
         - [ ] redial
 - [x] variable naming
     - [x] Change the occasional camel case namies (e.g., `genIds`) to the underscore names (e.g., `gen_ids`)
     - [x] Change `loadJsonFileFromDataset` to `load_json_file_from_dataset`.
-    - [ ] Change `recwizard.utility` to `recwizard.utils`
+    - [x] Change `recwizard.utility` to `recwizard.utils`
 - [ ] rules for importing modules
     - [ ] how to register KGSF tokenizers for MultiTokenizer

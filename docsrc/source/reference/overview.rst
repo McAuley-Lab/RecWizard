@@ -83,7 +83,7 @@ Code Structure
     │       ├── configuration_switch_decode.py
     │       └── modeling_switch_decode.py
     ├── tokenizer_utils.py
-    └── utility
+    └── utils
         ├── __init__.py
         ├── constants.py
         ├── device_manager.py

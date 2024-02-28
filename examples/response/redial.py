@@ -1,5 +1,5 @@
 from recwizard.modules.redial import RedialGen, RedialGenTokenizer, RedialRec, RedialRecTokenizer
-from recwizard.utility import load_json_file_from_dataset, init_deterministic, EntityLink, DeviceManager
+from recwizard.utils import load_json_file_from_dataset, init_deterministic, EntityLink, DeviceManager
 from recwizard.pipelines.expansion import ExpansionConfig, ExpansionPipeline
 
 init_deterministic(42)

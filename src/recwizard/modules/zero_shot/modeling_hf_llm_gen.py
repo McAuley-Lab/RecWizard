@@ -3,8 +3,8 @@ from typing import List
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from recwizard import BaseModule, monitor
-from recwizard.modules.llm.configuration_hf_llm_gen import HFLLMGenConfig
-from recwizard.utility import create_chat_message
+from recwizard.modules.zero_shot.configuration_hf_llm_gen import HFLLMGenConfig
+from recwizard.utils import create_chat_message
 
 import logging
 

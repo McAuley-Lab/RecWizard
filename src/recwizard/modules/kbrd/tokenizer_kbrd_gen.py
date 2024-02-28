@@ -46,7 +46,7 @@ if __name__ == "__main__":
     print(multi_tokenizer(f"I like <entity>Avatar</entity>!"))
 
     # Evaluate the saved tokenizer
-    from recwizard.utility import create_chat_message
+    from recwizard.utils import create_chat_message
 
     test = create_chat_message("I like <entity>The_Godfather</entity>!")
     print(multi_tokenizer.apply_chat_template(test, tokenize=False))

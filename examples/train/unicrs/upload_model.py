@@ -3,7 +3,7 @@ import sys
 sys.path.append("./src")
 
 from recwizard.modules.unicrs import UnicrsGen, UnicrsRec, UnicrsGenTokenizer, UnicrsRecTokenizer
-from recwizard.utility import HF_ORG, load_json_file_from_dataset
+from recwizard.utils import HF_ORG, load_json_file_from_dataset
 import os
 
 dataset = sys.argv[1]

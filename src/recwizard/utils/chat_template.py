@@ -1,5 +1,5 @@
 from typing import List, Dict, Union
-from recwizard.utility import SEP_TOKEN
+from recwizard.utils import SEP_TOKEN
 
 DEFAULT_CHAT_TEMPLATE = "{% for message in messages %}{% if message['role'] == 'user' %}{{ 'User: ' + message['content'] }}{% elif message['role'] == 'assistant' %}{{ 'System: ' + message['content'] }}{% endif %}{% if not loop.last %}{{'\n'}}{% endif %}{% endfor %}"
 

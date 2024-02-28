@@ -22,7 +22,7 @@ from tokenizers.pre_tokenizers import Whitespace as DummyPreTokenizer
 from tokenizers.implementations import BaseTokenizer
 from transformers import PreTrainedTokenizerFast
 
-from recwizard.utility import DEFAULT_CHAT_TEMPLATE
+from recwizard.utils import DEFAULT_CHAT_TEMPLATE
 
 import nltk
 
@@ -125,7 +125,7 @@ class NLTKTokenizer(PreTrainedTokenizerFast):
 
 if __name__ == "__main__":
     import os, json
-    from recwizard.utility import create_chat_message
+    from recwizard.utils import create_chat_message
 
     word2id = json.load(open("../../../../local_repo/kbrd-gen/raw_vocab/word2id.json"))
 

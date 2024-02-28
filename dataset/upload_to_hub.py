@@ -2,9 +2,10 @@ import sys, os
 import shutil
 from datasets import load_dataset
 from huggingface_hub import Repository, create_repo
-from recwizard.utility import HF_ORG
-sys.path.append('../')
-sys.path.append('../src/recwizard')
+from recwizard.utils import HF_ORG
+
+sys.path.append("../")
+sys.path.append("../src/recwizard")
 
 
 HF_ORG = "recwizard"
@@ -18,9 +19,10 @@ def copy_from_source_to_destination(source_folder: str, destination_folder: str)
         # Copy each file to the destination folder
         shutil.copy(source, destination)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     dataset_path = sys.argv[1]
-    dataset = load_dataset(dataset_path, download_mode='force_redownload')
+    dataset = load_dataset(dataset_path, download_mode="force_redownload")
     repo_id = f"{HF_ORG}/{dataset_path}"
     # dataset.push_to_hub(repo_id)
     local_repo = f"tmp/{repo_id}"
@@ -29,17 +31,12 @@ if __name__ == '__main__':
         clone_from = None
     else:
         clone_from = repo_url
-    repo = Repository(
-        local_dir=local_repo,
-        clone_from=clone_from,
-        skip_lfs_files=True
-    )
+    repo = Repository(local_dir=local_repo, clone_from=clone_from, skip_lfs_files=True)
 
     repo.git_pull()
     copy_from_source_to_destination(dataset_path, local_repo)
-    repo.git_add('*.py')
-    repo.git_add('*.json')
-    repo.git_add('*.jsonl')
+    repo.git_add("*.py")
+    repo.git_add("*.json")
+    repo.git_add("*.jsonl")
     repo.git_commit(input("Please enter the commit message:"))
     repo.git_push()
-

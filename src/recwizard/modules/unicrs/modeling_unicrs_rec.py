@@ -3,7 +3,7 @@ from transformers.utils import ModelOutput
 import torch
 
 from recwizard import BaseModule, monitor
-from recwizard.utility import Singleton, EntityLink, create_chat_message
+from recwizard.utils import Singleton, EntityLink, create_chat_message
 
 from recwizard.modules.unicrs.tokenizer_unicrs_rec import UnicrsRecTokenizer
 from recwizard.modules.unicrs.original_kg_prompt import KGPrompt

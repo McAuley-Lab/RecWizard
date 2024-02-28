@@ -1,4 +1,4 @@
-from recwizard.utility import EntityLink
+from recwizard.utils import EntityLink
 
 
 # Mocking function for load_json_file_from_dataset

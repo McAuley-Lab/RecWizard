@@ -9,8 +9,8 @@ from huggingface_hub import snapshot_download
 import logging, json
 
 from recwizard.modules.unicrs import UnicrsGenTokenizer
-from recwizard.utility.utils import load_json_file_from_dataset
-from recwizard.utility import SEP_TOKEN, EOS_TOKEN, BOS_TOKEN, HF_ORG, ENTITY_PATTERN, ENTITY_TEMPLATE
+from recwizard.utils.utils import load_json_file_from_dataset
+from recwizard.utils import SEP_TOKEN, EOS_TOKEN, BOS_TOKEN, HF_ORG, ENTITY_PATTERN, ENTITY_TEMPLATE
 
 
 class KGDataLoader:

@@ -7,7 +7,7 @@ from recwizard.modules.kbrd.tokenizer_kbrd_gen import KBRDGenTokenizer
 from recwizard.modules.kbrd.modeling_kbrd_rec import KBRDRecConfig, KBRDRec
 from recwizard.modules.kbrd.original_transformer_encoder_decoder import TransformerGeneratorModel
 
-from recwizard.utility import create_chat_message
+from recwizard.utils import create_chat_message
 
 
 class KBRDGen(BaseModule):

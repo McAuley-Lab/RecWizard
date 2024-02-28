@@ -10,7 +10,7 @@ import torch
 from datasets import load_dataset
 from tqdm import tqdm
 
-from recwizard.utility import pad_and_stack, load_json_file_from_dataset
+from recwizard.utils import pad_and_stack, load_json_file_from_dataset
 from recwizard.modules.redial.tokenizer_rnn import RnnTokenizer
 
 

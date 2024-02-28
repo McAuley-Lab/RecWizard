@@ -24,7 +24,7 @@ from recwizard.modules.redial import (
     RedialGenTokenizer,
     RedialRecTokenizer,
 )
-from recwizard.utility import init_deterministic, pad_and_stack, load_json_file_from_dataset
+from recwizard.utils import init_deterministic, pad_and_stack, load_json_file_from_dataset
 from recwizard.pipelines.switch_decode import SwitchDecodeConfig, SwitchDecodePipeline
 
 

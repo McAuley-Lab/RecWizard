@@ -1,6 +1,6 @@
 from recwizard.pipeline_utils import BasePipeline
 from recwizard import monitor
-from recwizard.utility import EntityLink
+from recwizard.utils import EntityLink
 from .configuration_expansion import ExpansionConfig
 
 

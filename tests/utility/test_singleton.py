@@ -1,4 +1,4 @@
-from recwizard.utility import Singleton
+from recwizard.utils import Singleton
 import torch
 
 

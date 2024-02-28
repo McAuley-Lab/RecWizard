@@ -8,7 +8,7 @@ from recwizard.modules.kbrd.tokenizer_kbrd_rec import KBRDRecTokenizer
 from recwizard.modules.kbrd.original_entity_attention_encoder import KBRD
 
 from recwizard import monitor
-from recwizard.utility import create_chat_message
+from recwizard.utils import create_chat_message
 
 
 class KBRDRec(BaseModule):

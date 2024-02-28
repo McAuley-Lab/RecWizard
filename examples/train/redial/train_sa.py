@@ -12,12 +12,13 @@ from transformers import AutoTokenizer, Trainer, TrainingArguments
 from transformers.trainer_utils import EvalLoopOutput
 
 from recwizard.modules.redial.hrnn_for_classification import HRNNForClassification, RedialSentimentAnalysisLoss
-from recwizard.utility import init_deterministic, pad_and_stack, DeviceManager
+from recwizard.utils import init_deterministic, pad_and_stack, DeviceManager
 from data_processor import RedialDataProcessor
 from recwizard.modules.redial.params import sentiment_analysis_params
 
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+
 
 class ReDialDataCollatorForSA:
     """
@@ -28,27 +29,24 @@ class ReDialDataCollatorForSA:
     def __init__(self, pad_token_id):
         self.pad_token_id = pad_token_id
 
-    def __call__(
-        self, batch: List[Dict[str, torch.Tensor]]
-    ) -> Dict[str, Union[Tensor, Any]]:
+    def __call__(self, batch: List[Dict[str, torch.Tensor]]) -> Dict[str, Union[Tensor, Any]]:
         """
         Pad the input sequences to the maximum length of the samples in a batch.
         """
-        res =  {
+        res = {
             "input_ids": pad_and_stack([ex["input_ids"] for ex in batch], pad_value=self.pad_token_id),
             "attention_mask": pad_and_stack([ex["attention_mask"] for ex in batch]),
             "movie_occurrences": pad_and_stack([ex["movie_occurrences"] for ex in batch]),
             "senders": pad_and_stack([ex["senders"] for ex in batch]),
             "labels": torch.stack([ex["labels"] for ex in batch]),
             # "lengths": pad_and_stack([ex["lengths"] for ex in batch]),
-            "conversation_lengths": torch.tensor([ex["conversation_lengths"] for ex in batch])
+            "conversation_lengths": torch.tensor([ex["conversation_lengths"] for ex in batch]),
         }
         return res
 
 
-
 class RedialSATrainer(Trainer):
-    def __init__(self, criterion,**kwargs):
+    def __init__(self, criterion, **kwargs):
         super().__init__(**kwargs)
         self.criterion = criterion
 
@@ -59,14 +57,13 @@ class RedialSATrainer(Trainer):
         loss = self.criterion(outputs, labels)
         return (loss, outputs) if return_outputs else loss
 
-
     def evaluation_loop(
         self,
         dataloader: DataLoader,
         description: str,
-        prediction_loss_only = None,
-        ignore_keys = None,
-        metric_key_prefix = "eval",
+        prediction_loss_only=None,
+        ignore_keys=None,
+        metric_key_prefix="eval",
     ):
 
         self.model.eval()
@@ -104,7 +101,8 @@ class RedialSATrainer(Trainer):
             # increment number of wrong predictions where the targets disagree (ambiguous dialogue or careless worker)
             wrongs_with_disagreement += np.sum(
                 1 * (Iliked.data.numpy() != target[:, 2]) * (target[:, 2] != target[:, 5])
-                + 1 * (Rliked.data.numpy() != target[:, 5]) * (target[:, 2] != target[:, 5]))
+                + 1 * (Rliked.data.numpy() != target[:, 5]) * (target[:, 2] != target[:, 5])
+            )
             total += target.shape[0]
 
             if metric_key_prefix == "test":
@@ -118,19 +116,23 @@ class RedialSATrainer(Trainer):
 
                 correct += (Iclass.data == torch.LongTensor(Itargetclass)).cpu().sum()
                 # increment confusion matrices
-                Iconfusion_matrix += sklearn.metrics.confusion_matrix(Itargetclass, Iclass.data.numpy(),
-                                                                      labels=np.arange(18))
-                Rconfusion_matrix += sklearn.metrics.confusion_matrix(Rtargetclass, Rclass.data.numpy(),
-                                                                      labels=np.arange(18))
+                Iconfusion_matrix += sklearn.metrics.confusion_matrix(
+                    Itargetclass, Iclass.data.numpy(), labels=np.arange(18)
+                )
+                Rconfusion_matrix += sklearn.metrics.confusion_matrix(
+                    Rtargetclass, Rclass.data.numpy(), labels=np.arange(18)
+                )
                 # increment confusion matrices only taking the examples where the two workers agree
                 Iconfusion_matrix_no_disagreement += sklearn.metrics.confusion_matrix(
                     Itargetclass[filter_no_disagreement],
                     Iclass.data.numpy()[filter_no_disagreement],
-                    labels=np.arange(18))
+                    labels=np.arange(18),
+                )
                 Rconfusion_matrix_no_disagreement += sklearn.metrics.confusion_matrix(
                     Rtargetclass[filter_no_disagreement],
                     Rclass.data.numpy()[filter_no_disagreement],
-                    labels=np.arange(18))
+                    labels=np.arange(18),
+                )
         if metric_key_prefix == "test":
             # the reshape modelizes a block matrix.
             # then we sum the blocks to obtain marginal matrices.
@@ -146,10 +148,12 @@ class RedialSATrainer(Trainer):
             # confusion matrix for the liked/disliked/did not say label
             Iliked_marginal = I_marginal.reshape(3, 3, 3, 3).sum(axis=(1, 3))
             Rliked_marginal = R_marginal.reshape(3, 3, 3, 3).sum(axis=(1, 3))
-            Iliked_marginal_no_disagreement = Iconfusion_matrix_no_disagreement.reshape(3, 3, 2, 3, 3, 2) \
-                .sum(axis=(1, 2, 4, 5))
-            Rliked_marginal_no_disagreement = Rconfusion_matrix_no_disagreement.reshape(3, 3, 2, 3, 3, 2) \
-                .sum(axis=(1, 2, 4, 5))
+            Iliked_marginal_no_disagreement = Iconfusion_matrix_no_disagreement.reshape(3, 3, 2, 3, 3, 2).sum(
+                axis=(1, 2, 4, 5)
+            )
+            Rliked_marginal_no_disagreement = Rconfusion_matrix_no_disagreement.reshape(3, 3, 2, 3, 3, 2).sum(
+                axis=(1, 2, 4, 5)
+            )
             print("marginals")
             print(I_marginal)
             print(R_marginal)
@@ -165,12 +169,15 @@ class RedialSATrainer(Trainer):
             print("Liked marginals, excluding targets with disagreements")
             print(Iliked_marginal_no_disagreement)
             print(Rliked_marginal_no_disagreement)
-        print("{} wrong answers for {} liked labels, for {} of those there was a disagreement between workers"
-              .format(wrongs, total*2, wrongs_with_disagreement))
+        print(
+            "{} wrong answers for {} liked labels, for {} of those there was a disagreement between workers".format(
+                wrongs, total * 2, wrongs_with_disagreement
+            )
+        )
         avg_loss = float(np.mean(losses))
-        print("{} loss : {}".format(metric_key_prefix, avg_loss ))
+        print("{} loss : {}".format(metric_key_prefix, avg_loss))
         metrics = {
-            f'{metric_key_prefix}_loss': avg_loss,
+            f"{metric_key_prefix}_loss": avg_loss,
         }
         output = EvalLoopOutput(predictions=None, label_ids=None, metrics=metrics, num_samples=total)
         return output
@@ -178,16 +185,18 @@ class RedialSATrainer(Trainer):
 
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser(description='Argument Parser')
-    parser.add_argument('--debug', '-d',  action='store_true', help='Enable debug mode')
-    parser.add_argument('--num_epochs', type=int, default=10, help='Number of epochs')
-    parser.add_argument('--seed', type=int, default=42, help='Random seed')
-    parser.add_argument('--batch_size', type=int, default=4, help='Batch size')
-    parser.add_argument('--lr', type=float, default=1e-4, help='Learning rate')
-    parser.add_argument('--num_workers', type=int, default=2, help='Number of workers for data loading')
-    parser.add_argument('--pretrained_model', type=str, default='princeton-nlp/unsup-simcse-roberta-base',
-                        help='Pretrained model name')
-    parser.add_argument('--output_dir', type=str, default="save/redial/sa")
+
+    parser = argparse.ArgumentParser(description="Argument Parser")
+    parser.add_argument("--debug", "-d", action="store_true", help="Enable debug mode")
+    parser.add_argument("--num_epochs", type=int, default=10, help="Number of epochs")
+    parser.add_argument("--seed", type=int, default=42, help="Random seed")
+    parser.add_argument("--batch_size", type=int, default=4, help="Batch size")
+    parser.add_argument("--lr", type=float, default=1e-4, help="Learning rate")
+    parser.add_argument("--num_workers", type=int, default=2, help="Number of workers for data loading")
+    parser.add_argument(
+        "--pretrained_model", type=str, default="princeton-nlp/unsup-simcse-roberta-base", help="Pretrained model name"
+    )
+    parser.add_argument("--output_dir", type=str, default="save/redial/sa")
 
     args = parser.parse_args()
     batch_size = args.batch_size
@@ -211,18 +220,20 @@ if __name__ == "__main__":
     trainer = RedialSATrainer(
         model=model,
         optimizers=(torch.optim.Adam(model.parameters(), lr=args.lr), None),
-        args=TrainingArguments(output_dir=output_dir,
-                               save_strategy="epoch",
-                               evaluation_strategy="epoch",
-                               num_train_epochs=num_epochs,
-                               remove_unused_columns=False,
-                               dataloader_num_workers=num_workers,
-                               per_device_train_batch_size=batch_size,
-                               load_best_model_at_end=True,
-                               report_to='none'
-                               ),
-        criterion=RedialSentimentAnalysisLoss(class_weight={"liked": [1. / 5, 1. / 80, 1. / 15]},
-                                              use_targets="suggested seen liked").to(device),
+        args=TrainingArguments(
+            output_dir=output_dir,
+            save_strategy="epoch",
+            evaluation_strategy="epoch",
+            num_train_epochs=num_epochs,
+            remove_unused_columns=False,
+            dataloader_num_workers=num_workers,
+            per_device_train_batch_size=batch_size,
+            load_best_model_at_end=True,
+            report_to="none",
+        ),
+        criterion=RedialSentimentAnalysisLoss(
+            class_weight={"liked": [1.0 / 5, 1.0 / 80, 1.0 / 15]}, use_targets="suggested seen liked"
+        ).to(device),
         train_dataset=tokenized_datasets["train"],
         eval_dataset=tokenized_datasets["validation"],
         data_collator=ReDialDataCollatorForSA(pad_token_id=tokenizer.pad_token_id),
@@ -230,4 +241,4 @@ if __name__ == "__main__":
 
     trainer.train()
     trainer.evaluate(tokenized_datasets["test"], metric_key_prefix="test")
-    trainer.save_model(os.path.join(output_dir, 'model_best'))
+    trainer.save_model(os.path.join(output_dir, "model_best"))

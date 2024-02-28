@@ -3,7 +3,7 @@
     We use this class to make the code more modular.
 """
 
-from recwizard.utility import create_chat_message
+from recwizard.utils import create_chat_message
 
 
 class ChatgptTokenizer:

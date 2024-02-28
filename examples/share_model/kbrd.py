@@ -5,7 +5,7 @@ sys.path.append("./src/recwizard")
 
 from modules.kbrd import KBRDGen, KBRDRec, KBRDGenTokenizer, KBRDRecTokenizer
 from pipelines.trivial import TrivialConfig, TrivialPipeline
-from utility import HF_ORG
+from utils import HF_ORG
 
 dir = "path/to/load"  # any local dir
 

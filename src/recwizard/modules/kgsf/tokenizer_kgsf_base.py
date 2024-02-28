@@ -20,7 +20,7 @@ from tokenizers.pre_tokenizers import Whitespace as DummyPreTokenizer
 from tokenizers.implementations import BaseTokenizer
 from transformers import PreTrainedTokenizerFast
 
-from recwizard.utility import DEFAULT_CHAT_TEMPLATE
+from recwizard.utils import DEFAULT_CHAT_TEMPLATE
 
 
 class KGSFBasePreTokenizer:

@@ -3,7 +3,7 @@ from transformers import GenerationConfig
 from transformers.utils import ModelOutput
 
 from recwizard import BaseModule, monitor
-from recwizard.utility import deterministic_seed, Singleton, create_chat_message
+from recwizard.utils import deterministic_seed, Singleton, create_chat_message
 
 from recwizard.modules.unicrs.configuration_unicrs_gen import UnicrsGenConfig
 from recwizard.modules.unicrs.tokenizer_unicrs_gen import UnicrsGenTokenizer

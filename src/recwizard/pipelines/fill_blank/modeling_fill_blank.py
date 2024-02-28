@@ -1,7 +1,7 @@
 import re
 
 from recwizard.pipeline_utils import BasePipeline
-from recwizard.utility import SEP_TOKEN, EntityLink, monitor
+from recwizard.utils import SEP_TOKEN, EntityLink, monitor
 
 from .configuration_fill_blank import FillBlankConfig
 

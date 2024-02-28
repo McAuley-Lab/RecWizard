@@ -6,7 +6,7 @@ from recwizard.modules.kgsf.tokenizer_kgsf_gen import KGSFGenTokenizer
 
 from recwizard.modules.kgsf.original_model import GenModel
 
-from recwizard.utility import create_chat_message
+from recwizard.utils import create_chat_message
 from recwizard import monitor
 
 

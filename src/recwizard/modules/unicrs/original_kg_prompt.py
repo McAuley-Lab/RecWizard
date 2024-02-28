@@ -10,7 +10,7 @@ from torch.nn import functional as F
 from torch_geometric.nn import RGCNConv
 from transformers import AutoModel
 
-from recwizard.utility import deterministic_seed, Singleton
+from recwizard.utils import deterministic_seed, Singleton
 
 
 class KGPrompt(nn.Module):

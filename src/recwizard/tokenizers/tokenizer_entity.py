@@ -22,7 +22,7 @@ from tokenizers.decoders import WordPiece as DummyDecoder
 from tokenizers.implementations import BaseTokenizer
 from transformers import PreTrainedTokenizerFast
 
-from recwizard.utility import DEFAULT_CHAT_TEMPLATE
+from recwizard.utils import DEFAULT_CHAT_TEMPLATE
 
 
 START_TAG = "<entity>"
@@ -115,7 +115,7 @@ class EntityTokenizer(PreTrainedTokenizerFast):
 if __name__ == "__main__":
     import os, json
 
-    from recwizard.utility import create_chat_message
+    from recwizard.utils import create_chat_message
 
     entity2id = json.load(open("../../../../local_repo/kbrd-rec/raw_vocab/entity2id.json"))
 
