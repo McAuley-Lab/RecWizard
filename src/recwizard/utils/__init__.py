@@ -25,6 +25,7 @@ ASSISTANT_TOKEN = "System:"
 USER_TOKEN = "User:"
 
 from .entity_linkers import EntityLink
-from .decorators import Singleton
+from .decorators import Singleton, WrapSingleInput
 from .chat_template import create_chat_message, create_rec_list
 from .others import *
+from .device_manager import DeviceManager

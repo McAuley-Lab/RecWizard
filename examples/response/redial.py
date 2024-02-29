@@ -1,6 +1,7 @@
-from recwizard.modules.redial import RedialGen, RedialGenTokenizer, RedialRec, RedialRecTokenizer
+from recwizard.modules.redial import RedialGen, RedialRec
+from recwizard.tokenizers import MultiTokenizer
 from recwizard.utils import load_json_file_from_dataset, init_deterministic, EntityLink, DeviceManager
-from recwizard.pipelines.expansion import ExpansionConfig, ExpansionPipeline
+from recwizard.pipelines import RedialPipelineConfig, RedialPipeline
 
 init_deterministic(42)
 # DeviceManager.initialize('cpu')
@@ -20,19 +21,17 @@ query1 = (
     " Would you please recommend me some other movies?"
 )
 
-gen_module_name = "recwizard/redial-gen"
-rec_module_name = "recwizard/redial-rec"
 
-# gen_tokenizer = RedialGenTokenizer.from_pretrained(gen_module_name)
-# rec_tokenizer = RedialRecTokenizer.from_pretrained(rec_module_name)
+gen_tokenizer = MultiTokenizer.from_pretrained("Kevin99z/redial-gen")
+rec_tokenizer = MultiTokenizer.from_pretrained("Kevin99z/redial-rec")
 
-gen_module = RedialGen.from_pretrained(gen_module_name)
-rec_module = RedialRec.from_pretrained(rec_module_name)
+gen_module = RedialGen.from_pretrained("recwizard/redial-gen")
+rec_module = RedialRec.from_pretrained("recwizard/redial-rec")
 
-model = ExpansionPipeline(
-    config=ExpansionConfig(),
-    # gen_tokenizer=gen_tokenizer,
-    # rec_tokenizer=rec_tokenizer,
+model = RedialPipeline(
+    config=RedialPipelineConfig(),
+    gen_tokenizer=gen_tokenizer,
+    rec_tokenizer=rec_tokenizer,
     gen_module=gen_module,
     rec_module=rec_module,
 )
@@ -42,4 +41,4 @@ model = model.to("cuda:0")
 result = model.response(query, return_dict=True)
 
 print(query)
-print(result["output"])
+print(result)

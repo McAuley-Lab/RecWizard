@@ -18,7 +18,7 @@ from transformers.trainer_utils import EvalLoopOutput
 from recwizard.modules.redial import AutoRec, ReconstructionLoss
 from recwizard.utils import init_deterministic, DeviceManager
 from data_processor import RedialDataProcessor
-from recwizard.modules.redial.params import autorec_params
+from recwizard.modules.redial.original_params import autorec_params
 
 
 def load_movies_merged(path="dataset/redial/movies_merged.csv"):

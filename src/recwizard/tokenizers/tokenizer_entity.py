@@ -78,6 +78,11 @@ class EntityTokenizer(PreTrainedTokenizerFast):
         **kwargs,
     ):
 
+        if vocab is not None:
+            if not unk_token in vocab:
+                vocab[str(unk_token)] = len(vocab)
+            if not pad_token in vocab:
+                vocab[str(pad_token)] = len(vocab)
         # Initialize the backend entity tokenizer
         tokenizer = EntityBackendTokenizer(vocab, unk_token=str(unk_token), pad_token=str(pad_token))
 
@@ -92,8 +97,9 @@ class EntityTokenizer(PreTrainedTokenizerFast):
 
         # Save init_inputs
         self.init_inputs = (vocab,)
-        self.unk_token = unk_token
-        self.pad_token = pad_token
+        # self.unk_token = unk_token
+        # self.pad_token = pad_token
+        self.add_special_tokens({"unk_token": unk_token, "pad_token": pad_token})
 
         # Set the chat template
         if chat_template is not None:
