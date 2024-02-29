@@ -2,13 +2,13 @@ import torch
 import re
 
 from recwizard import BaseModule
-from recwizard.utility import SEP_TOKEN, DeviceManager
+from recwizard.utils import SEP_TOKEN, DeviceManager
 from recwizard.modules.monitor import monitor
 
 from .configuration_redial_rec import RedialRecConfig
-from .hrnn_for_classification import HRNNForClassification
-from .autorec import AutoRec
-from .utils import preprocess, fill_movie_occurrences
+from .original_hrnn_for_classification import HRNNForClassification
+from .original_autorec import AutoRec
+from .original_utils import preprocess, fill_movie_occurrences
 
 
 
@@ -81,11 +81,25 @@ class RedialRec(BaseModule):
                 mask = mask.cumsum(dim=0) > 0
                 recs[batchId, :, movieIds[batchId][j]] -= mask * 1e10
         return recs
-
+    
     @monitor
     def response(self, raw_input, tokenizer, return_dict=False, topk=3, **kwargs):
-        movies = [m[0] for m in re.findall(r'<entity>(.*?)</entity>', raw_input)]
-        texts = raw_input.split(SEP_TOKEN)
+        inputs = self.tokenize_input(raw_input, tokenizer)
+        inputs = DeviceManager.copy_to_device(inputs, device=self.device)
+        logits = self.forward(**inputs)
+        movieIds = logits.topk(k=topk, dim=-1).indices[:, -1, :]  # selects the recommendation for the last sentence
+        output = tokenizer.batch_decode(movieIds.view(-1, 1))
+        if return_dict:
+            return {
+                'logits': logits.squeeze(0),
+                'item_ids': movieIds.tolist(),
+                'output': output,
+            }
+        return output
+
+    def tokenize_input(self, input, tokenizer):
+        movies = [m[0] for m in re.findall(r'<entity>(.*?)</entity>', input)]
+        texts = input.split(SEP_TOKEN)
         batch_text, senders = zip(*[preprocess(text) for text in texts])
         encodings = tokenizer(batch_text, padding=True, return_tensors='pt', truncation=True)
         movie_occurrences = torch.stack([fill_movie_occurrences(encodings['sen_encoding'], batch_text, movie_name=movie) for movie in movies]) if len(movies) > 0 else torch.zeros((0, 0, 1))
@@ -96,7 +110,7 @@ class RedialRec(BaseModule):
         entity_mask = encodings['entity']['attention_mask']
         batch_entities = [entity_ids[i, entity_mask[i].bool()] for i in range(entity_ids.size(0))]
         movieIds = [movieId for entities in batch_entities for movieId in entities if movieId]
-        inputs = {
+        encodings = {
             'input_ids': input_ids,
             'attention_mask': attention_mask,
             'senders': torch.as_tensor(senders),
@@ -104,15 +118,4 @@ class RedialRec(BaseModule):
             'movieIds': torch.as_tensor(movieIds),
             'conversation_lengths': torch.tensor(len(texts)),
         }
-        inputs = {k: v.unsqueeze(0) for k, v in inputs.items()}
-        inputs = DeviceManager.copy_to_device(inputs, device=self.device)
-        logits = self.forward(**inputs)
-        movieIds = logits.topk(k=topk, dim=-1).indices[:, -1, :]  # selects the recommendation for the last sentence
-        output = tokenizer.batch_decode(movieIds.view(-1, 1))
-        if return_dict:
-            return {
-                'logits': logits,
-                'movieIds': movieIds.tolist(),
-                'output': output,
-            }
-        return output
+        return {k: v.unsqueeze(0) for k, v in encodings.items()}

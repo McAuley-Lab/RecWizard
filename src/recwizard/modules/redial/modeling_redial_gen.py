@@ -4,12 +4,12 @@ import re
 
 from recwizard import BaseModule
 from recwizard.modules.monitor import monitor
-from recwizard.utility import SEP_TOKEN, DeviceManager
-from .utils import sort_for_packed_sequence
+from recwizard.utils import SEP_TOKEN, DeviceManager
+from .original_utils import sort_for_packed_sequence
 from .configuration_redial_gen import RedialGenConfig
-from .hrnn import HRNN
-from .utils import preprocess, fill_movie_occurrences
-from .decoders import SwitchingDecoder
+from .original_hrnn import HRNN
+from .original_utils import preprocess, fill_movie_occurrences
+from .original_decoders import SwitchingDecoder
 
 class RedialGen(BaseModule):
     """
@@ -28,7 +28,7 @@ class RedialGen(BaseModule):
         self.n_movies = config.n_movies
 
 
-    def forward(self, dialogue, lengths, recs, context=None, state=None, encode_only=False, **hrnn_input):
+    def forward(self, dialogue, lengths, rec_logits, context=None, state=None, encode_only=False, **hrnn_input):
         """
 
         Args:
@@ -48,9 +48,9 @@ class RedialGen(BaseModule):
         conv_repr = context if context is not None else self.encoder(**hrnn_input)['conv_repr']  # (batch, hidden_size)
         if encode_only:
             return conv_repr
-        sorted_utterances, sorted_lengths, conv_repr, recs, rev, num_positive_lengths \
+        sorted_utterances, sorted_lengths, conv_repr, rec_logits, rev, num_positive_lengths \
             = self.prepare_input_for_decoder(
-            dialogue, lengths, conv_repr, recs
+            dialogue, lengths, conv_repr, rec_logits
         )
 
         # Run decoder
@@ -58,7 +58,7 @@ class RedialGen(BaseModule):
             sorted_utterances,
             sorted_lengths,
             conv_repr,
-            recs,
+            rec_logits,
             log_probabilities=True,
             sample_movies=False
         )
@@ -77,15 +77,46 @@ class RedialGen(BaseModule):
         outputs = outputs.index_select(0, rev). \
             view(batch_size, max_conv_length, max_utterance_length, -1)
         # (batch, max_conv_len, max_sentence_len, vocab + n_movie)
-        return outputs
-
+        return outputs        
 
     @monitor
-    def response(self, raw_input, tokenizer, recs=None, return_dict=False, beam_size=10, forbid_movies=None,
+    def response(self, raw_input, tokenizer, rec_logits=None, return_dict=False, beam_size=10, forbid_movies=None,
                  temperature=1, max_seq_length=40, **kwargs):
+        inputs = self.tokenize_input(raw_input, tokenizer)
+        inputs = DeviceManager.copy_to_device(inputs, device=self.device)
+        best_beam, mentioned_movies = self.generate(inputs, rec_logits=rec_logits, tokenizer=tokenizer, beam_size=beam_size, forbid_movies=forbid_movies, temperature=temperature, max_seq_length=max_seq_length)
+        output = tokenizer.decode(best_beam.sequence, skip_special_tokens=True)
+        if return_dict:
+            return {
+                "output": output,
+                "item_ids": list(mentioned_movies)
+                # These movieIds could be passed as forbid_movies in the following queries
+            }
+        return output
+
+    def generate(self, inputs, rec_logits=None, tokenizer=None, beam_size=10, forbid_movies=None, temperature=1, max_seq_length=40, **kwargs):
+        context = self.forward(**inputs, rec_logits=rec_logits, encode_only=True)[0]
+        if rec_logits is None:
+            rec_logits = torch.zeros(1, self.n_movies, device=self.device)
+        mentioned_movies = forbid_movies if forbid_movies is not None else set()
+        best_beam = self.decoder.generate(
+                            initial_sequence=[],
+                            tokenizer=tokenizer,
+                            forbid_movies=mentioned_movies,
+                            beam_size=beam_size,
+                            max_seq_length=max_seq_length,
+                            movie_recommendations=rec_logits[-1].unsqueeze(0),
+                            context=context[-1].unsqueeze(0),
+                            sample_movies=False,
+                            temperature=temperature         
+                    )
+        mentioned_movies.update(best_beam.mentioned_movies)
         
-        movies = [m[0] for m in re.findall(r'<entity>(.*?)</entity>', raw_input)]
-        texts = raw_input.split(SEP_TOKEN)
+        return best_beam, mentioned_movies
+    
+    def tokenize_input(self, input, tokenizer):
+        movies = [m[0] for m in re.findall(r'<entity>(.*?)</entity>', input)]
+        texts = input.split(SEP_TOKEN)
         batch_text, senders = zip(*[preprocess(text) for text in texts])
         encodings = tokenizer(batch_text, padding=True, return_tensors='pt', truncation=True)
 
@@ -102,33 +133,7 @@ class RedialGen(BaseModule):
             'movie_occurrences': movie_occurrences,
             'conversation_lengths': torch.tensor(len(texts)),
         }
-        gen_input = {k: v.unsqueeze(0) for k, v in gen_input.items()}
-        gen_input = DeviceManager.copy_to_device(gen_input, device=self.device)
-        context = self.forward(**gen_input, recs=recs, encode_only=True)[0]
-        if recs is None:
-            recs = torch.zeros(1, self.n_movies, device=self.device)
-        mentioned_movies = forbid_movies if forbid_movies is not None else set()
-
-        inputs = {
-            "initial_sequence": [],
-            "forbid_movies": mentioned_movies,
-            "beam_size": beam_size,
-            "max_seq_length": max_seq_length,
-            "movie_recommendations": recs[-1].unsqueeze(0),
-            "context": context[-1].unsqueeze(0),
-            "sample_movies": False,
-            "temperature": temperature
-        }
-        best_beam = self.decoder.generate(**inputs, tokenizer=tokenizer.tokenizers['dialogue'])
-        mentioned_movies.update(best_beam.mentioned_movies)
-        output = tokenizer.decode(best_beam.sequence, skip_special_tokens=True)
-        if return_dict:
-            return {
-                "output": output,
-                "movieIds": list(mentioned_movies)
-                # These movieIds could be passed as forbid_movies in the following queries
-            }
-        return output
+        return {k: v.unsqueeze(0) for k, v in gen_input.items()}
 
     def prepare_input_for_decoder(self, dialogue, lengths, conv_repr, recs):
         batch_size, max_conv_length = dialogue.shape[:2]
@@ -151,7 +156,7 @@ class RedialGen(BaseModule):
             .index_select(0, sorted_idx)
 
         # shift the movie recommendations one step in time
-        pad_tensor = torch.zeros(batch_size, 1, self.n_movies, device=self.device)
+        pad_tensor = torch.zeros(batch_size, 1, self.n_movies, device=recs.device)
         recs = torch.cat((pad_tensor, recs), 1).narrow(
             1, 0, max_conv_length)
         # and reshape+reorder movie_recommendations the same way as utterances

@@ -3,7 +3,7 @@ from torch import nn
 from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
 from transformers import AutoModel
 
-from .utils import sort_for_packed_sequence
+from .original_utils import sort_for_packed_sequence
 
 
 class HRNN(nn.Module):

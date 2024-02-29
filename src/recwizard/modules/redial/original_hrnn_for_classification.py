@@ -3,8 +3,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from recwizard import BaseConfig, BaseModule
-from .hrnn import HRNN
-from .utils import pad_and_stack
+from .original_hrnn import HRNN
+from .original_utils import pad_and_stack
 
 class HRNNForClassification(BaseModule):
 

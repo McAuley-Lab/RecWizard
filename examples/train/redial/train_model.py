@@ -18,7 +18,7 @@ from recwizard.pipelines.expansion import ExpansionPipeline, ExpansionConfig
 from recwizard.modules.redial import (
     RedialGen,
     RedialGenConfig,
-    params,
+    original_params,
     RedialRec,
     RedialRecConfig,
     RedialGenTokenizer,
@@ -188,11 +188,11 @@ if __name__ == "__main__":
     vocab = load_json_file_from_dataset("dataset/redial", "vocab.json")
     gen_module = RedialGen(
         RedialGenConfig(
-            hrnn_params=params.hrnn_params, decoder_params=params.decoder_params, vocab_size=len(vocab), n_movies=6924
+            hrnn_params=original_params.hrnn_params, decoder_params=original_params.decoder_params, vocab_size=len(vocab), n_movies=6924
         ),
         word_embedding=dp.get_task_embedding(),
     )
-    sa_params = params.sentiment_analysis_params
+    sa_params = original_params.sentiment_analysis_params
     sa_params.update(
         {
             "return_liked_probability": True,
@@ -200,7 +200,7 @@ if __name__ == "__main__":
         }
     )
     rec_module = RedialRec(
-        RedialRecConfig(sa_params=sa_params, autorec_params=params.autorec_params),
+        RedialRecConfig(sa_params=sa_params, autorec_params=original_params.autorec_params),
         n_movies=6924,
         recommend_new_movies=False,
     )

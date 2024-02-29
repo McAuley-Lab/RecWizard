@@ -11,10 +11,10 @@ from tqdm import tqdm
 from transformers import AutoTokenizer, Trainer, TrainingArguments
 from transformers.trainer_utils import EvalLoopOutput
 
-from recwizard.modules.redial.hrnn_for_classification import HRNNForClassification, RedialSentimentAnalysisLoss
+from recwizard.modules.redial.original_hrnn_for_classification import HRNNForClassification, RedialSentimentAnalysisLoss
 from recwizard.utils import init_deterministic, pad_and_stack, DeviceManager
 from data_processor import RedialDataProcessor
-from recwizard.modules.redial.params import sentiment_analysis_params
+from recwizard.modules.redial.original_params import sentiment_analysis_params
 
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")

@@ -2,7 +2,7 @@ import torch
 from torch import nn as nn
 from torch.nn import functional as F
 from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
-from .beam_search import BeamSearch, Beam, get_best_beam
+from .original_beam_search import BeamSearch, Beam, get_best_beam
 
 class DecoderGRU(nn.Module):
     """
@@ -203,7 +203,7 @@ class SwitchingDecoder(nn.Module):
                 res.append(token_id)
             else:
                 movie_name = tokenizer.decode([token_id])
-                res.extend(tokenizer.tokenizers[1].encode(movie_name, add_special_tokens=False))
+                res.extend(tokenizer.tokenizers['entity'].encode(movie_name, add_special_tokens=False))
         return res
     
     @property
@@ -222,8 +222,8 @@ class SwitchingDecoder(nn.Module):
         """
         if initial_sequence is None:
             initial_sequence = []
-        initial_sequence = [tokenizer.bos_token_id] + initial_sequence
-        Beam.end_token = tokenizer.eos_token_id
+        initial_sequence = [tokenizer.tokenizers['dialogue'].bos_token_id] + initial_sequence
+        Beam.end_token = tokenizer.tokenizers['dialogue'].eos_token_id
         beams = BeamSearch.initial_beams(initial_sequence)
         for i in range(max_seq_length):
             # compute probabilities for each beam

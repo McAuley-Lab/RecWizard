@@ -84,9 +84,9 @@ class EntityTokenizer(PreTrainedTokenizerFast):
 
         if vocab is not None:
             if not unk_token in vocab:
-                vocab[unk_token] = len(vocab)
+                vocab[str(unk_token)] = len(vocab)
             if not pad_token in vocab:
-                vocab[pad_token] = len(vocab)
+                vocab[str(pad_token)] = len(vocab)
         # Initialize the backend entity tokenizer
         tokenizer = EntityBackendTokenizer(vocab, unk_token=str(unk_token), pad_token=str(pad_token))
 

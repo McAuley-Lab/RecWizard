@@ -11,7 +11,7 @@ from datasets import load_dataset
 from tqdm import tqdm
 
 from recwizard.utils import pad_and_stack, load_json_file_from_dataset
-from recwizard.modules.redial.tokenizer_rnn import RnnTokenizer
+from recwizard.modules.redial.original_tokenizer_rnn import RnnTokenizer
 
 
 def tokenize(message):
