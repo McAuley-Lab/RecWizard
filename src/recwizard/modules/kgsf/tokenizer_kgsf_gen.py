@@ -28,6 +28,7 @@ if __name__ == "__main__":
     word_tokenizer = KGSFBaseTokenizer(
         vocab=word2id, unk_token="[UNK]", pad_token="[PAD]", start_token="[START]", end_token="[END]"
     )
+    word_tokenizer.add_special_tokens({"additional_special_tokens": ["[START]", "[END]"]})
 
     print(word_tokenizer(string))
     print(word_tokenizer.tokenize(string))

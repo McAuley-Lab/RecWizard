@@ -86,14 +86,14 @@ class KGSFBaseTokenizer(PreTrainedTokenizerFast):
             self.backend_tokenizer.normalizer = Lowercase()
         self.backend_tokenizer.pre_tokenizer = PreTokenizer.custom(KGSFBasePreTokenizer())
 
-        # Protect the vocab tokens
-        self.add_tokens(list(vocab.keys()))
-
         # Save init_inputs
         self.init_inputs = (
             vocab,
             lowercase,
         )
+
+        # Set the special tokens
+        self.add_special_tokens({"unk_token": unk_token, "pad_token": pad_token})
 
         self.unk_token = unk_token
         self.pad_token = pad_token

@@ -22,12 +22,9 @@ from tokenizers.pre_tokenizers import Whitespace as DummyPreTokenizer
 from tokenizers.implementations import BaseTokenizer
 from transformers import PreTrainedTokenizerFast
 
-from recwizard.utils import DEFAULT_CHAT_TEMPLATE
+from recwizard.utils import DEFAULT_CHAT_TEMPLATE, START_TAG, END_TAG
 
 import nltk
-
-START_TAG = "<entity>"
-END_TAG = "</entity>"
 
 
 class NLTKPreTokenizer:

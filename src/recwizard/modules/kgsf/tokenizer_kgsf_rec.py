@@ -29,18 +29,21 @@ if __name__ == "__main__":
     # Step 2. itemtokenizer: item2id, fill the holes
     item_tokenizer = EntityTokenizer(vocab=item2id, unk_token="[UNK]", pad_token="[PAD]")
 
+    print("item tokenizer")
     print(item_tokenizer(string))
     print(item_tokenizer.tokenize(string))
 
     # Step 3. entitytokenizer: entity2id, fill the holes
     entity_tokenizer = KGSFBaseTokenizer(vocab=entity2id, unk_token="[UNK]", pad_token="[PAD]")
 
+    print("entity tokenizer")
     print(entity_tokenizer(string))
     print(entity_tokenizer.tokenize(string))
 
     # Step 4. concepttokenizer: concept2id, fill the holes
     concept_tokenizer = KGSFBaseTokenizer(vocab=concept2id, unk_token="[UNK]", pad_token="[UNK]", lowercase=True)
 
+    print("concept tokenizer")
     print(concept_tokenizer(string))
     print(concept_tokenizer.tokenize(string))
 

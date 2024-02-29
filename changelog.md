@@ -12,13 +12,14 @@
 - [x] introduce `apply_chat_template` to tokenizers to make e.g., `BOS_TOKEN`, or other tags bind to the specific tokenizers.
 
 - [ ] Fix the bugs:
-    - [ ] Concept_tokenizers in KGSF
+    - [x] Concept_tokenizers in KGSF
     - [ ] UniCRS chat template
 
 ## Better Organization
 
 - [x] Move `./utilty/monitor.py` to `./monitor_utils.py`, usually import it with `from recwizard import monitor`.
-- [x] `MovieLinker` does not follow the design and actually not portable, we downgrade it to hyperlink for google search instead.
+- [x] `EntityLinker` does not follow the design and actually not portable, we downgrade it to hyperlink for google search instead.
+- [ ] Move EntityLinker to the frontend.
 - [x] Delete the `DeviceManager` since it is lagecy code.
 - [x] Move constants to `__init__.py`.
 
@@ -62,10 +63,14 @@
             - [x] Change the `llm` folder into `chatgpt` and `llama`, which work as two examples of using llms for rec.
             - [x] Finish the `ChatGPT` folder.
             - [x] Finish all the other Huggingface LLMs.
+            - [ ] Should we remove the tags in LLM tokenizers.
         - [ ] redial
 - [x] variable naming
     - [x] Change the occasional camel case namies (e.g., `genIds`) to the underscore names (e.g., `gen_ids`)
     - [x] Change `loadJsonFileFromDataset` to `load_json_file_from_dataset`.
     - [x] Change `recwizard.utility` to `recwizard.utils`
 - [ ] rules for importing modules
-    - [ ] how to register KGSF tokenizers for MultiTokenizer
+    - [ ] How to register KGSF tokenizers for MultiTokenizer
+
+## Others
+- [ ] should pipeline good for `to(device)`.

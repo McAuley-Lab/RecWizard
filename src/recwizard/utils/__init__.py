@@ -7,6 +7,9 @@ BOS_TOKEN: str = "<bos>"
 SEP_TOKEN: str = "<sep>"
 EOS_TOKEN: str = "<eos>"
 
+START_TAG = "<entity>"
+END_TAG = "</entity>"
+
 HF_ORG = "recwizard"
 """
 Our official organization that's used to publish new models and tokenizers
@@ -16,8 +19,12 @@ ENTITY = "entity"
 ENTITY_PATTERN = r"<entity>(.*?)</entity>"
 ENTITY_TEMPLATE = "<entity>{}</entity>"
 
+DEFAULT_CHAT_TEMPLATE = "{% for message in messages %}{% if message['role'] == 'user' %}{{ 'User: ' + message['content'] }}{% elif message['role'] == 'assistant' %}{{ 'System: ' + message['content'] }}{% endif %}{% if not loop.last %}{{'\n'}}{% endif %}{% endfor %}"
+
+ASSISTANT_TOKEN = "System:"
+USER_TOKEN = "User:"
 
 from .entity_linkers import EntityLink
 from .decorators import Singleton
-from .chat_template import create_chat_message, DEFAULT_CHAT_TEMPLATE
+from .chat_template import create_chat_message, create_rec_list
 from .others import *
