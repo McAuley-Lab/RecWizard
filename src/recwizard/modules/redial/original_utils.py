@@ -5,6 +5,7 @@ import re
 initiator = "User:"
 respondent = "System:"
 
+
 def preprocess(text: str) -> Tuple[str, int]:
     """
     Extract and remove the sender from text
@@ -15,14 +16,15 @@ def preprocess(text: str) -> Tuple[str, int]:
 
     """
     if text.startswith(initiator):
-        text = text[len(initiator):].strip(" ")
+        text = text[len(initiator) :].strip(" ")
         sender = 1
     elif text.startswith(respondent):
-        text = text[len(respondent):].strip(" ")
+        text = text[len(respondent) :].strip(" ")
         sender = -1
     else:
         sender = 0
     return text, sender
+
 
 def fill_movie_occurrences(encoding, conversation, movie_name):
     max_length = max(len(ex) for ex in encoding["input_ids"])
@@ -34,9 +36,10 @@ def fill_movie_occurrences(encoding, conversation, movie_name):
         for m in re.finditer(re.escape(movie_name), msg):
             l = word_ids[encoding[i].char_to_token(m.start())]
             r = word_ids[encoding[i].char_to_token(m.end() - 1)]
-            occurrence[l: r + 1] = 1
+            occurrence[l : r + 1] = 1
         movie_occurrences.append(occurrence)
     return torch.stack(movie_occurrences)
+
 
 def pad_and_stack(tensors, dtype=torch.long, pad_value=0):
     """
@@ -69,6 +72,7 @@ def pad_and_stack(tensors, dtype=torch.long, pad_value=0):
         padded_and_stacked[(i,) + tuple(slices)] = tensor
     return padded_and_stacked
 
+
 def sort_for_packed_sequence(lengths):
     """
     Sorts an array of lengths in descending order and returns the sorted lengths,
@@ -89,26 +93,21 @@ def sort_for_packed_sequence(lengths):
     return sorted_lengths, sorted_idx, rev
 
 
-def get_task_embedding(vocab, pretrained_emb='embeddings/glove.840B.300d.h5'):
+def get_task_embedding(vocab, pretrained_emb="embeddings/glove.840B.300d.h5"):
     import h5py
     import numpy as np
+
     pretrained_embeddings = h5py.File(pretrained_emb)
-    embedding_matrix = pretrained_embeddings['embedding'][()]
-    pretrain_vocab = pretrained_embeddings['words_flatten'][()].decode().split('\n')
-    pretrain_word2id = {
-        word: ind for ind, word in enumerate(pretrain_vocab)
-    }
+    embedding_matrix = pretrained_embeddings["embedding"][()]
+    pretrain_vocab = pretrained_embeddings["words_flatten"][()].decode().split("\n")
+    pretrain_word2id = {word: ind for ind, word in enumerate(pretrain_vocab)}
     task_embeddings = []
     oov = 0
     for word in vocab:
         if word in pretrain_word2id:
-            task_embeddings.append(
-                embedding_matrix[pretrain_word2id[word]]
-            )
+            task_embeddings.append(embedding_matrix[pretrain_word2id[word]])
         else:
             oov += 1
-            task_embeddings.append(
-                np.zeros(300, dtype=np.float32)
-            )
+            task_embeddings.append(np.zeros(300, dtype=np.float32))
     logging.info(f"{len(vocab)} words, {oov} oov")
     return np.stack(task_embeddings).astype(np.float32)

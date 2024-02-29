@@ -96,7 +96,9 @@ class NLTKTokenizer(PreTrainedTokenizerFast):
         super().__init__(tokenizer_object=tokenizer, *args, **kwargs)
 
         # Add the custom normalizer, pre-tokenizer and decoder
-        self.backend_tokenizer.normalizer = Sequence([Replace(START_TAG, " "), Replace(END_TAG, " "), Lowercase()])
+        self.backend_tokenizer.normalizer = Sequence(
+            [Replace(START_TAG, " "), Replace(END_TAG, " "), Replace("_", " "), Lowercase()]
+        )
         self.backend_tokenizer.pre_tokenizer = PreTokenizer.custom(
             NLTKPreTokenizer(nltk_sent_language, nltk_word_tokenizer)
         )

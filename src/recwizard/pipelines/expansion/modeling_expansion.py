@@ -1,6 +1,6 @@
 from recwizard.pipeline_utils import BasePipeline
 from recwizard import monitor
-from recwizard.utils import create_rec_list
+from recwizard.utils import create_item_list
 from recwizard.pipelines.expansion.configuration_expansion import ExpansionConfig
 
 
@@ -15,7 +15,7 @@ class ExpansionPipeline(BasePipeline):
 
         # Get the recommendations
         rec_output = self.rec_module.response(query, tokenizer=self.rec_tokenizer, return_dict=return_dict, **rec_args)
-        rec_list = create_rec_list(rec_output["output"] if return_dict else rec_output)
+        rec_list = create_item_list(rec_output["output"] if return_dict else rec_output)
 
         # Get the generation
         gen_output = self.gen_module.response(

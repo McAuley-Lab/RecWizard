@@ -22,7 +22,14 @@
 - [ ] Move EntityLinker to the frontend.
 - [x] Delete the `DeviceManager` since it is lagecy code.
 - [x] Move constants to `__init__.py`.
+- [x] Remove `train` from `example` folder temporarily
+- [ ] Add more examples to the `example` folder
 
+## More Robust
+
+- [ ] Add more tests.
+- [ ] What if no movies are detected.
+- [ ] Device management.
 
 ## Code Style Standardization
 
@@ -65,6 +72,10 @@
             - [x] Finish all the other Huggingface LLMs.
             - [ ] Should we remove the tags in LLM tokenizers.
         - [ ] redial
+            - [ ] Cannot move to correct devices.
+            - [ ] EntityTokenizer are not with <entity> tags in mapping.
+            - [ ] Holes in tokenizers
+            - [ ] Variables are movies, not items
 - [x] variable naming
     - [x] Change the occasional camel case namies (e.g., `genIds`) to the underscore names (e.g., `gen_ids`)
     - [x] Change `loadJsonFileFromDataset` to `load_json_file_from_dataset`.

@@ -1,6 +1,3 @@
-import os
-import sys
-
 from recwizard.modules.kgsf.modeling_kgsf_rec import KGSFRec, KGSFRecTokenizer
 from recwizard.modules.kgsf.modeling_kgsf_gen import KGSFGen, KGSFGenTokenizer
 
@@ -29,8 +26,3 @@ pipeline = TrivialPipeline(
 )
 
 print(pipeline.response("I like <entity>Avatar</entity>, and you?", return_dict=False))
-
-# __start__ i'm good. what kind of movies do you like? __end__
-#  - Avatar
-#  - Trojan War
-#  - The Patriot

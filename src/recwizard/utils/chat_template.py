@@ -25,7 +25,7 @@ def create_chat_message(context: Union[str, list]) -> List[Dict[str, str]]:
         return [_create_chat_message(c) for c in context]
 
 
-def create_rec_list(text: str) -> List[str]:
+def create_item_list(text: str) -> List[str]:
     """Return a list of entities from the given text
 
     Args:
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     print(create_chat_message("I am fine."))
 
     print(
-        create_rec_list(
+        create_item_list(
             "<entity>Jumanji_(2017_sequel)</entity> <entity>Bridesmaids_(2011_film)</entity> <entity>Bad_Moms</entity>"
         )
     )

@@ -1,7 +1,7 @@
 from recwizard.pipeline_utils import BasePipeline
 from recwizard import monitor
 
-from recwizard.utils import create_rec_list
+from recwizard.utils import create_item_list
 from recwizard.pipelines.trivial.configuration_trivial import TrivialConfig
 
 

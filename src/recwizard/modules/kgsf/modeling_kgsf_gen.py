@@ -50,11 +50,11 @@ class KGSFGen(BaseModule):
     @monitor
     def response(self, raw_input: str, tokenizer, return_dict=False):
 
-        # raw input to chat message
+        # Raw input to chat message
         chat_message = create_chat_message(raw_input)
         chat_inputs = tokenizer.apply_chat_template(chat_message, tokenize=False)
 
-        # chat message to model inputs
+        # Chat message to model inputs
         inputs = tokenizer(chat_inputs, return_token_type_ids=False, return_tensors="pt").to(self.device)
         inputs = {
             "context_ids": inputs["word"]["input_ids"],
@@ -63,11 +63,11 @@ class KGSFGen(BaseModule):
             "entity_ids": inputs["entity"]["input_ids"],
         }
 
-        # model generates
+        # Model generates
         outputs = self.generate(**inputs)
         output = tokenizer.decode(outputs["preds"].flatten().tolist(), skip_special_tokens=True)
 
-        # return the output
+        # Return the output
         if return_dict:
             return {
                 "chat_inputs": chat_inputs,

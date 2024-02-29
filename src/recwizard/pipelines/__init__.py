@@ -1,5 +1,5 @@
-# from .expansion import ExpansionPipeline, ExpansionConfig
-# from .fill_blank import FillBlankPipeline, FillBlankConfig
-# from .chatgpt import ChatgptAgent, ChatgptAgentConfig
+from .expansion import ExpansionPipeline, ExpansionConfig
+from .fill_blank import FillBlankPipeline, FillBlankConfig
+from .chatgpt_merge import ChatgptMergePipeline, ChatgptMergeConfig
 from .trivial import TrivialPipeline, TrivialConfig
-from .redial_pipeline import RedialPipeline, RedialPipelineConfig
+from .redial_only import RedialOnlyPipeline, RedialOnlyConfig

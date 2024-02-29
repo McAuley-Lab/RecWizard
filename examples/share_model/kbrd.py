@@ -3,19 +3,19 @@ import sys
 
 sys.path.append("./src/recwizard")
 
-from modules.kbrd import KBRDGen, KBRDRec, KBRDGenTokenizer, KBRDRecTokenizer
-from pipelines.trivial import TrivialConfig, TrivialPipeline
-from utils import HF_ORG
+from recwizard.modules.kbrd import KBRDGen, KBRDRec, KBRDGenTokenizer, KBRDRecTokenizer
+from recwizard.pipelines.trivial import TrivialConfig, TrivialPipeline
+from recwizard.utils import HF_ORG
 
 dir = "path/to/load"  # any local dir
 
 # load rec
-rec_tokenizer = KBRDRecTokenizer.from_pretrained(os.path.join(dir, "temp_kbrd_rec"))
-rec_module = KBRDRec.from_pretrained(os.path.join(dir, "temp_kbrd_rec"))
+rec_tokenizer = KBRDRecTokenizer.from_pretrained(os.path.join(dir, "kbrd-rec"))
+rec_module = KBRDRec.from_pretrained(os.path.join(dir, "kbrd-rec"))
 
 ## load gen
-gen_tokenizer = KBRDGenTokenizer.from_pretrained(os.path.join(dir, "temp_kbrd_gen"))
-gen_module = KBRDGen.from_pretrained(os.path.join(dir, "temp_kbrd_gen"))
+gen_tokenizer = KBRDGenTokenizer.from_pretrained(os.path.join(dir, "kbrd-gen"))
+gen_module = KBRDGen.from_pretrained(os.path.join(dir, "kbrd-gen"))
 
 # load tirival pipeline
 pipeline = TrivialPipeline(
@@ -26,22 +26,19 @@ pipeline = TrivialPipeline(
     gen_tokenizer=gen_tokenizer,
 )
 
-print(pipeline.response("I like <entity>Avatar</entity>, and you?", return_dict=False))
-
-# result:
-
-# __start__ i'm good. what kind of movies do you like? __end__
-#  - Avatar
-#  - Trojan War
-#  - The Patriot
-
+print(
+    pipeline.response(
+        query="User: Hello; <sep> System: Hi <sep> User: Could you recommend me some movies similar to <entity>Avatar</entity>?",
+        return_dict=False,
+    )
+)
 # push to hub
 
-gen_repo = os.path.join(HF_ORG, f"kbrd-gen-redial")
+gen_repo = os.path.join(HF_ORG, f"kbrd-gen")
 gen_module.push_to_hub(gen_repo)
 gen_tokenizer.push_to_hub(gen_repo)
 
-rec_repo = os.path.join(HF_ORG, f"kbrd-rec-redial")
+rec_repo = os.path.join(HF_ORG, f"kbrd-rec")
 rec_module.push_to_hub(rec_repo)
 rec_tokenizer.push_to_hub(rec_repo)
 
@@ -64,9 +61,9 @@ pipeline = TrivialPipeline(
     gen_tokenizer=gen_tokenizer,
 )
 
-print(pipeline.response("I like <entity>Avatar</entity>, and you?", return_dict=False))
-
-# __start__ i'm good. what kind of movies do you like? __end__
-#  - Avatar
-#  - Trojan War
-#  - The Patriot
+print(
+    pipeline.response(
+        "User: Hello; <sep> System: Hi <sep> User: Could you recommend me some movies similar to <entity>Avatar</entity>?",
+        return_dict=False,
+    )
+)

@@ -26,8 +26,3 @@ pipeline = FillBlankPipeline(
 )
 
 print(pipeline.response("I like <entity>Avatar</entity>, and you?", return_dict=True))
-
-# __start__ i'm good. what kind of movies do you like? __end__
-#  - Avatar
-#  - Trojan War
-#  - The Patriot

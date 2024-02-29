@@ -2,7 +2,7 @@ import re
 
 from recwizard import monitor
 from recwizard.pipeline_utils import BasePipeline
-from recwizard.utils import SEP_TOKEN, ASSISTANT_TOKEN, create_rec_list
+from recwizard.utils import SEP_TOKEN, ASSISTANT_TOKEN, create_item_list
 
 from .configuration_fill_blank import FillBlankConfig
 
@@ -47,7 +47,7 @@ class FillBlankPipeline(BasePipeline):
                 return_dict=return_dict,
                 **rec_args,
             )
-            rec_list = create_rec_list(rec_output["output"] if return_dict else rec_output)
+            rec_list = create_item_list(rec_output["output"] if return_dict else rec_output)
 
             # Replace <movie> placeholder in response
             for i in range(topk):

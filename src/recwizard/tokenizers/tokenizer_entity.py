@@ -97,8 +97,6 @@ class EntityTokenizer(PreTrainedTokenizerFast):
 
         # Save init_inputs
         self.init_inputs = (vocab,)
-        # self.unk_token = unk_token
-        # self.pad_token = pad_token
         self.add_special_tokens({"unk_token": unk_token, "pad_token": pad_token})
 
         # Set the chat template
@@ -112,27 +110,3 @@ class EntityTokenizer(PreTrainedTokenizerFast):
         self.backend_tokenizer.decoder = DummyDecoder()
         self.backend_tokenizer.pre_tokenizer = DummyPreTokenizer()
         return super().save_pretrained(*args, **kwargs)
-
-
-if __name__ == "__main__":
-    import os, json
-
-    from recwizard.utils import create_chat_message
-
-    entity2id = json.load(open("../../../../local_repo/kbrd-rec/raw_vocab/entity2id.json"))
-
-    tokenizer = EntityTokenizer(vocab=entity2id, unk_token="[UNK]", pad_token="[PAD]")
-
-    tokenizer.pad_token = "[PAD]"
-
-    tokenizer.save_pretrained("test")
-
-    tokenizer = EntityTokenizer.from_pretrained("test")
-
-    print(tokenizer.pad_token)
-
-    chat = create_chat_message("User: Hi; <sep> System: Yes! I recommend <entity>Titanic</entity>!")
-
-    print(tokenizer.apply_chat_template(chat, tokenize=False))
-
-    print(tokenizer.apply_chat_template(chat, tokenize=True))

@@ -46,11 +46,11 @@ class KGSFRec(BaseModule):
     @monitor
     def response(self, raw_input: str, tokenizer, return_dict=False, topk=3):
 
-        # raw input to chat message
+        # Raw input to chat message
         chat_message = create_chat_message(raw_input)
         chat_inputs = tokenizer.apply_chat_template(chat_message, tokenize=False)
 
-        # chat message to model inputs
+        # Chat message to model inputs
         inputs = tokenizer(chat_inputs, return_token_type_ids=False, return_tensors="pt").to(self.device)
         inputs = {
             "concept_ids": inputs["concept"]["input_ids"],
@@ -60,16 +60,16 @@ class KGSFRec(BaseModule):
 
         logits = self.forward(**inputs)["rec_logits"]
 
-        # mask all non-item indices
+        # Mask all non-item indices
         offset = 0 * logits.clone() + float("-inf")
         offset[:, self.item_index] = 0
         logits += offset
 
-        # get topk items
+        # Get topk items
         item_ids = logits.topk(k=topk, dim=1).indices.flatten().tolist()
         output = tokenizer.decode(item_ids)
 
-        # return the output
+        # Return the output
         if return_dict:
             return {
                 "chat_inputs": chat_inputs,

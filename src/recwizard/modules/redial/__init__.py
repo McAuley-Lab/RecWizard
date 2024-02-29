@@ -8,3 +8,6 @@ from .configuration_redial_rec import RedialRecConfig
 from .configuration_redial_gen import RedialGenConfig
 import logging
 from .original_utils import get_task_embedding
+
+from .tokenizer_redial_rec import RedialRecTokenizer
+from .tokenizer_redial_gen import RedialGenTokenizer

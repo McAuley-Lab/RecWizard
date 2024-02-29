@@ -34,8 +34,3 @@ print(
         return_dict=True,
     )
 )
-
-# __start__ i'm good. what kind of movies do you like? __end__
-#  - Avatar
-#  - Trojan War
-#  - The Patriot

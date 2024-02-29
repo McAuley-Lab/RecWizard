@@ -1,7 +1,7 @@
 from recwizard.configuration_utils import BaseConfig
 
 
-class RedialPipelineConfig(BaseConfig):
+class RedialOnlyConfig(BaseConfig):
     """
     The configuration of the expansion pipeline.
     """
