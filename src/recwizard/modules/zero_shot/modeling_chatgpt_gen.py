@@ -90,7 +90,7 @@ class ChatgptGen(BaseModule):
         res_out = "System: {}".format(res)
         if return_dict:
             return {
-                "input": messages,
+                "chat_inputs": messages,
                 "output": res_out,
             }
         return res_out

@@ -76,13 +76,13 @@ if __name__ == "__main__":
     tokenizer = UnicrsGenTokenizer.from_pretrained(path)
     unicrs_gen = UnicrsGen.from_pretrained(path)
 
-    print(
-        unicrs_gen.response(
-            "System: Hi! <sep> User: I like <entity>Titanic</entity>! Can you recommend me more?",
-            tokenizer=tokenizer,
-            return_dict=True,
-        )
-    )
+    string = "System: Hi! <sep> User: I like <entity>Titanic</entity>! Can you recommend me more?"
+    string = "Hello!"
+    print(unicrs_gen.response(raw_input=string, tokenizer=tokenizer))
+
+    import pdb
+
+    pdb.set_trace()
 
     unicrs_gen.save_pretrained(path)
 
@@ -90,7 +90,7 @@ if __name__ == "__main__":
     unicrs_gen = UnicrsGen.from_pretrained(path)
     print(
         unicrs_gen.response(
-            "System: Hi! <sep> User: I like <entity>Titanic</entity>! Can you recommend me more?",
+            query=string,
             tokenizer=tokenizer,
             return_dict=True,
         )

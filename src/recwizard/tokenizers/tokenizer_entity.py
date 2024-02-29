@@ -22,11 +22,7 @@ from tokenizers.decoders import WordPiece as DummyDecoder
 from tokenizers.implementations import BaseTokenizer
 from transformers import PreTrainedTokenizerFast
 
-from recwizard.utils import DEFAULT_CHAT_TEMPLATE
-
-
-START_TAG = "<entity>"
-END_TAG = "</entity>"
+from recwizard.utils import DEFAULT_CHAT_TEMPLATE, START_TAG, END_TAG
 
 
 class EntityPreTokenizer:
