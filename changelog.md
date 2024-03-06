@@ -23,7 +23,7 @@
 - [x] Delete the `DeviceManager` since it is lagecy code.
 - [x] Move constants to `__init__.py`.
 - [x] Remove `train` from `example` folder temporarily
-- [ ] Add more examples to the `example` folder
+- [x] Add more examples to the `example` folder
 
 ## More Robust
 
@@ -73,9 +73,9 @@
             - [ ] Should we remove the tags in LLM tokenizers.
         - [ ] redial
             - [ ] Cannot move to correct devices.
-            - [ ] EntityTokenizer are not with <entity> tags in mapping.
+            - [x] EntityTokenizer are not with <entity> tags in mapping.
             - [ ] Holes in tokenizers
-            - [ ] Variables are movies, not items
+            - [x] Variables are movies, not items
 - [x] variable naming
     - [x] Change the occasional camel case namies (e.g., `genIds`) to the underscore names (e.g., `gen_ids`)
     - [x] Change `loadJsonFileFromDataset` to `load_json_file_from_dataset`.

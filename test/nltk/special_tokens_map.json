@@ -1,0 +1,6 @@
+{
+  "bos_token": "__start__",
+  "eos_token": "__end__",
+  "pad_token": "__null__",
+  "unk_token": "__unk__"
+}
