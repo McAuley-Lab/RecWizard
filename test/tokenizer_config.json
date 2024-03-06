@@ -1,8 +1,0 @@
-{
-  "tokenizers": {
-    "dialogue": "NLTKTokenizer",
-    "entity": "EntityTokenizer",
-    "sen_encoding": "RobertaTokenizerFast"
-  },
-  "tokenizer_key_for_decoding": "dialogue"
-}
