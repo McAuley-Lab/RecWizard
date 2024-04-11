@@ -1,7 +1,8 @@
+import time
+
 from recwizard import monitoring
 from fastapi import FastAPI
 import logging
-import time
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -21,8 +22,8 @@ from recwizard import (
     FillBlankPipeline,
     UnicrsGen,
     UnicrsRec,
-    ChatgptGen,
-    ChatgptRec,
+    ChatGPTGen,
+    ChatGPTRec,
     ExpansionPipeline,
     ExpansionConfig,
     RedialGen,
@@ -51,15 +52,15 @@ def load_model(model_name):
         if model_name == "Unicrs":
             state[model_name] = FillBlankPipeline(
                 config=FillBlankConfig(),
-                gen_module=UnicrsGen.from_pretrained("recwizard/unicrs-gen-redial"),
-                rec_module=UnicrsRec.from_pretrained("recwizard/unicrs-rec-redial"),
+                gen_module=UnicrsGen.from_pretrained("../../local_repo/unicrs-gen"),
+                rec_module=UnicrsRec.from_pretrained("../../local_repo/unicrs-rec"),
             )
 
         if model_name == "Unicrs-redial":
             state[model_name] = FillBlankPipeline(
                 config=FillBlankConfig(),
-                gen_module=UnicrsGen.from_pretrained("recwizard/unicrs-gen-redial"),
-                rec_module=UnicrsRec.from_pretrained("recwizard/unicrs-rec-redial"),
+                gen_module=UnicrsGen.from_pretrained("ZhankuiHe/unicrs-gen"),
+                rec_module=UnicrsRec.from_pretrained("ZhankuiHe/unicrs-rec"),
             )
 
         if model_name == "Redial":
@@ -72,7 +73,7 @@ def load_model(model_name):
         if model_name == "ChatGPT-expansion":
             state[model_name] = ExpansionPipeline(
                 config=ExpansionConfig(),
-                gen_module=ChatgptGen.from_pretrained("recwizard/chatgpt-gen-expansion"),
+                gen_module=ChatGPTGen.from_pretrained("recwizard/chatgpt-gen-expansion"),
                 rec_module=RedialRec.from_pretrained("recwizard/redial-rec"),
                 use_rec_logits=False,
             )
@@ -81,7 +82,7 @@ def load_model(model_name):
             state[model_name] = FillBlankPipeline(
                 config=FillBlankConfig(),
                 gen_module=UnicrsGen.from_pretrained("recwizard/unicrs-gen-redial"),
-                rec_module=ChatgptRec.from_pretrained("recwizard/chatgpt-rec-fillblank"),
+                rec_module=ChatGPTRec.from_pretrained("recwizard/chatgpt-rec-fillblank"),
             )
 
         return "success"
@@ -95,8 +96,8 @@ def predict(
     model_name: str,
     query: str,
     mode: str = "info",
-    rec_args: dict = None,
-    gen_args: dict = None,
+    rec_args: dict = {},
+    gen_args: dict = {},
 ):
     logger.info(f"Query: {query}")
     load_model(model_name)
@@ -105,6 +106,6 @@ def predict(
         logger.info(f"Response: {response}")
         return {
             "query": query,
-            "response": {"output": response["output"], "links": response["links"]},
+            "response": {"output": response["output"], "links": response["links"] if "links" in response else {}},
             "graph": m.graph,
         }

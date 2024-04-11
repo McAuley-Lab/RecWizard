@@ -3,10 +3,8 @@ from recwizard.modules.unicrs.modeling_unicrs_gen import UnicrsGen, UnicrsGenTok
 
 from recwizard.pipelines.fill_blank import FillBlankConfig, FillBlankPipeline
 
-gen_repo = "../local_repo/unicrs-gen"
-rec_repo = "../local_repo/unicrs-rec"
-
-# test after pushed to hub
+gen_repo = "ZhankuiHe/unicrs-gen"
+rec_repo = "ZhankuiHe/unicrs-rec"
 
 # load rec
 rec_tokenizer = UnicrsRecTokenizer.from_pretrained(rec_repo)
@@ -26,3 +24,11 @@ pipeline = FillBlankPipeline(
 )
 
 print(pipeline.response("I like <entity>Avatar</entity>, and you?", return_dict=True))
+
+# push to hub
+
+# rec_module.push_to_hub("ZhankuiHe/unicrs-rec")
+# rec_tokenizer.push_to_hub("ZhankuiHe/unicrs-rec")
+
+# gen_module.push_to_hub("ZhankuiHe/unicrs-gen")
+# gen_tokenizer.push_to_hub("ZhankuiHe/unicrs-gen")

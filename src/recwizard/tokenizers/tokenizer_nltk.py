@@ -120,22 +120,3 @@ class NLTKTokenizer(PreTrainedTokenizerFast):
 
         self.backend_tokenizer.pre_tokenizer = DummyPreTokenizer()
         return super().save_pretrained(*args, **kwargs)
-
-
-if __name__ == "__main__":
-    import os, json
-    from recwizard.utils import create_chat_message
-
-    word2id = json.load(open("../../../../local_repo/kbrd-gen/raw_vocab/word2id.json"))
-
-    tokenizer = NLTKTokenizer(vocab=word2id, unk_token="[UNK]", pad_token="[PAD]")
-
-    tokenizer.save_pretrained("test")
-
-    tokenizer = NLTKTokenizer.from_pretrained("test")
-
-    chat = create_chat_message("User: Hi; <sep> System: Yes! I recommend <entity>Titanic</entity>!")
-
-    print(tokenizer.apply_chat_template(chat, tokenize=False))
-
-    print(tokenizer.apply_chat_template(chat, tokenize=True))

@@ -1,2 +1,2 @@
-from .configuration_chatgpt_merge import ChatgptMergeConfig
-from .modeling_chatgpt_merge import ChatgptMergePipeline
+from .configuration_chatgpt_merge import ChatGPTMergeConfig
+from .modeling_chatgpt_merge import ChatGPTMergePipeline

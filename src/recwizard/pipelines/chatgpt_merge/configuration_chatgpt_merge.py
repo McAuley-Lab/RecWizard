@@ -2,7 +2,7 @@ from recwizard.utils import START_TAG, END_TAG
 from recwizard.configuration_utils import BaseConfig
 
 
-class ChatgptMergeConfig(BaseConfig):
+class ChatGPTMergeConfig(BaseConfig):
     """
     The configuration of the CRS pipeline based on OpenAI's GPT models.
     This pipeline is used to merge the results from any recommendation module and generation module.

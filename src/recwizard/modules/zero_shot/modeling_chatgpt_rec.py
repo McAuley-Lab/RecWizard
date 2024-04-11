@@ -2,28 +2,25 @@ import json
 from openai import OpenAI
 
 from recwizard import BaseModule, monitor
-from tokenizer_chatgpt import ChatgptTokenizer
-from configuration_chatgpt_rec import ChatGPTRecConfig
-import logging
-
-logger = logging.getLogger(__name__)
+from recwizard.modules.zero_shot.tokenizer_chatgpt import ChatGPTTokenizer
+from recwizard.modules.zero_shot.configuration_chatgpt_rec import ChatGPTRecConfig
 
 
-class ChatgptRec(BaseModule):
+class ChatGPTRec(BaseModule):
     """
     The recommender implemented based on OpanAI's GPT models.
 
     """
 
     config_class = ChatGPTRecConfig
-    tokenizer_class = ChatgptTokenizer
+    tokenizer_class = ChatGPTTokenizer
 
     def __init__(self, config: ChatGPTRecConfig, **kwargs):
         """
         Initializes the instance based on the config file.
 
         Args:
-            config (ChatgptRecConfig): The config file.
+            config (ChatGPTRecConfig): The config file.
             prompt (str, optional): A prompt to override the prompt from config file.
             model_name (str, optional): The specified GPT model's name.
         """
@@ -39,10 +36,10 @@ class ChatgptRec(BaseModule):
         Get a tokenizer.
 
         Returns:
-            (ChatgptRecTokenizer): the tokenizer.
+            (ChatGPTRecTokenizer): the tokenizer.
         """
         # return lambda x: {'context': x}
-        return ChatgptTokenizer()
+        return ChatGPTTokenizer()
 
     @monitor
     def response(
@@ -110,15 +107,3 @@ class ChatgptRec(BaseModule):
             return {"input": messages, "output": output, "links": {name: link for name, link in zip(output, links)}}
         else:
             return output
-
-
-if __name__ == "__main__":
-    # Test the ChatgptRec module
-    config = ChatGPTRecConfig(model_name="gpt-3.5-turbo")
-    chatgpt_gen = ChatgptRec(config)
-
-    string = "User: Hello; <sep> System: Hi <sep> User: How are you? <sep> System: I am fine."
-
-    tokenizer = ChatgptTokenizer()
-    res = chatgpt_gen.response(string, tokenizer)
-    print(res)

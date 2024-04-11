@@ -166,8 +166,6 @@ class SelfAttentionLayer_batch(nn.Module):
         mask = 1e-30 * mask.float()
 
         e = torch.matmul(torch.tanh(torch.matmul(h, self.a)), self.b)
-        # print(e.size())
-        # print(mask.size())
         attention = F.softmax(e + mask.unsqueeze(-1), dim=1)
         # attention = F.dropout(attention, self.dropout, training=self.training)
         return torch.matmul(torch.transpose(attention, 1, 2), h).squeeze(1), attention

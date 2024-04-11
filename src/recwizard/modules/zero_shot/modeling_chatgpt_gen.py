@@ -1,30 +1,26 @@
-import os
 from typing import List
 from openai import OpenAI
 
 from recwizard import BaseModule, monitor
-from configuration_chatgpt_gen import ChatGPTGenConfig
-from tokenizer_chatgpt import ChatgptTokenizer
-import logging
-
-logger = logging.getLogger(__name__)
+from recwizard.modules.zero_shot.configuration_chatgpt_gen import ChatGPTGenConfig
+from recwizard.modules.zero_shot.tokenizer_chatgpt import ChatGPTTokenizer
 
 
-class ChatgptGen(BaseModule):
+class ChatGPTGen(BaseModule):
     """
     The generator implemented based on OpanAI's GPT models.
 
     """
 
     config_class = ChatGPTGenConfig
-    tokenizer_class = ChatgptTokenizer
+    tokenizer_class = ChatGPTTokenizer
 
     def __init__(self, config: ChatGPTGenConfig, **kwargs):
         """
         Initializes the instance based on the ChatGPT configuration.
 
         Args:
-            config (ChatgptGenConfig): The ChatGPT config for the generator.
+            config (ChatGPTGenConfig): The ChatGPT config for the generator.
         """
 
         super().__init__(config, **kwargs)
@@ -37,10 +33,10 @@ class ChatgptGen(BaseModule):
         Get a tokenizer.
 
         Returns:
-            (ChatgptTokenizer): the tokenizer.
+            (ChatGPTTokenizer): the tokenizer.
         """
         # return lambda x: {'context': x}
-        return ChatgptTokenizer()
+        return ChatGPTTokenizer()
 
     @monitor
     def response(
@@ -97,12 +93,12 @@ class ChatgptGen(BaseModule):
 
 
 if __name__ == "__main__":
-    # Test the ChatgptGen module
+    # Test the ChatGPTGen module
     config = ChatGPTGenConfig(model_name="gpt-3.5-turbo")
-    chatgpt_gen = ChatgptGen(config)
+    chatgpt_gen = ChatGPTGen(config)
 
     string = "User: Hello; <sep> System: Hi <sep> User: How are you? <sep> System: I am fine."
 
-    tokenizer = ChatgptTokenizer()
+    tokenizer = ChatGPTTokenizer()
     res = chatgpt_gen.response(string, tokenizer)
     print(res)

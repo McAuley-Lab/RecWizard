@@ -9,6 +9,6 @@ Pipelines
     :special-members: __init__
     :members: response
 
-.. autoclass:: recwizard.pipelines.ChatgptAgent
+.. autoclass:: recwizard.pipelines.ChatGPTAgent
     :special-members: __init__
     :members:

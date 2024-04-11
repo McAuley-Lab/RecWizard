@@ -1,23 +1,25 @@
 from typing import List, Tuple, Set, Dict
 import torch
 
-GLOBAL_DEVICE = torch.device('cuda:0')
+GLOBAL_DEVICE = torch.device("cuda:0")
 
 
 class DeviceManager:
     """
     A static class that manages the device used for training and inference.
     """
+
     device = GLOBAL_DEVICE
 
     @classmethod
     def initialize(cls, device=None):
         if device is None:
-            cls.device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
+            cls.device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
         else:
             cls.device = device
 
         import os
+
         if os.environ.get("CUDA_VISIBLE_DEVICES") is None:
             os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -43,8 +45,6 @@ class DeviceManager:
             return {k: cls.copy_to_device(v, device) for k, v in val.items()}
         else:
             return val
-        # else:
-        #     print(f"Unsupported type: {type(val)}")
 
 
 def copy_to_device(val, device=None):

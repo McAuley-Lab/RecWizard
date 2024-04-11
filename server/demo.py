@@ -94,7 +94,6 @@ else:
             rec_args = json.loads(rec_args)
             if "chatgpt" in model_name.lower():
                 gen_args["model_name"] = chatgpt_model
-
             result = requests.get(
                 f"http://localhost:{PORT}/predict",
                 {
@@ -104,7 +103,8 @@ else:
                     "gen_args": gen_args,
                     "rec_args": rec_args,
                 },
-            ).json()
+            )
+            result = result.json()
         if result:
             with st.chat_message(name="ai", avatar="recwizard.png"):
                 output = result["response"]["output"]
@@ -143,9 +143,11 @@ else:
                         st.session_state["chat_history"][model_name].append(
                             {"role": "assistant", "debug_message": result["graph"], "type": "json"},
                         )
+
     if st.sidebar.button("Refresh Chat"):
         del st.session_state["chat_history"][model_name]
         st.rerun()
+
     st.sidebar.download_button(
         "Download Chat History",
         convert_to_json(strip_debug(st.session_state["chat_history"], model_name)),

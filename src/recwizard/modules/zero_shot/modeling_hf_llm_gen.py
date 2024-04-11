@@ -6,10 +6,6 @@ from recwizard import BaseModule, monitor
 from recwizard.modules.zero_shot.configuration_hf_llm_gen import HFLLMGenConfig
 from recwizard.utils import create_chat_message
 
-import logging
-
-logger = logging.getLogger(__name__)
-
 
 class HFLLMGen(BaseModule):
     """

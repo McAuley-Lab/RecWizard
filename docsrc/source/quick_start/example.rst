@@ -8,12 +8,12 @@ Let's start by building a ``ExpansionPipeline`` using a ChatGPT-based generator 
 .. code-block:: python
 
     from recwizard import ExpansionConfig, ExpansionPipeline
-    from recwizard import ChatgptGen, RedialRec
+    from recwizard import ChatGPTGen, RedialRec
 
     pipeline = ExpansionPipeline(
       ExpansionConfig(),
       rec_module=RedialRec.from_pretrained('recwizard/redial-rec'),
-      gen_module=ChatgptGen.from_pretrained('recwizard/chatgpt-expansion')
+      gen_module=ChatGPTGen.from_pretrained('recwizard/chatgpt-expansion')
     )
 
 2. Format the input

@@ -7,6 +7,9 @@
 
 import os, warnings
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 from typing import Union, Tuple, Any
 
@@ -14,7 +17,7 @@ from transformers.tokenization_utils_base import PreTrainedTokenizerBase, TOKENI
 from transformers.tokenization_utils import BatchEncoding
 from transformers import AutoTokenizer
 
-from huggingface_hub import hf_hub_download
+from huggingface_hub import snapshot_download
 
 from collections import OrderedDict
 
@@ -167,8 +170,9 @@ class MultiTokenizer(PreTrainedTokenizerBase):
             MultiTokenizer: The tokenizer loaded from the pretrained model or local directory.
         """
         try:
-            path = hf_hub_download(pretrained_model_name_or_path)
-        except:
+            path = snapshot_download(pretrained_model_name_or_path)
+        except Exception as e:
+            logger.error(f"Error downloading the model: {e}")
             path = os.path.join(pretrained_model_name_or_path)
 
         # Load the config file

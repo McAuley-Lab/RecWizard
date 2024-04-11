@@ -1,10 +1,10 @@
 from recwizard.pipeline_utils import BasePipeline
-from recwizard.pipelines.chatgpt_merge.configuration_chatgpt_merge import ChatgptMergeConfig
+from recwizard.pipelines.chatgpt_merge.configuration_chatgpt_merge import ChatGPTMergeConfig
 
 from openai import OpenAI
 
 
-class ChatgptMergePipeline(BasePipeline):
+class ChatGPTMergePipeline(BasePipeline):
     """
     The configuration of the CRS pipeline based on OpenAI's GPT models.
     This pipeline is used to merge the results from any recommendation module and generation module.
@@ -16,14 +16,14 @@ class ChatgptMergePipeline(BasePipeline):
         answer_type (str): The type of the answer.
     """
 
-    config_class = ChatgptMergeConfig
+    config_class = ChatGPTMergeConfig
 
-    def __init__(self, config: ChatgptMergeConfig, **kwargs):
+    def __init__(self, config: ChatGPTMergeConfig, **kwargs):
         """
         Initializes the instance based on the ChatGPT configuration.
 
         Args:
-            config (ChatgptMergeConfig): The ChatGPT config for the generator.
+            config (ChatGPTMergeConfig): The ChatGPT config for the generator.
         """
 
         super().__init__(config, **kwargs)

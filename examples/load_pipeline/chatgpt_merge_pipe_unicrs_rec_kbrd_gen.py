@@ -1,7 +1,7 @@
 from recwizard.modules.unicrs.modeling_unicrs_rec import UnicrsRec, UnicrsRecTokenizer
 from recwizard.modules.kbrd.modeling_kbrd_gen import KBRDGen, KBRDGenTokenizer
 
-from recwizard.pipelines.chatgpt_merge import ChatgptMergeConfig, ChatgptMergePipeline
+from recwizard.pipelines.chatgpt_merge import ChatGPTMergeConfig, ChatGPTMergePipeline
 
 rec_repo = "../local_repo/unicrs-rec"
 gen_repo = "../local_repo/kbrd-gen"
@@ -17,8 +17,8 @@ gen_tokenizer = KBRDGenTokenizer.from_pretrained(gen_repo)
 gen_module = KBRDGen.from_pretrained(gen_repo)
 
 # load tirival pipeline
-pipeline = ChatgptMergePipeline(
-    config=ChatgptMergeConfig(),
+pipeline = ChatGPTMergePipeline(
+    config=ChatGPTMergeConfig(),
     rec_module=rec_module,
     rec_tokenizer=rec_tokenizer,
     gen_module=gen_module,

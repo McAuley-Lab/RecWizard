@@ -33,7 +33,7 @@
 
 ## Code Style Standardization
 
-- [ ] logging
+- [x] logging
 - [ ] standards for coding styles
     - [ ] Pipelines:
         - [x] Clean `chatgpt/*.py` by changing the `format` to `f-string`.

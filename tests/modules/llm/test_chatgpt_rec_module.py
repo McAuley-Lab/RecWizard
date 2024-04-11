@@ -1,4 +1,4 @@
-from recwizard.modules.zero_shot import ChatgptRec
+from recwizard.modules.zero_shot import ChatGPTRec
 
 
 class TestChatGPTRecModule:
@@ -6,7 +6,7 @@ class TestChatGPTRecModule:
         import os
 
         os.environ["OPENAI_API_KEY"] = "sk-dummy-key"
-        self.model = ChatgptRec.from_pretrained("recwizard/chatgpt-rec-fillblank")
+        self.model = ChatGPTRec.from_pretrained("recwizard/chatgpt-rec-fillblank")
         self.tokenizer = self.model.get_tokenizer()
 
     def test_response(self):

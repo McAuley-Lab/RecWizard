@@ -36,14 +36,3 @@ def create_item_list(text: str) -> List[str]:
     """
     entities = re.findall(rf"{START_TAG}(.*?){END_TAG}", text)
     return entities
-
-
-if __name__ == "__main__":
-    print(create_chat_message("User: Hello; <sep> System: Hi <sep> User: How are you? <sep> System: I am fine."))
-    print(create_chat_message("I am fine."))
-
-    print(
-        create_item_list(
-            "<entity>Jumanji_(2017_sequel)</entity> <entity>Bridesmaids_(2011_film)</entity> <entity>Bad_Moms</entity>"
-        )
-    )

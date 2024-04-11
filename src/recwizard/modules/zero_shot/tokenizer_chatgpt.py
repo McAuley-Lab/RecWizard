@@ -3,10 +3,10 @@
     We use this class to make the code more modular.
 """
 
-from recwizard.utils import create_chat_message
+from recwizard.utils import create_chat_message, START_TAG, END_TAG
 
 
-class ChatgptTokenizer:
+class ChatGPTTokenizer:
     """
     The tokenizer for the generator based on OpenAI's GPT models.
     """
@@ -23,16 +23,11 @@ class ChatgptTokenizer:
         """
 
         def preprocess(text):
-            text = text.replace("<entity>", "")
-            text = text.replace("</entity>", "")
+            text = text.replace(START_TAG, "")
+            text = text.replace(END_TAG, "")
             return text
 
         texts = preprocess(context)
         messages = create_chat_message(texts)
 
         return {"messages": messages}
-
-
-if __name__ == "__main__":
-    tokenizer = ChatgptTokenizer()
-    print(tokenizer("User: Hello; <sep> System: Hi <sep> User: How are you? <sep> System: I am fine."))
