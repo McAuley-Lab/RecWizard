@@ -5,7 +5,7 @@
 
 ## Overview
 
-The RecWizard libary is built for easy deployment/development of Conversational Recommender Systems(CRS).
+The RecWizard library is built for easy deployment/development of Conversational Recommender Systems(CRS).
 The core idea of RecWizard is to use a "Text-in, Text-out" interface for all kinds of different modules
 used in a CRS pipeline. The text-based interface gives our package a **plug-and-play** nature that allows users to
 easily experiment with new combinations of modules.
@@ -15,8 +15,8 @@ easily experiment with new combinations of modules.
 We abstract a CRS model into two levels as shown in the figure below:
 
 - **Module Level**: We typically provide a `recwizard.BaseModule` for making recommendations and
-  another `rectbot.BaseModule` for generating natural-language responses.
-  We can further introduce processor `rectbot.BaseModule` to extract important information (e.g., entity linking) from
+  another `recwizard.BaseModule` for generating natural-language responses.
+  We can further introduce processor `recwizard.BaseModule` to extract important information (e.g., entity linking) from
   users' raw features;
 - **Model Level**: We treat a `recwizard.BasePipeline` as a high-level manager to decide when and how to call the
   lower-level modules, and how to combine the results from such modules.
@@ -55,7 +55,7 @@ context = "<sep>".join([
 ```
 
 > Currently. The formatting contains 3 aspects:
-> 1. We prepend the sender of the message to the beggining of the sentence. Either "User: " or "System: "
+> 1. We prepend the sender of the message to the beginning of the sentence. Either "User: " or "System: "
 > 2. We join the utterances with the \<sep\> token. which can be handled differently by different tokenizers
 > 3. (Optional) We mark the entities in the text manually so that the named entities can be extracted by the downstream
      modules.
@@ -76,7 +76,7 @@ Both movies have Sandler's signature humor and are quite entertaining.
 | Base Model | Recommender Module                                           | Generator Module                                             |
 | ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | ReDIAL     | [redial-rec](https://huggingface.co/recwizard/redial-rec)    | [redial-gen](https://huggingface.co/recwizard/redial-gen)    |
-| KBRD       | [kbrd-rec-redial](https://huggingface.co/recwizard/kbrd-rec-redial) | [kbrd-rec-redial](https://huggingface.co/recwizard/kbrd-gen-redial) |
+| KBRD       | [kbrd-rec-redial](https://huggingface.co/recwizard/kbrd-rec-redial) | [kbrd-gen-redial](https://huggingface.co/recwizard/kbrd-gen-redial) |
 | UniCRS     | [unicrs-rec-redial](https://huggingface.co/recwizard/unicrs-rec-redial)/[unicrs-rec-inspired](https://huggingface.co/recwizard/unicrs-rec-inspired) | [unicrs-gen-redial](https://huggingface.co/recwizard/unicrs-gen-redial)/[unicrs-gen-inspired](https://huggingface.co/recwizard/unicrs-gen-inspired) |
 | KGSF       | [kgsf-rec](https://huggingface.co/recwizard/kgsf-rec)                                                     | [kgsf-gen](https://huggingface.co/recwizard/kgsf-gen)                                                     |
 | ChatGPT    | [chatgpt-rec-fillblank](https://huggingface.co/recwizard/chatgpt-rec-fillblank) | [chatgpt-gen-fillblank](https://huggingface.co/recwizard/chatgpt-gen-fillblank)/[chatgpt-gen-expansion](https://huggingface.co/recwizard/chatgpt-gen-expansion) |
@@ -99,17 +99,36 @@ recwizard
 │   ├── __init__.py
 │   ├── llm
 │   │   ├── __init__.py
-│   │   ├── configuration_chatgpt_gen.py
-│   │   ├── configuration_chatgpt_rec.py
+│   │   ├── configuration_llm.py
+│   │   ├── configuration_llm_rec.py
 │   │   ├── modeling_chatgpt_gen.py
 │   │   ├── modeling_chatgpt_rec.py
-│   │   └── tokenizer_chatgpt.py
+│   │   ├── modeling_llama_gen.py
+│   │   ├── tokenizer_chatgpt.py
+│   │   └── tokenizer_llama.py
 │   ├── kbrd
 │   │   ├── configuration_kbrd_gen.py
 │   │   ├── configuration_kbrd_rec.py
+│   │   ├── entity_attention_encoder.py
+│   │   ├── modeling_kbrd_gen.py
 │   │   ├── modeling_kbrd_rec.py
-│   │   ├── shared_encoder.py
-│   │   └── tokenizer_kbrd_rec.py
+│   │   ├── tokenizer_kbrd_gen.py
+│   │   ├── tokenizer_kbrd_rec.py
+│   │   ├── tokenizer_nltk.py
+│   │   └── transformer_encoder_decoder.py
+│   ├── kgsf
+│   │   ├── configuration_kgsf_gen.py
+│   │   ├── configuration_kgsf_rec.py
+│   │   ├── graph_utils.py
+│   │   ├── modeling_kgsf_gen.py
+│   │   ├── modeling_kgsf_rec.py
+│   │   ├── tokenizer_kgsf_gen.py
+│   │   ├── tokenizer_kgsf_rec.py
+│   │   ├── transformer_utils.py
+│   │   └── utils.py
+│   ├── monitor
+│   │   ├── __init__.py
+│   │   └── monitor.py
 │   ├── redial
 │   │   ├── __init__.py
 │   │   ├── autorec.py
@@ -148,6 +167,10 @@ recwizard
 │   │   ├── __init__.py
 │   │   ├── configuration_fill_blank.py
 │   │   └── modeling_fill_blank.py
+│   ├── trivial
+│   │   ├── __init__.py
+│   │   ├── configuration_trivial.py
+│   │   └── modeling_trivial.py
 │   └── switch_decode
 │       ├── __init__.py
 │       ├── configuration_switch_decode.py
@@ -159,8 +182,7 @@ recwizard
     ├── device_manager.py
     ├── entity_linking.py
     ├── singleton.py
-    ├── utils.py
-    └── monitor.py
+    └── utils.py
 
 ```
 
